@@ -3,9 +3,9 @@
         style="background-image: url('/assets/img/backgrounds/page-bg.png');position:absolute;bottom:0;width:100%;height:100%; padding-top: 40px;">
         <div class="m-auto" style="width:350px;padding-top:48px;">
             <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded-top border-bottom-left-radius-0 border-bottom-right-radius-0"
-                style="position:relative;background-image:none;background:#fff;-webkit-box-shadow:none;padding-top:7px;height:80px;">
+                style="position:relative;background-image:none;background:#fff;-webkit-box-shadow:none;padding-top:7px;height:170px;">
                 <a href="javascript:void(0)" class="page-logo-link press-scale-down align-items-center">
-                    <img src="/assets/img/logo-letras-csbp.png" alt="Caja de Salud Banca Privada" style="height: 60px;">
+                    <img src="/assets/img/logo.jpeg" alt="Caja de Salud Banca Privada" style="height: 150px;">
                 </a>
             </div>
 
@@ -42,9 +42,9 @@
                             Debe indicar, si No es un robot.
                         </small>
                     </div>
-                    <button type="submit" class="btn btn-primary float-left">Iniciar Sesión</button>
+                    <button type="submit" class="btn btn-primary float-right">Iniciar Sesión</button>
                 </form>
-                <div class="blankpage-footer text-left mt-3">
+                <div class="blankpage-footer text-right mt-3">
                     <router-link :to="{ name: 'forgot-your-password' }">
                         Restablecer contraseña
                     </router-link>

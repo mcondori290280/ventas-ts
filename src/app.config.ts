@@ -1,5 +1,5 @@
 export default {
-    TITULO_SISTEMA: 'CSBP',
+    TITULO_SISTEMA: 'MOM\'S',
 
     API_REST: 'http://localhost:3000/api/',
 
