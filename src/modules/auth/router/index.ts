@@ -24,12 +24,12 @@ export default {
             },
         },
         {
-            path: '/regional-module',
-            name: 'regional-module',
-            component: () => import(/* webpackChunkName: "regional-module" */ '@/modules/auth/views/RegionalModuleView.vue'),
+            path: '/seleccionar-sucursal',
+            name: 'seleccionar-sucursal',
+            component: () => import(/* webpackChunkName: "regional-module" */ '@/modules/auth/views/SeleccionarSucursalView.vue'),
             beforeEnter: isAuthenticatedGuard,
             meta: {
-                title: appConfig.TITULO_SISTEMA + ' - Regional y Módulo',
+                title: appConfig.TITULO_SISTEMA + ' - Sucursal',
             },
         },
         {

@@ -2,7 +2,7 @@
     <div class="page-wrapper p-0">
         <div class="page-inner">
             <div class="page-content-wrapper p-0">
-                <header-regional-modulo-component :mostrarOpcionesUsuario="false" />
+                <header-cucursal-component :mostrarOpcionesUsuario="false" />
 
                 <main id="js-page-content" role="main" class="page-content">
                     <div class="row justify-content-center">
@@ -126,7 +126,7 @@ import { passRegex } from '@/utils/pass_regex';
 
 export default {
     components: {
-        HeaderRegionalModuloComponent: defineAsyncComponent(() => import('../components/HeaderRegionalModuloComponent.vue')),
+        HeaderCucursalComponent: defineAsyncComponent(() => import('../components/HeaderSucursalComponent.vue')),
         FooterComponent: defineAsyncComponent(() => import('../components/FooterComponent.vue')),
     },
     setup() {

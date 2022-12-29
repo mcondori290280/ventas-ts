@@ -106,9 +106,11 @@ export default {
             if (statusRecaptcha) {
                 if (!v$.value.$invalid) {
                     const inicioSesion = JSON.parse(JSON.stringify(login.value));
-                    await loginUser(inicioSesion);
+                    const respuesta = await loginUser(inicioSesion);
 
-                    router.push({ name: 'main' });
+                    if (respuesta) {
+                        router.push({ name: 'seleccionar-sucursal' });
+                    }
                 }
                 else {
                     v$.value.$touch();

@@ -1,18 +1,15 @@
 import CryptoJS from 'crypto-js';
 
-export const loginUser = (state: any, { user, access_token }: any) => {
-    state.user.id_usuario = user.id_usuario;
-    state.user.usuario = user.usuario;
-    state.user.nombre_completo = user.nombre_completo;
-    state.user.correo_electronico = user.correo_electronico;
-    state.user.id_regional = user.id_regional ? user.id_regional : 0;
-    state.user.regional = user.regional ? user.regional : '';
-    state.user.id_modulo = user.id_modulo ? user.id_modulo : 0;
-    state.user.unica_regional_modulo = user.unica_regional_modulo ? user.unica_regional_modulo : false;
-    state.user.accesos = user.accesos ? user.accesos : [];
-    state.user.caduco = user.caduco;
-    state.user.modificar_password = user.modificar_password;
-    state.user.documento_identidad = user.documento_identidad;
+export const loginUser = (state: any, { usuario, access_token }: any) => {
+    state.user.correo_electronico = '';
+    state.user.id_usuario = usuario.id_usuario;
+    state.user.nombre_completo = usuario.nombre_completo;
+    state.user.usuario = usuario.usuario;
+    state.user.id_sucursal = 0;
+    state.user.sucursal = '';
+    state.user.accesos = [];
+    state.user.modificar_password = usuario.modificar_password;
+    state.user.unica_sucursal = false;
 
     const userEncrypt = CryptoJS.AES.encrypt(
         JSON.stringify(state.user),
@@ -27,7 +24,28 @@ export const loginUser = (state: any, { user, access_token }: any) => {
     state.status = 'authenticated';
 };
 
-export const setRegionalModule = (state: any, regionalModule: any) => {
+export const logout = (state: any) => {
+    state.status = 'not-authenticated';
+    state.user = {
+        correo_electronico: '',
+        id_usuario: 0,
+        nombre_completo: '',
+        usuario: '',
+        id_sucursal: 0,
+        sucursal: '',
+        accesos: [],
+        modificar_password: false,
+        unica_sucursal: false,
+    };
+    state.token = null;
+
+    localStorage.removeItem('_token');
+
+    sessionStorage.removeItem('acceso-menu');
+    sessionStorage.removeItem('menu-item');
+};
+
+export const setSucursal = (state: any, sucursal: any) => {
     const token = localStorage.getItem('_token');
     if (token) {
         let user: any = token.split('|')[1];
@@ -40,10 +58,9 @@ export const setRegionalModule = (state: any, regionalModule: any) => {
             ).toString(CryptoJS.enc.Utf8)
         );
         
-        user.id_regional = regionalModule.id_regional;
-        user.id_modulo = regionalModule.id_modulo;
-        user.unica_regional_modulo = regionalModule.unica_regional_modulo;
-        user.regional = regionalModule.regional;
+        user.id_sucursal = sucursal.id_sucursal;
+        user.sucursal = sucursal.sucursal;
+        user.unica_sucursal = sucursal.unica_sucursal;
 
         const userEncrypt = CryptoJS.AES.encrypt(
             JSON.stringify(user),
@@ -54,6 +71,12 @@ export const setRegionalModule = (state: any, regionalModule: any) => {
         state.user = user;
     }
 };
+
+
+
+
+
+
 
 export const setAccess = (state: any, access: any) => {
     const token = localStorage.getItem('_token');
@@ -79,30 +102,6 @@ export const setAccess = (state: any, access: any) => {
         state.user = user;
     }
 };
-
-export const logout = (state: any) => {
-    state.status = 'not-authenticated';
-    state.user = {
-        correo_electronico: '',
-        id_usuario: 0,
-        nombre_completo: '',
-        usuario: '',
-        id_regional: 0,
-        regional: '',
-        id_modulo: 0,
-        unica_regional_modulo: false,
-        accesos: [],
-        caduco: false,
-        modificar_password: false
-    };
-    state.token = null;
-
-    localStorage.removeItem('_token');
-
-    sessionStorage.removeItem('acceso-menu');
-    sessionStorage.removeItem('menu-item');
-};
-
 
 export const setTokenUser = (state: any, { access_token }: any) => {
 

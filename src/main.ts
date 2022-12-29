@@ -17,6 +17,7 @@ import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 
+// Componentes propios globales.
 
 createApp(App)
     .use(store)
@@ -25,5 +26,6 @@ createApp(App)
     .component('EasyDataTable', Vue3EasyDataTable)
     .component('Select2', Select2)
     .component('Tree', Tree)
+    // Componentes locales.
     .mount('#app');
 

@@ -31,7 +31,7 @@ export default {
             switch (error.response.status) {
                 case 400:
                     if (error.response.data.Datos) {
-                        mensaje = error.response.data.Mensaje.Descripcion;
+                        mensaje = error.response.data.Mensaje.descripcion;
                     }
                     if (error.response.data.Error_logueo) {
                         mensaje                    }
@@ -128,7 +128,7 @@ export default {
      * @param redirect URL dónde se quiere que se direccione.
      */
     mostrarMensaje(mensaje: any, redirect:  any = null) {
-        if (mensaje.Descripcion && mensaje.TipoMensaje) {
+        if (mensaje.descripcion && mensaje.tipoMensaje) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                   confirmButton: 'btn btn-primary btn-sm',
@@ -138,11 +138,11 @@ export default {
             });
 
             swalWithBootstrapButtons.fire({
-                html: `<p>${mensaje.Descripcion}</p>` + ((typeof mensaje.IdMensaje === 'undefined')? '': `<p style="font-size:0.7em;text-align: center;"> ${mensaje.IdMensaje}</p>`),
+                html: `<p>${mensaje.descripcion}</p>` + ((typeof mensaje.IdMensaje === 'undefined')? '': `<p style="font-size:0.7em;text-align: center;"> ${mensaje.IdMensaje}</p>`),
                 toast: true,
                 timer: 5000, 
                 position: 'top-end',
-                icon: (mensaje.TipoMensaje === 'Information' ? 'info' : mensaje.TipoMensaje.toLowerCase()),
+                icon: (mensaje.tipoMensaje === 'Information' ? 'info' : mensaje.tipoMensaje.toLowerCase()),
                 confirmButtonText: '<i class="fa fa-thumbs-up"></i> Aceptar',
             }); 
             if (redirect) {
@@ -151,8 +151,8 @@ export default {
         } else {
             alert(`Error: El objeto mensaje no tienen la estructura siguiente:
             {
-                Descripcion: 'Texto-mensaje',
-                TipoMensaje: 'tipo-mensaje'
+                descripcion: 'Texto-mensaje',
+                tipoMensaje: 'tipo-mensaje'
             }`);
         }
     },
@@ -204,7 +204,7 @@ export default {
      * @param redirect URL dónde se quiere que se direccione.
      */
      mostrarMensajeModal(mensaje: any, redirect = null) {
-        if (mensaje.Descripcion && mensaje.TipoMensaje) {
+        if (mensaje.descripcion && mensaje.tipoMensaje) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                   confirmButton: 'btn btn-primary btn-sm',
@@ -213,8 +213,8 @@ export default {
                 buttonsStyling: false
             });
             swalWithBootstrapButtons.fire({
-                html: mensaje.Descripcion,
-                icon: (mensaje.TipoMensaje === 'Information' ? 'info' : mensaje.TipoMensaje.toLowerCase()),
+                html: mensaje.descripcion,
+                icon: (mensaje.tipoMensaje === 'Information' ? 'info' : mensaje.tipoMensaje.toLowerCase()),
                 confirmButtonText: '<i class="fa fa-thumbs-up"></i> Aceptar',
             });
             if (redirect) {
@@ -223,8 +223,8 @@ export default {
         } else {
             alert(`Error: El objeto mensaje no tienen la estructura siguiente:
             {
-                Descripcion: 'Texto-mensaje',
-                TipoMensaje: 'tipo-mensaje'
+                descripcion: 'Texto-mensaje',
+                tipoMensaje: 'tipo-mensaje'
             }`);
         }
     },

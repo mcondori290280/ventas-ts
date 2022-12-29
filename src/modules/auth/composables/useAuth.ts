@@ -15,84 +15,74 @@ const useAuth = () => {
 
     const loginUser = async(user: any) => {
         const loader = $loading.show(utils.configuracionLoading);
-        await store.dispatch('auth/loginUser', user);
+        const respuesta = await store.dispatch('auth/loginUser', user);
         loader.hide();
+
+        return respuesta;
     }
+
+    const obtenerSucursales = async() => {
+        let sucursales = [];
+
+        const loader = $loading.show(utils.configuracionLoading);
+        try {
+            const { data } = await authApi.get(
+                `/sucursales/obtener-sucursales-usuario/${ store.getters['auth/getIdUsuario'] }`,
+                {
+                    headers: {
+                        'Content-type' : 'application/json',
+                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
+                    }
+                }
+            );
+
+            if (data.ok) {
+                sucursales = data.datos;
+            }
+        } catch( error ) {
+            utils.mostrarMensajeErrorApi(error);
+        }
+        loader.hide();
+
+        return sucursales;
+    }
+
+    const checkAuthStatus = async() => {
+        const token = localStorage.getItem('_token');
+        if (token) {
+            let usuario = token.split('|')[1];
+            const access_token = token.split('|')[0];
+    
+            usuario = JSON.parse(
+                CryptoJS.AES.decrypt(
+                    usuario,
+                    "Secreto"
+                ).toString(CryptoJS.enc.Utf8)
+            );
+            store.commit('auth/loginUser', { usuario, access_token });
+        } else {
+            store.commit('auth/logout');
+        }
+    }
+
+    const logout = () => {
+        store.commit('auth/logout');
+    }
+
+
+
+
+
+
+
+
+
 
     const getTokenUser = async (user: any) => {
         const loader = $loading.show(utils.configuracionLoading);
         const ok = await store.dispatch('auth/getTokenUser', user);
         loader.hide();
         return ok;
-    }
-
-    const checkAuthStatus = async() => {
-        const token = localStorage.getItem('_token');
-        if (token) {
-            let user = token.split('|')[1];
-            const access_token = token.split('|')[0];
-    
-            user = JSON.parse(
-                CryptoJS.AES.decrypt(
-                    user,
-                    "Secreto"
-                ).toString(CryptoJS.enc.Utf8)
-            );
-        
-            store.commit('auth/loginUser', { user, access_token });
-        } else {
-            store.commit('auth/logout');
-        }
-    }
-
-    const obtenerRegionales = async() => {
-        let regionales = [];
-
-        const loader = $loading.show(utils.configuracionLoading);
-        try {
-            const respRegionales = await authApi.get(
-                `RegionalesUsuario?IdUsuario=${ store.getters['auth/getIdUsuario'] }`,
-                {
-                    headers: {
-                        'Content-type' : 'application/json',
-                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
-                    }
-                }
-            );
-            if (!respRegionales.data.Mensaje.TieneMensaje) {
-                regionales = respRegionales.data.Datos;
-            }
-        } catch( error ) {
-            utils.mostrarMensajeErrorApi(error);
-        }
-        loader.hide();
-
-        return regionales;
-    }
-
-    const obtenerModulos = async(idRegional: any) => {
-        let modulos = [];
-
-        const loader = $loading.show(utils.configuracionLoading);
-        try {
-            const respModulos = await authApi.get(
-                `ModulosUsuario?IdUsuario=${ store.getters['auth/getIdUsuario'] }&IdRegional=${ idRegional }`,
-                {
-                    headers: {
-                        'Content-type' : 'application/json',
-                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
-                    }
-                }
-            );
-            if (!respModulos.data.Mensaje.TieneMensaje) {
-                modulos = respModulos.data.Datos;
-            }
-        } catch( error ) {
-            utils.mostrarMensajeErrorApi(error);
-        }
-        loader.hide();
-
-        return modulos;
     }
 
     const obtenerAccesos = async() => {
@@ -135,10 +125,6 @@ const useAuth = () => {
         loader.hide();
 
         return resultado;
-    }
-
-    const logout = () => {
-        store.commit('auth/logout');
     }
 
     const checkVersion = async (url: any) => {
@@ -283,15 +269,15 @@ const useAuth = () => {
     }
     
     return {
+        loginUser,
+        obtenerSucursales,
+
         cambiarContrasenia,
         checkAuthStatus,
         checkVersion,
         getTokenUser,
-        loginUser,
         logout,
         obtenerAccesos,
-        obtenerModulos,
-        obtenerRegionales,
         solicitaReestablecerContrasenia,
         verificaEnlace,
         reestablecerContrasena,

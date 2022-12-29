@@ -3,9 +3,6 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import { isNotAuthenticatedGuard } from '@/modules/auth/router/authGuard';
 import authRouter from '@/modules/auth/router';
 import systemRouter from '@/modules/system/router';
-// import facturacionRouter from "@/modules/facturacion/router";
-import seguridadRouter from "@/modules/seguridad/router";
-// import prevencionRouter from "@/modules/medico/prevencion/router";
 import appConfig from '../app.config';
 
 const routes = [
@@ -17,18 +14,6 @@ const routes = [
         path: '/system',
         ...systemRouter,
     },
-    // {
-    //     path: '/facturacion',
-    //     ...facturacionRouter,
-    // },
-    {
-        path: '/seguridad',
-        ...seguridadRouter,
-    },
-    // {
-    //     path: '/medico/prevencion',
-    //     ...prevencionRouter,
-    // },
     {
         path: '',
         redirect: '/auth'

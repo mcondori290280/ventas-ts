@@ -6,16 +6,12 @@ export const getIdUsuario = (state: any) => {
     return state.user.id_usuario;
 }
 
-export const getIdRegional = (state: any) => {
-    return state.user.id_regional;
+export const getIdSucursal = (state: any) => {
+    return state.user.id_sucursal;
 }
 
-export const getRegional = (state: any) => {
-    return state.user.regional;
-}
-
-export const getIdModulo = (state: any) => {
-    return state.user.id_modulo;
+export const getSucursal = (state: any) => {
+    return state.user.sucursal;
 }
 
 export const getUserName = (state: any) => {
@@ -34,20 +30,11 @@ export const getToken = (state: any) => {
     return state.token;
 }
 
-export const getUnicaRegionalModulo = (state: any) => {
-    return state.user.unica_regional_modulo;
-}
-export const getAccesosModulo = (state: any) => {
+export const getAccesos = (state: any) => {
     return state.user.accesos;
 }
 
-export const getCaducoPassword = (state: any) => {
-    return state.user.caduco;
-}
 export const getModificarPassword = (state: any) => {
     return state.user.modificar_password;
-}
-export const getDocumentoIdentidad = (state: any) => {
-    return state.user.documento_identidad;
 }
 
