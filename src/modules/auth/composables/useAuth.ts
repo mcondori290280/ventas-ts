@@ -70,6 +70,60 @@ const useAuth = () => {
         store.commit('auth/logout');
     }
 
+    const checkVersion = async (url: any) => {
+        let hash = '';
+        let currentHash: any = '';
+
+        try {
+            const respuesta = await axios.get(
+                url + '?t=' + new Date().getTime(),
+                {
+                    headers: {
+                        'Content-type' : 'application/json',
+                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
+                    }
+                }
+            );
+            hash = respuesta.data.hash;
+            currentHash = localStorage.getItem('ad7a024142e0256d760f0deee43e7699')
+                ? localStorage.getItem('ad7a024142e0256d760f0deee43e7699')
+                : '';
+            localStorage.setItem('ad7a024142e0256d760f0deee43e7699', hash);
+
+            if (currentHash !== hash) {
+                console.log('Recarga...');
+                location.reload();
+            }
+        } catch (error) {
+            console.error(error, 'No se pudo obtener la versión.');
+        }
+    }
+
+    const solicitaReestablecerContrasenia = async (correo: string) => { 
+        let ok = false;
+
+        const loader = $loading.show(utils.configuracionLoading);
+        try {
+            const { data } = await authApi.post(
+                `/usuarios/enviar-correo-recuperar-contrasenia`,
+                {
+                    correoElectronico: correo
+                },
+            );
+            loader.hide();
+
+            if (data.ok) {
+                ok = true;
+            }
+
+            utils.mostrarMensaje(data.mensaje);
+        } catch (error) {
+            loader.hide();
+
+            utils.mostrarMensajeErrorApi(error);
+        }
+        return ok;
+    }
 
 
 
@@ -126,74 +180,6 @@ const useAuth = () => {
         loader.hide();
 
         return resultado;
-    }
-
-    const checkVersion = async (url: any) => {
-        let hash = '';
-        let currentHash: any = '';
-
-        try {
-            const respuesta = await axios.get(
-                url + '?t=' + new Date().getTime(),
-                {
-                    headers: {
-                        'Content-type' : 'application/json',
-                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
-                    }
-                }
-            );
-            hash = respuesta.data.hash;
-            currentHash = localStorage.getItem('ad7a024142e0256d760f0deee43e7699')
-                ? localStorage.getItem('ad7a024142e0256d760f0deee43e7699')
-                : '';
-            localStorage.setItem('ad7a024142e0256d760f0deee43e7699', hash);
-
-            if (currentHash !== hash) {
-                console.log('Recarga...');
-                location.reload();
-            }
-        } catch (error) {
-            console.error(error, 'No se pudo obtener la versión.');
-        }
-    }
-
-    const solicitaReestablecerContrasenia = async (correo: string) => { 
-        let ok = false;
-
-        const loader = $loading.show(utils.configuracionLoading);
-        try {
-            const { data } = await authApi.post(
-                `ReestablecerContrasena/solicita`,
-                {
-                    CorreoElectronico: correo
-                },
-                {
-                    headers: {
-                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
-                    }
-                }
-            );
-            loader.hide();
-
-            if (data.Mensaje.TipoMensaje === 'Information') {
-                ok = true;
-                utils.mostrarMensaje({
-                    Descripcion: data.Mensaje.Descripcion,
-                    TipoMensaje: 'success',
-                });
-            } else {
-
-                utils.mostrarMensaje({ 
-                    Descripcion: data.Mensaje.Descripcion,
-                    TipoMensaje: 'error',
-                });
-            }
-        } catch (error) {
-            loader.hide();
-
-            utils.mostrarMensajeErrorApi(error);
-        }
-        return ok;
     }
 
     const verificaEnlace = async (enlace: string) => {
@@ -272,14 +258,18 @@ const useAuth = () => {
     return {
         loginUser,
         obtenerSucursales,
-
-        cambiarContrasenia,
         checkAuthStatus,
         checkVersion,
-        getTokenUser,
         logout,
-        obtenerAccesos,
         solicitaReestablecerContrasenia,
+
+
+
+
+
+        cambiarContrasenia,
+        getTokenUser,
+        obtenerAccesos,
         verificaEnlace,
         reestablecerContrasena,
         accesos: computed(() => store.getters['auth/getAccesosModulo']),
