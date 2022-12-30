@@ -1609,18 +1609,14 @@ export default {
         const router = useRouter();
         const { email, fullNameUser, unicaRegionalModulo, nombreRegional, logout } = useAuth();
         
-        // const { logoutFacturacion } = useVentas();
-
         const cambiarRegional = () => {
             // Cerramos el menu de login.
             const html = document.querySelector('html');
             if (html) {
                 html.click();
             }
-            
-            // logoutFacturacion();
 
-            router.push({ name: 'regional-module' });
+            router.push({ name: 'seleccionar-sucursal' });
         }
 
         const abrirModalModificarContrasenia = () => {
@@ -1637,7 +1633,6 @@ export default {
         const cerrarModalCambioContrasena = (cambioContrasena: any) => {
             if (cambioContrasena) {
                 logout();
-                // logoutFacturacion();
                 router.push({ name: 'login' });
             }
         }

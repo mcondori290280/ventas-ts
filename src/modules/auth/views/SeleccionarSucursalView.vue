@@ -27,23 +27,19 @@
                                     <div class="panel-content">
                                         <div class="frame-wrap">
                                             <div class="demo">
-                                                <div
-                                                    class="custom-control custom-switch"
-                                                    v-for="(sucursal, index) in sucursales"
-                                                    :key="index">
-                                                    <input
-                                                        type="radio"
-                                                        class="custom-control-input"
-                                                        :id="sucursal.id_sucursal"
-                                                        name="id_sucursal"
-                                                        v-model="payload.id_sucursal"
-                                                        :value="sucursal.id_sucursal"
-                                                        @change="obtenerSucursalesCargar"/>
-                                                    <label
-                                                        class="custom-control-label cursor-pointer"
-                                                        :for="sucursal.id_sucursal">
+                                                <div class="list-group">
+                                                    <a
+                                                        v-for="(sucursal, index) in sucursales"
+                                                        :key="index"
+                                                        href="javascript:void(0)"
+                                                        class="list-group-item list-group-item-action border-0"
+                                                        :class="{ 'font-weight-bold': payload.id_sucursal === sucursal.id_sucursal }"
+                                                        @click="obtenerSucursalesCargar(sucursal.id_sucursal)">
+                                                        <i
+                                                            class='fal fa-check-circle mr-2'
+                                                            :class="{ 'font-weight-bold': payload.id_sucursal === sucursal.id_sucursal }"></i>
                                                         {{ sucursal.ciudad }} - {{ sucursal.zona }} - {{ sucursal.direccion }}
-                                                    </label>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -94,7 +90,7 @@ export default {
         sessionStorage.removeItem('acceso-menu');
         sessionStorage.removeItem('menu-item');
 
-        const obtenerSucursalesCargar = async () => {
+        const obtenerSucursalesCargar = async (id_sucursal: number) => {
             if (sucursales.value.length === 0) {
                 sucursales.value = await obtenerSucursales();
                 if (sucursales.value.length === 0) {
@@ -111,9 +107,11 @@ export default {
                     store.commit('auth/setSucursal', payload.value);
 
                     router.push({ name: 'main' });
+                } else if (store.getters['auth/getIdSucursal'] !== 0) {
+                    payload.value.id_sucursal = store.getters['auth/getIdSucursal'];
                 }
             } else {
-                payload.value.id_sucursal = sucursales.value.filter((sucursal: any) => sucursal.id_sucursal == payload.value.id_sucursal)[0].id_sucursal;
+                payload.value.id_sucursal = id_sucursal;
                 payload.value.sucursal = sucursales.value.filter((sucursal: any) => sucursal.id_sucursal == payload.value.id_sucursal)[0].ciudad
                     + ' - ' + sucursales.value.filter((sucursal: any) => sucursal.id_sucursal == payload.value.id_sucursal)[0].zona
                     + ' - ' + sucursales.value.filter((sucursal: any) => sucursal.id_sucursal == payload.value.id_sucursal)[0].direccion;
@@ -125,7 +123,7 @@ export default {
             }
         };
 
-        obtenerSucursalesCargar();
+        obtenerSucursalesCargar(store.getters['auth/getIdSucursal']);
 
         return {
             payload,
