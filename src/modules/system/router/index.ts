@@ -7,8 +7,8 @@ export default {
     children: [
         {
             path: '',
-            name: 'main',
-            component: () => import(/* webpackChunkName: "main" */ '@/modules/system/views/MainView.vue'),
+            name: 'inicio',
+            component: () => import(/* webpackChunkName: "inicio" */ '@/modules/system/views/InicioView.vue'),
             beforeEnter: isAuthenticatedGuard,
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Inicio',

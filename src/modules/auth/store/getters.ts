@@ -38,3 +38,6 @@ export const getModificarPassword = (state: any) => {
     return state.user.modificar_password;
 }
 
+export const getUnicaSucursal = (state: any) => {
+    return state.user.unica_sucursal;
+}

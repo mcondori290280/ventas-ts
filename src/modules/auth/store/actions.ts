@@ -14,6 +14,10 @@ export const loginUser = async ({ commit }: any, user: any) => {
         if (data.ok) {
             const access_token = data.datos;
             const usuario = data.extraData;
+            usuario.id_sucursal = 0;
+            usuario.sucursal = '';
+            usuario.unica_sucursal = false;
+            usuario.accesos = [];
 
             await commit('loginUser', { usuario, access_token });
 

@@ -2,11 +2,11 @@
     <!-- BEGIN Page Wrapper -->
     <div class="page-wrapper">
         <div class="page-inner">
-            <sidebar-component />
+            <barra-lateral-component />
             <div class="page-content-wrapper">
-                <header-component></header-component>
+                <cabecera-component />
                 <router-view />
-                <footer-component />
+                <pie-de-pagina-component />
             </div>
         </div>
     </div>
@@ -39,9 +39,9 @@ import { defineAsyncComponent } from 'vue';
 
 export default {
     components: {
-        SidebarComponent: defineAsyncComponent(() => import('../components/SidebarComponent')),
-        HeaderComponent: defineAsyncComponent(() => import('../components/HeaderComponent')),
-        FooterComponent: defineAsyncComponent(() => import('../components/FooterComponent')),
+        BarraLateralComponent: defineAsyncComponent(() => import('../components/BarraLateralComponent')),
+        CabeceraComponent: defineAsyncComponent(() => import('../components/CabeceraComponent')),
+        PieDePaginaComponent: defineAsyncComponent(() => import('../components/PieDePaginaComponent')),
     },
 }
 </script>

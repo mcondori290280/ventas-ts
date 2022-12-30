@@ -15,9 +15,9 @@ export default {
             },
         },
         {
-            path: '/forgot-your-password',
-            name: 'forgot-your-password',
-            component: () => import(/* webpackChunkName: "forgot-your-password" */ '@/modules/auth/views/ForgotYourPasswordView.vue'),
+            path: '/olvidaste-tu-contrasena',
+            name: 'olvidaste-tu-contrasena',
+            component: () => import(/* webpackChunkName: "olvidaste-tu-contrasena" */ '@/modules/auth/views/OlvidasteTuContrasenaView.vue'),
             beforeEnter: isNotAuthenticatedGuard,
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Restablecer contraseña',
@@ -26,7 +26,7 @@ export default {
         {
             path: '/seleccionar-sucursal',
             name: 'seleccionar-sucursal',
-            component: () => import(/* webpackChunkName: "regional-module" */ '@/modules/auth/views/SeleccionarSucursalView.vue'),
+            component: () => import(/* webpackChunkName: "seleccionar-sucursal" */ '@/modules/auth/views/SeleccionarSucursalView.vue'),
             beforeEnter: isAuthenticatedGuard,
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Sucursal',

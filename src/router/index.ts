@@ -20,8 +20,8 @@ const routes = [
     },
     {
         path: '/404',
-        name: 'notfound',
-        component: () => import(/* webpackChunkName: "not-found" */'@/modules/auth/views/NotFoundView.vue'),
+        name: 'no-encontrado',
+        component: () => import(/* webpackChunkName: "not-found" */'@/modules/auth/views/NoEncontradoView.vue'),
         beforeEnter: isNotAuthenticatedGuard,
         meta: {
             title: appConfig.TITULO_SISTEMA + ' - Página no encontrada',

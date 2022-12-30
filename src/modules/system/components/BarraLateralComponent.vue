@@ -10,7 +10,7 @@
                     <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
                 </a> -->
             <router-link
-                :to="{ name: 'main' }"
+                :to="{ name: 'inicio' }"
                 class="page-logo-link press-scale-down d-flex align-items-center"
                 exact>
                 <!-- <img src="/assets/img/logo.png"
@@ -209,13 +209,13 @@ export default {
                 $('li.acceso-menu').removeClass('active');
                 $('#' + sessionStorage.getItem('acceso-menu')).addClass('open active');
             } else {
-                router.push({ name: 'main' });
+                router.push({ name: 'inicio' });
             }
 
             if (sessionStorage.getItem('menu-item')) {
                 $('#' + sessionStorage.getItem('menu-item')).addClass('active');
             } else {
-                router.push({ name: 'main' });
+                router.push({ name: 'inicio' });
             }
         });
 

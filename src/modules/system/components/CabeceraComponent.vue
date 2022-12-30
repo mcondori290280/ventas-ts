@@ -15,7 +15,7 @@
                     <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
                     <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
                 </a> -->
-                <router-link :to="{ name: 'main' }" class="page-logo-link press-scale-down d-flex align-items-center">
+                <router-link :to="{ name: 'inicio' }" class="page-logo-link press-scale-down d-flex align-items-center">
                     <!-- <img src="/assets/img/logo.png"
                          alt="SmartAdmin WebApp"
                          aria-roledescription="logo">
@@ -88,7 +88,7 @@
 
                 <div class="nav-regional mt-x">
                     <h5 class="text-dark">
-                        {{ nombreRegional }} <span v-if="nombreSucursal"> - {{ nombreSucursal }} - {{ nombrePuntoVenta }}</span>
+                        {{ nombreSucursal }}
                     </h5>
                 </div>
 
@@ -823,9 +823,9 @@
                         </a>
                         <a href="javascript:void(0)"
                            class="dropdown-item"
-                           @click="cambiarRegional()"
-                           v-if="!unicaRegionalModulo">
-                            Cambiar Regional
+                           @click="cambiarSucursal()"
+                           v-if="!unicaSucursal">
+                            Cambiar Sucursal
                         </a>
                         <a class="dropdown-item fw-500 pt-3 pb-3"
                            href="javascript:void(0)"
@@ -1586,7 +1586,7 @@
         </div>
         <!-- END Messenger -->
 
-        <change-password-component @cerrarModalCambioContrasena="cerrarModalCambioContrasena($event)" />
+        <cambiar-contrasenia-component @cerrarModalCambioContrasena="cerrarModalCambioContrasena($event)" />
     </div>
 </template>
 
@@ -1602,14 +1602,14 @@ declare let window: any;
 
 export default {
     components: {
-        ChangePasswordComponent: defineAsyncComponent(() => import('@/modules/auth/components/ChangePasswordComponent.vue')),
+        CambiarContraseniaComponent: defineAsyncComponent(() => import('@/modules/auth/components/CambiarContraseniaComponent.vue')),
     },  
     setup() {
         const store = useStore();
         const router = useRouter();
-        const { email, fullNameUser, unicaRegionalModulo, nombreRegional, logout } = useAuth();
+        const { email, fullNameUser, unicaSucursal, logout } = useAuth();
         
-        const cambiarRegional = () => {
+        const cambiarSucursal = () => {
             // Cerramos el menu de login.
             const html = document.querySelector('html');
             if (html) {
@@ -1637,21 +1637,19 @@ export default {
             }
         }
 
+        const cerrarSesion = () => {
+            router.push({ name: 'login' });
+            logout();
+        }
+
         return {
             email,
             fullNameUser,
-            unica_regional_modulo: false,
-            unicaRegionalModulo,
-            nombreRegional,
-            nombreSucursal: computed(() => store.getters['facturacion/nombreSucursal']),
-            nombrePuntoVenta: computed(() => store.getters['facturacion/nombrePuntoVenta']),
+            unicaSucursal,
+            nombreSucursal: computed(() => store.getters['auth/getSucursal']),
 
-            cerrarSesion: () => {
-                router.push({ name: 'login' });
-                logout();
-                // logoutFacturacion();
-            },
-            cambiarRegional,
+            cerrarSesion,
+            cambiarSucursal,
             abrirModalModificarContrasenia,
             cerrarModalCambioContrasena,
         };

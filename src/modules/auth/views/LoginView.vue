@@ -45,7 +45,7 @@
                     <button type="submit" class="btn btn-primary float-right">Iniciar Sesión</button>
                 </form>
                 <div class="blankpage-footer text-right mt-3">
-                    <router-link :to="{ name: 'forgot-your-password' }">
+                    <router-link :to="{ name: 'olvidaste-tu-contrasena' }">
                         Restablecer contraseña
                     </router-link>
                 </div>
@@ -75,12 +75,10 @@ export default {
         const router = useRouter();
         const { loginUser, logout, checkVersion } = useAuth();
         
-        const login = ref(
-            {
-                usuario: '',
-                password: ''           
-            }
-        );
+        const login = ref({
+            usuario: '',
+            password: ''           
+        });
         const reglas = {
             usuario: {
                 required
@@ -102,7 +100,6 @@ export default {
         });
 
         const iniciarSesion = async () => {
-
             if (statusRecaptcha) {
                 if (!v$.value.$invalid) {
                     const inicioSesion = JSON.parse(JSON.stringify(login.value));

@@ -59,6 +59,7 @@ const useAuth = () => {
                     "Secreto"
                 ).toString(CryptoJS.enc.Utf8)
             );
+            console.log(usuario);
             store.commit('auth/loginUser', { usuario, access_token });
         } else {
             store.commit('auth/logout');
@@ -284,8 +285,7 @@ const useAuth = () => {
         accesos: computed(() => store.getters['auth/getAccesosModulo']),
         email: computed(() => store.getters['auth/getEmail']),
         fullNameUser: computed(() => store.getters['auth/getFullNameUser']),
-        nombreRegional: computed(() => store.getters['auth/getRegional']),
-        unicaRegionalModulo: computed(() => store.getters['auth/getUnicaRegionalModulo']),
+        unicaSucursal: computed(() => store.getters['auth/getUnicaSucursal']),
         userName: computed(() => store.getters['auth/getUserName']),
     }
 };

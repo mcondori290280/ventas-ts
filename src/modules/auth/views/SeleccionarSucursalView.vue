@@ -2,7 +2,7 @@
     <div class="page-wrapper p-0">
         <div class="page-inner">
             <div class="page-content-wrapper p-0">
-                <header-cucursal-component />
+                <cabecera-sucursal-component />
 
                 <main id="js-page-content" role="main" class="page-content">
                     <div class="row justify-content-center">
@@ -71,7 +71,7 @@ import useAuth from '../composables/useAuth';
 
 export default {
     components: {
-        HeaderCucursalComponent: defineAsyncComponent(() => import('../components/HeaderSucursalComponent.vue')),
+        CabeceraSucursalComponent: defineAsyncComponent(() => import('../components/CabeceraSucursalComponent.vue')),
         FooterComponent: defineAsyncComponent(() => import('../components/FooterComponent.vue')),
     },
     setup() {
@@ -106,7 +106,7 @@ export default {
 
                     store.commit('auth/setSucursal', payload.value);
 
-                    router.push({ name: 'main' });
+                    router.push({ name: 'inicio' });
                 } else if (store.getters['auth/getIdSucursal'] !== 0) {
                     payload.value.id_sucursal = store.getters['auth/getIdSucursal'];
                 }
@@ -119,7 +119,7 @@ export default {
 
                 store.commit('auth/setSucursal', payload.value);
 
-                router.push({ name: 'main' });
+                router.push({ name: 'inicio' });
             }
         };
 

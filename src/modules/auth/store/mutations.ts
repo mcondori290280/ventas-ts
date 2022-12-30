@@ -1,15 +1,15 @@
 import CryptoJS from 'crypto-js';
 
 export const loginUser = (state: any, { usuario, access_token }: any) => {
-    state.user.correo_electronico = '';
+    state.user.correo_electronico = usuario.correo_electronico;
     state.user.id_usuario = usuario.id_usuario;
     state.user.nombre_completo = usuario.nombre_completo;
     state.user.usuario = usuario.usuario;
-    state.user.id_sucursal = 0;
-    state.user.sucursal = '';
-    state.user.accesos = [];
+    state.user.id_sucursal = usuario.id_sucursal;
+    state.user.sucursal = usuario.sucursal;
+    state.user.accesos = usuario.accesos;
     state.user.modificar_password = usuario.modificar_password;
-    state.user.unica_sucursal = false;
+    state.user.unica_sucursal = usuario.unica_sucursal;
 
     const userEncrypt = CryptoJS.AES.encrypt(
         JSON.stringify(state.user),
