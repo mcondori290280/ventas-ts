@@ -1,8 +1,11 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import { isNotAuthenticatedGuard } from '@/modules/auth/router/authGuard';
+
 import authRouter from '@/modules/auth/router';
 import systemRouter from '@/modules/system/router';
+import ventasRouter from '@/modules/ventas/router';
+
 import appConfig from '../app.config';
 
 const routes = [
@@ -13,6 +16,10 @@ const routes = [
     {
         path: '/system',
         ...systemRouter,
+    },
+    {
+        path: '/ventas',
+        ...ventasRouter,
     },
     {
         path: '',

@@ -43,7 +43,7 @@
                 </div> -->
 
             <ul id="js-nav-menu" class="nav-menu">
-                <template v-for="acceso in accesos" :key="acceso.IdRolFormularioWeb">
+                <!-- <template v-for="acceso in accesos" :key="acceso.IdRolFormularioWeb">
                     <li class="nav-title">
                         {{ acceso.titulo }}
                     </li>
@@ -84,100 +84,77 @@
                             </ul>
                         </li>
                     </template>
-                </template>
+                </template> -->
 
-                <!--
-                <li class="nav-title">Facturación Electrónica</li>
-                <li id="acceso_menu_seguimiento_pacientes" class="acceso-menu">
-                <a
-                    href="javascript:void(0)"
-                    title="Application Intel"
-                    data-filter-tags="application intel"
-                >
-                    <i class="fal fa-info-circle"></i>
-                    <span class="nav-link-text" data-i18n="nav.application_intel"
-                    >Facturación</span
-                    >
-                </a>
-                <ul>
-                    <li id="menu-item-0">
+                <li class="nav-title">Sistema de Ventas</li>
+                <li id="acceso-menu-ventas" class="acceso-menu">
                     <a
                         href="javascript:void(0)"
-                        title="Ventas"
-                        @click="
-                        seHizoClickEnOpcion(
-                            'acceso_menu_seguimiento_pacientes',
-                            'menu-item-0',
-                            'ventas-admin'
-                        )
-                        "
-                    >
-                        <span class="nav-link-text">Ventas</span>
+                        title="Almacén">
+                        <i class="fal fa-archive"></i>
+                        <span class="nav-link-text" data-i18n="nav.application_intel">
+                            Almacén
+                        </span>
                     </a>
-                    </li>
-                    <li id="menu-item-1">
-                    <a
-                        href="javascript:void(0)"
-                        title="Eventos"
-                        @click="
-                        seHizoClickEnOpcion(
-                            'acceso_menu_seguimiento_pacientes',
-                            'menu-item-1',
-                            'eventos-admin'
-                        )
-                        "
-                    >
-                        <span class="nav-link-text">Eventos</span>
-                    </a>
-                    </li>
-                    <li id="menu-item-2">
-                    <a
-                        href="javascript:void(0)"
-                        title="Clientes"
-                        @click="
-                        seHizoClickEnOpcion(
-                            'acceso_menu_seguimiento_pacientes',
-                            'menu-item-2',
-                            'clientes-admin'
-                        )
-                        "
-                    >
-                        <span class="nav-link-text">Clientes</span>
-                    </a>
-                    </li>
-                    <li id="menu-item-3">
-                    <a
-                        href="javascript:void(0)"
-                        title="Productos"
-                        @click="
-                        seHizoClickEnOpcion(
-                            'acceso_menu_seguimiento_pacientes',
-                            'menu-item-3',
-                            'productos-admin'
-                        )
-                        "
-                    >
-                        <span class="nav-link-text">Productos</span>
-                    </a>
-                    </li>
-                    <li id="menu-item-4">
-                    <a
-                        href="javascript:void(0)"
-                        title="Sucursales"
-                        @click="
-                        seHizoClickEnOpcion(
-                            'acceso_menu_seguimiento_pacientes',
-                            'menu-item-4',
-                            'sucursales-admin'
-                        )
-                        "
-                    >
-                        <span class="nav-link-text">Sucursales</span>
-                    </a>
-                    </li>
-                </ul>
+                    <ul>
+                        <li id="menu-item-0">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión de categorías de productos"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-0',
+                                        'categorias-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Categorías</span>
+                            </a>
+                        </li>
+                        <li id="menu-item-1">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión de presentaciones"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-1',
+                                        'presentaciones-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Presentaciones</span>
+                            </a>
+                        </li>
+                        <li id="menu-item-2">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión de marcas"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-2',
+                                        'marcas-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Marcas</span>
+                            </a>
+                        </li>
+                        <li id="menu-item-3">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión productos"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-3',
+                                        'productos-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Productos</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                -->
             </ul>
             <div class="filter-message js-filter-message bg-success-600"></div>
         </nav>
@@ -224,13 +201,13 @@ export default {
             $('body').removeClass('mobile-nav-on');
         };
 
-        const seHizoClickEnOpcion = (acceso, item, route, idKey) => {
+        const seHizoClickEnOpcion = (acceso, item, route/*, idKey*/) => {
             // Removemos la clase active de los link <a>
             route = route.toString().replace('/', '');
 
             for (let i = 0; i < 200; i++) {
-                $('#menu-item-' + idKey.toString() + '-' + i.toString()).removeClass(
-                'active'
+                $('#menu-item-' + i.toString()).removeClass(
+                '   active'
                 );
             }
 
