@@ -3,9 +3,9 @@
         style="background-image: url('/assets/img/backgrounds/page-bg.png');position:absolute;bottom:0;width:100%;height:100%; padding-top: 40px;">
         <div class="m-auto" style="width:350px;padding-top:48px;">
             <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded-top border-bottom-left-radius-0 border-bottom-right-radius-0"
-                style="position:relative;background-image:none;background:#fff;-webkit-box-shadow:none;padding-top:7px;height:170px;">
+                style="position:relative;background-image:none;background:#fff;-webkit-box-shadow:none;padding-top:7px;height:120px;">
                 <a href="javascript:void(0)" class="page-logo-link press-scale-down align-items-center">
-                    <img src="/assets/img/logo.jpeg" alt="Caja de Salud Banca Privada" style="height: 150px;">
+                    <img src="/assets/img/logo.png" alt="MarketBo" style="height: 70px;">
                 </a>
             </div>
 

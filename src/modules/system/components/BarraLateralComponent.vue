@@ -9,27 +9,25 @@
                     <span class="page-logo-text mr-1">SmartAdmin WebAppv</span>
                     <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
                 </a> -->
-            <router-link
+            <!-- <router-link
                 :to="{ name: 'inicio' }"
                 class="page-logo-link press-scale-down d-flex align-items-center"
-                exact>
-                <!-- <img src="/assets/img/logo.png"
-                            alt="SmartAdmin WebApp">
-                        <span class="page-logo-text mr-1">CSBP</span>
-                        <i class="fal d-inline-block ml-1 fs-lg color-primary-300"></i> -->
+                exact> -->
+            <div class="page-logo-link press-scale-down d-flex align-items-center">
                 <img
-                    src="/assets/img/logo2020.png"
+                    src="/assets/img/logo-imagen.png"
                     alt="SmartAdmin WebApp"
-                    style="height: 50px"
+                    style="height:60px"
                     @click="clickLogoMovil()" />
-                <span class="page-logo-text ml-3">
+                <span class="page-logo-text">
                     <img
                         src="/assets/img/logo2020letras.png"
                         alt="SmartAdmin WebApp"
-                        style="height: 25px; margin-left: 10px"
+                        style="height:50px; margin-left:-10px"
                         @click="clickLogoMovil()" />
                 </span>
-            </router-link>
+            </div>
+            <!-- </router-link> -->
         </div>
         <!-- BEGIN PRIMARY NAVIGATION -->
         <nav id="js-primary-nav" class="primary-nav" role="navigation">

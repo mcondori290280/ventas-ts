@@ -3,6 +3,8 @@ import appConfig from '@/app.config';
 
 import SystemLayout from '@/modules/system/layouts/SystemLayout.vue';
 import CategoriasAdminView from '@/modules/ventas/views/CategoriasAdminView.vue';
+import PresentacionesAdminView from '@/modules/ventas/views/PresentacionesAdminView.vue';
+import MarcasAdminView from '@/modules/ventas/views/MarcasAdminView.vue';
 
 export default {
     name: 'ventas',
@@ -21,7 +23,7 @@ export default {
         {
             path: '/presentaciones-admin',
             name: 'presentaciones-admin',
-            component: CategoriasAdminView,
+            component: PresentacionesAdminView,
             beforeEnter: isAuthenticatedGuard,
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Presentaciones',
@@ -31,7 +33,7 @@ export default {
         {
             path: '/marcas-admin',
             name: 'marcas-admin',
-            component: CategoriasAdminView,
+            component: MarcasAdminView,
             beforeEnter: isAuthenticatedGuard,
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Marcas',

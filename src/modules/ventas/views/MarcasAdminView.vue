@@ -14,7 +14,7 @@
                 <div class="panel">
                     <div class="panel-hdr mt-2">
                         <div class="float-left">
-                            <button type="button" class="btn btn-primary btn-sm mr-2" title="Nuevo" @click="nuevaCategoria">
+                            <button type="button" class="btn btn-primary btn-sm mr-2" title="Nuevo" @click="nuevaMarca">
                                 <i class="fal fa-plus-square"></i>
                                 <span class="d-none d-sm-block float-right ml-1">Nuevo</span>
                             </button>
@@ -34,7 +34,7 @@
                             <div class="row mb-1">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label class="form-label" for="nombre">Categoría</label>
+                                        <label class="form-label" for="nombre">Marca</label>
                                         <div class="input-group">
                                             <input
                                                 type="text"
@@ -44,14 +44,14 @@
                                                 placeholder="Nombre de categoría"
                                                 autocomplete="off"
                                                 v-model.trim="fitroBusqueda.textoBuscar"
-                                                @keyup.enter="buscarCategorias"/>
+                                                @keyup.enter="buscarMarcas"/>
                                             <div class="input-group-append">
                                                 <button
                                                     class="btn btn-primary btn-sm mb-2"
-                                                    id="btn-buscar-categorias"
-                                                    name="btn-buscar-categorias"
+                                                    id="btn-buscar-marcas"
+                                                    name="btn-buscar-marcas"
                                                     type="button"
-                                                    @click="buscarCategorias">
+                                                    @click="buscarMarcas">
                                                     <i class="fal fa-search"></i>
                                                     Buscar
                                                 </button>
@@ -101,7 +101,7 @@
 
                             <EasyDataTable
                                 :headers="headers"
-                                :items="categoriasFiltrados"
+                                :items="marcasFiltrados"
                                 border-cell
                                 alternating
                                 buttons-pagination>
@@ -125,8 +125,8 @@
                                         <button
                                             type="button"
                                             class="btn btn-primary btn-xs"
-                                            title="Editar categoría"
-                                            @click="editarCategoria(item)">
+                                            title="Editar marca"
+                                            @click="editarMarca(item)">
                                             <i class="fal fa-edit"></i>
                                         </button>
                                     </div>
@@ -144,9 +144,9 @@
     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
     <!-- END Page Content -->
 
-    <categoria-editar-component
-        ref="categoriaEditarComponentRef"
-        @cerrarEditarCategoriaComponent="cerrarEditarCategoriaComponentEmit" />
+    <marca-editar-component
+        ref="marcaEditarComponentRef"
+        @cerrarEditarMarcaComponent="cerrarEditarMarcaComponentEmit" />
 
 </template>
 
@@ -157,18 +157,18 @@ import {
     defineAsyncComponent,
  } from 'vue'; 
 
-import useCategorias from '@/modules/ventas/composables/useCategorias';
+import useMarcas from '@/modules/ventas/composables/useMarcas';
 
 export default {
     components: {
-        CategoriaEditarComponent: defineAsyncComponent(
-            () => import('@/modules/ventas/components/CategoriaEditarComponent.vue')
+        MarcaEditarComponent: defineAsyncComponent(
+            () => import('@/modules/ventas/components/MarcaEditarComponent.vue')
         ),
     },
     setup() {
         const {
-            obtenerCategorias,
-        } = useCategorias();
+            obtenerMarcas,
+        } = useMarcas();
 
         const fitroBusqueda = ref<any>({
             textoBuscar: ''
@@ -180,44 +180,44 @@ export default {
             { text: '', value: 'acciones', width: 15 },
         ];
 
-        let categorias: any = [];
-        const categoriasFiltrados = ref<any[]>([]);
+        let marcas: any = [];
+        const marcasFiltrados = ref<any[]>([]);
 
         const textoFiltro = ref<string>('');
 
-        const categoriaEditarComponentRef = ref();
+        const marcaEditarComponentRef = ref();
 
         onMounted(async() => {
-            await buscarCategorias();
+            await buscarMarcas();
         });
 
-        const buscarCategorias = async () => {
-            const resp = await obtenerCategorias(fitroBusqueda.value.textoBuscar);
+        const buscarMarcas = async () => {
+            const resp = await obtenerMarcas(fitroBusqueda.value.textoBuscar);
             if (resp.ok) {
-                categorias = resp.data;
-                categoriasFiltrados.value = JSON.parse(JSON.stringify(categorias));
+                marcas = resp.data;
+                marcasFiltrados.value = JSON.parse(JSON.stringify(marcas));
             }
         }
 
-        const nuevaCategoria = async () => {
-            categoriaEditarComponentRef.value.abrirComponent();
+        const nuevaMarca = async () => {
+            marcaEditarComponentRef.value.abrirComponent();
         }
 
-        const editarCategoria = async (categoria: any) => {
-            categoriaEditarComponentRef.value.abrirComponent(categoria);
+        const editarMarca = async (categoria: any) => {
+            marcaEditarComponentRef.value.abrirComponent(categoria);
         }
 
         const filtrarInformacion = async () => {
-            categoriasFiltrados.value = JSON.parse(JSON.stringify(
-                categorias.filter(
+            marcasFiltrados.value = JSON.parse(JSON.stringify(
+                marcas.filter(
                     (u: any) => u.nombre.toLowerCase().includes(textoFiltro.value.toLowerCase())
                 )
             ));
         }
 
-        const cerrarEditarCategoriaComponentEmit = async(seGrabo: boolean) => {
+        const cerrarEditarMarcaComponentEmit = async(seGrabo: boolean) => {
             if (seGrabo) {
-                await buscarCategorias();
+                await buscarMarcas();
             }
         }
 
@@ -225,15 +225,15 @@ export default {
             fitroBusqueda,
             headers,
             textoFiltro,
-            categoriasFiltrados,
+            marcasFiltrados,
 
-            buscarCategorias,
-            editarCategoria,
+            buscarMarcas,
+            editarMarca,
             filtrarInformacion,
-            nuevaCategoria,
+            nuevaMarca,
 
-            categoriaEditarComponentRef,
-            cerrarEditarCategoriaComponentEmit,
+            marcaEditarComponentRef,
+            cerrarEditarMarcaComponentEmit,
         };
     }
 }

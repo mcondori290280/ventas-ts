@@ -5,13 +5,13 @@
                 role="banner">
             <!-- we need this logo when user switches to nav-function-top -->
             <div class="pl-0 bg-white page-logo-link press-scale-down d-flex align-items-center">
-                <img src="/assets/img/logo2020.png"
-                        alt="Caja de Salud Banca Privada"
-                        style="height: 50px;">
+                <img src="/assets/img/logo-imagen.png"
+                        alt="MarketBo"
+                        style="height:60px;">
                 <span class="page-logo-text mr-1">
-                    <img src="/assets/img/logo2020letras.png"
-                            alt="Caja de Salud Banca Privada"
-                            style="height: 25px;margin-left:10px;">
+                    <img src="/assets/img/logo-letras.png"
+                            alt="MarketBo"
+                            style="height:50px;margin-left:-10px;">
                 </span>
             </div>
 

@@ -7,7 +7,7 @@
                 <a href="javascript:void(0)"
                 class="page-logo-link press-scale-down align-items-center">
                     <img src="/assets/img/logo.jpeg"
-                        alt="Caja de Salud Banca Privada" style="height: 150px;"
+                        alt="MarketBo" style="height: 150px;"
                         aria-roledescription="logo">
                 </a>
                 

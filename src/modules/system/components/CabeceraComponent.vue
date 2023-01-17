@@ -5,31 +5,18 @@
                 role="banner">
             <!-- we need this logo when user switches to nav-function-top -->
             <div class="page-logo" style="padding-top:3px;">
-                <!-- <a href="javascript:void(0)"
-                   class="page-logo-link press-scale-down d-flex align-items-center"
-                   data-toggle="modal"
-                   data-target="#modal-shortcut">
-                    <img src="/assets/img/logo.png"
-                         alt="SmartAdmin WebApp"
-                         aria-roledescription="logo">
-                    <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
-                    <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
-                </a> -->
-                <router-link :to="{ name: 'inicio' }" class="page-logo-link press-scale-down d-flex align-items-center">
-                    <!-- <img src="/assets/img/logo.png"
-                         alt="SmartAdmin WebApp"
-                         aria-roledescription="logo">
-                    <span class="page-logo-text mr-1">CSBP</span>
-                    <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i> -->
-                    <img src="/assets/img/logo2020.png"
-                         alt="Caja de Salud Banca Privada"
-                         style="height: 50px;">
+                <!-- <router-link :to="{ name: 'inicio' }" class="page-logo-link press-scale-down d-flex align-items-center"> -->
+                <div class="page-logo-link press-scale-down d-flex align-items-center">
+                    <img src="/assets/img/logo-imagen.png"
+                         alt="MarketBo"
+                         style="height:60px;">
                     <span class="page-logo-text mr-1">
-                        <img src="/assets/img/logo2020letras.png"
-                             alt="Caja de Salud Banca Privada"
-                             style="height: 25px;margin-left:10px;">
+                        <img src="/assets/img/logo-letras.png"
+                             alt="MarketBo"
+                             style="height:60px;margin-left:-10px;">
                     </span>
-                </router-link>
+                </div>
+                <!-- </router-link> -->
             </div>
             <!-- DOC: nav menu layout change shortcut -->
             <div class="hidden-md-down dropdown-icon-menu position-relative">

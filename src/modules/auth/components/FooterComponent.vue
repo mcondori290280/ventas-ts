@@ -2,7 +2,10 @@
     <!-- BEGIN Page Footer -->
     <footer class="page-footer position-absolute pos-bottom bg-transparent" role="contentinfo">
         <div class="d-flex align-items-center flex-1 text-muted">
-            <span class="hidden-md-down fw-700">{{ anioActual }} © Caja de Salud Banca Privada&nbsp;-&nbsp;<a href='http://portal.csbp.com.bo' class='text-primary fw-500' title='http://portal.csbp.com.bo' target='_blank'>portal.csbp.com.bo</a></span>
+            <span class="hidden-md-down fw-700">
+                {{ anioActual }} © {{ nombreEmpresa }}&nbsp;-&nbsp;
+                <a :href='sitioWebEmpresa' class='text-primary fw-500' :title='sitioWebEmpresa' target='_blank'>{{ sitioWebEmpresa }}</a>
+            </span>
         </div>
         <!-- <div>
             <ul class="list-table m-0">
@@ -18,12 +21,18 @@
 <script>
 import { computed } from 'vue';
 
+import appConfig from '@/app.config';
+
 export default {
     setup() {
         const anioActual = computed(() => new Date().getUTCFullYear())
+        const nombreEmpresa = appConfig.NOMBRE_EMPRESA;
+        const sitioWebEmpresa = appConfig.SITIO_WEB_EMPRESA;
 
         return {
             anioActual,
+            nombreEmpresa,
+            sitioWebEmpresa,
         };
     }
 }

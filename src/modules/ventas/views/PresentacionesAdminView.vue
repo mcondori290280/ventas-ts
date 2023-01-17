@@ -14,7 +14,7 @@
                 <div class="panel">
                     <div class="panel-hdr mt-2">
                         <div class="float-left">
-                            <button type="button" class="btn btn-primary btn-sm mr-2" title="Nuevo" @click="nuevaCategoria">
+                            <button type="button" class="btn btn-primary btn-sm mr-2" title="Nuevo" @click="nuevaPresentacion">
                                 <i class="fal fa-plus-square"></i>
                                 <span class="d-none d-sm-block float-right ml-1">Nuevo</span>
                             </button>
@@ -34,24 +34,24 @@
                             <div class="row mb-1">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label class="form-label" for="nombre">Categoría</label>
+                                        <label class="form-label" for="nombre">Presentación</label>
                                         <div class="input-group">
                                             <input
                                                 type="text"
                                                 id="nombre"
                                                 name="nombre"
                                                 class="form-control form-control-sm"
-                                                placeholder="Nombre de categoría"
+                                                placeholder="Nombre presentación"
                                                 autocomplete="off"
                                                 v-model.trim="fitroBusqueda.textoBuscar"
-                                                @keyup.enter="buscarCategorias"/>
+                                                @keyup.enter="buscarPresentaciones"/>
                                             <div class="input-group-append">
                                                 <button
                                                     class="btn btn-primary btn-sm mb-2"
-                                                    id="btn-buscar-categorias"
-                                                    name="btn-buscar-categorias"
+                                                    id="btn-buscar-presentaciones"
+                                                    name="btn-buscar-presentaciones"
                                                     type="button"
-                                                    @click="buscarCategorias">
+                                                    @click="buscarPresentaciones">
                                                     <i class="fal fa-search"></i>
                                                     Buscar
                                                 </button>
@@ -101,7 +101,7 @@
 
                             <EasyDataTable
                                 :headers="headers"
-                                :items="categoriasFiltrados"
+                                :items="presentacionesFiltrados"
                                 border-cell
                                 alternating
                                 buttons-pagination>
@@ -125,8 +125,8 @@
                                         <button
                                             type="button"
                                             class="btn btn-primary btn-xs"
-                                            title="Editar categoría"
-                                            @click="editarCategoria(item)">
+                                            title="Editar presentación"
+                                            @click="editarPresentacion(item)">
                                             <i class="fal fa-edit"></i>
                                         </button>
                                     </div>
@@ -144,9 +144,9 @@
     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
     <!-- END Page Content -->
 
-    <categoria-editar-component
-        ref="categoriaEditarComponentRef"
-        @cerrarEditarCategoriaComponent="cerrarEditarCategoriaComponentEmit" />
+    <presentacion-editar-component
+        ref="presentacionEditarComponentRef"
+        @cerrarEditarPresentacionComponent="cerrarEditarPresentacionComponentEmit" />
 
 </template>
 
@@ -157,18 +157,18 @@ import {
     defineAsyncComponent,
  } from 'vue'; 
 
-import useCategorias from '@/modules/ventas/composables/useCategorias';
+import usePresentaciones from '@/modules/ventas/composables/usePresentaciones';
 
 export default {
     components: {
-        CategoriaEditarComponent: defineAsyncComponent(
-            () => import('@/modules/ventas/components/CategoriaEditarComponent.vue')
+        PresentacionEditarComponent: defineAsyncComponent(
+            () => import('@/modules/ventas/components/PresentacionEditarComponent.vue')
         ),
     },
     setup() {
         const {
-            obtenerCategorias,
-        } = useCategorias();
+            obtenerPresentaciones,
+        } = usePresentaciones();
 
         const fitroBusqueda = ref<any>({
             textoBuscar: ''
@@ -176,48 +176,49 @@ export default {
 
         const headers = [
             { text: 'Nombre', value: 'nombre', sortable: true },
+            { text: 'Sigla', value: 'sigla', sortable: true },
             { text: 'Estado', value: 'estado', sortable: true },
             { text: '', value: 'acciones', width: 15 },
         ];
 
-        let categorias: any = [];
-        const categoriasFiltrados = ref<any[]>([]);
+        let presentaciones: any = [];
+        const presentacionesFiltrados = ref<any[]>([]);
 
         const textoFiltro = ref<string>('');
 
-        const categoriaEditarComponentRef = ref();
+        const presentacionEditarComponentRef = ref();
 
         onMounted(async() => {
-            await buscarCategorias();
+            await buscarPresentaciones();
         });
 
-        const buscarCategorias = async () => {
-            const resp = await obtenerCategorias(fitroBusqueda.value.textoBuscar);
+        const buscarPresentaciones = async () => {
+            const resp = await obtenerPresentaciones(fitroBusqueda.value.textoBuscar);
             if (resp.ok) {
-                categorias = resp.data;
-                categoriasFiltrados.value = JSON.parse(JSON.stringify(categorias));
+                presentaciones = resp.data;
+                presentacionesFiltrados.value = JSON.parse(JSON.stringify(presentaciones));
             }
         }
 
-        const nuevaCategoria = async () => {
-            categoriaEditarComponentRef.value.abrirComponent();
+        const nuevaPresentacion = async () => {
+            presentacionEditarComponentRef.value.abrirComponent();
         }
 
-        const editarCategoria = async (categoria: any) => {
-            categoriaEditarComponentRef.value.abrirComponent(categoria);
+        const editarPresentacion = async (categoria: any) => {
+            presentacionEditarComponentRef.value.abrirComponent(categoria);
         }
 
         const filtrarInformacion = async () => {
-            categoriasFiltrados.value = JSON.parse(JSON.stringify(
-                categorias.filter(
+            presentacionesFiltrados.value = JSON.parse(JSON.stringify(
+                presentaciones.filter(
                     (u: any) => u.nombre.toLowerCase().includes(textoFiltro.value.toLowerCase())
                 )
             ));
         }
 
-        const cerrarEditarCategoriaComponentEmit = async(seGrabo: boolean) => {
+        const cerrarEditarPresentacionComponentEmit = async(seGrabo: boolean) => {
             if (seGrabo) {
-                await buscarCategorias();
+                await buscarPresentaciones();
             }
         }
 
@@ -225,15 +226,15 @@ export default {
             fitroBusqueda,
             headers,
             textoFiltro,
-            categoriasFiltrados,
+            presentacionesFiltrados,
 
-            buscarCategorias,
-            editarCategoria,
+            buscarPresentaciones,
+            editarPresentacion,
             filtrarInformacion,
-            nuevaCategoria,
+            nuevaPresentacion,
 
-            categoriaEditarComponentRef,
-            cerrarEditarCategoriaComponentEmit,
+            presentacionEditarComponentRef,
+            cerrarEditarPresentacionComponentEmit,
         };
     }
 }

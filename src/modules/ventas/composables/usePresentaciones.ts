@@ -5,11 +5,11 @@ import utils from '@/utils/utils';
 
 import { useLoading } from 'vue-loading-overlay';
 
-const useCategorias = () => {
+const usePresentaciones = () => {
     const store = useStore();
     const $loading = useLoading();
 
-    const obtenerCategorias = async(nombre: string) => {
+    const obtenerPresentaciones = async(nombre: string) => {
         const respuesta = {
             ok: false,
             data: undefined,
@@ -18,7 +18,7 @@ const useCategorias = () => {
         const loader = $loading.show(utils.configuracionLoading);
         try {
             const { data } = await authApi.get(
-                `/categorias/obtener-categorias/${ nombre }`,
+                `/presentaciones/obtener-presentaciones/${ nombre }`,
                 {
                     headers: {
                         'Content-type' : 'application/json',
@@ -46,7 +46,7 @@ const useCategorias = () => {
         return respuesta;
     }
 
-    const grabarCategoria = async (categoria: any) => {
+    const grabarPresentacion = async (presentacion: any) => {
         const respuesta = {
             ok: false,
             data: 0,
@@ -55,8 +55,8 @@ const useCategorias = () => {
         const loader = $loading.show(utils.configuracionLoading);
         try {
             const { data } = await authApi.post(
-                '/categorias/grabar-categoria',
-                categoria,
+                '/presentaciones/grabar-presentacion',
+                presentacion,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + store.getters['auth/getToken']
@@ -82,9 +82,9 @@ const useCategorias = () => {
     }
     
     return {
-        obtenerCategorias,
-        grabarCategoria,
+        obtenerPresentaciones,
+        grabarPresentacion,
     }
 };
 
-export default useCategorias;
+export default usePresentaciones;
