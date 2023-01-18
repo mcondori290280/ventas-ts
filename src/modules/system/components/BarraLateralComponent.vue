@@ -4,11 +4,6 @@
         <div
             class="page-logo"
             style=" background: linear-gradient(90deg, rgba(215, 215, 215, 1) 3px, rgba(255, 255, 255, 1) 32px);">
-            <!-- <a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center" data-toggle="modal" data-target="#modal-shortcut">
-                    <img src="/assets/img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo">
-                    <span class="page-logo-text mr-1">SmartAdmin WebAppv</span>
-                    <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
-                </a> -->
             <!-- <router-link
                 :to="{ name: 'inicio' }"
                 class="page-logo-link press-scale-down d-flex align-items-center"
@@ -31,61 +26,9 @@
         </div>
         <!-- BEGIN PRIMARY NAVIGATION -->
         <nav id="js-primary-nav" class="primary-nav" role="navigation">
-        <!-- <div class="nav-filter">
-                    <div class="position-relative">
-                        <input type="text" id="nav_filter_input" placeholder="Filter menu" class="form-control" tabindex="0">
-                        <a href="javascript:void(0)" onclick="return false;" class="btn-primary btn-search-close js-waves-off" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar">
-                            <i class="fal fa-chevron-up"></i>
-                        </a>
-                    </div>
-                </div> -->
-
             <ul id="js-nav-menu" class="nav-menu">
-                <!-- <template v-for="acceso in accesos" :key="acceso.IdRolFormularioWeb">
-                    <li class="nav-title">
-                        {{ acceso.titulo }}
-                    </li>
-                    <template
-                        v-for="hijo in acceso.Children"
-                        :key="hijo.IdRolFormularioWeb">
-                        <li
-                            :id="`acceso_menu_${acceso.IdRolFormularioWeb}`"
-                            class="acceso-menu">
-                            <a
-                                href="javascript:void(0)"
-                                :title="`${hijo.titulo}`"
-                                :data-filter-tags="`${hijo.titulo}`">
-                                <i :class="`${hijo.classIcon}`"></i>
-                                <span class="nav-link-text" data-i18n="nav.application_intel">{{
-                                hijo.titulo
-                                }}</span>
-                            </a>
-                            <ul>
-                                <template
-                                    v-for="(nieto, index) in hijo.Children"
-                                    :key="nieto.IdRolFormularioWeb">
-                                    <li :id="`menu-item-${acceso.IdRolFormularioWeb}-${index}`">
-                                            <a
-                                                href="javascript:void(0)"
-                                                :title="`${nieto.titulo}`"
-                                                @click="
-                                                    seHizoClickEnOpcion(
-                                                    `acceso_menu_${acceso.IdRolFormularioWeb}`,
-                                                    `menu-item-${acceso.IdRolFormularioWeb}-${index}`,
-                                                    nieto.url,
-                                                    `${acceso.IdRolFormularioWeb}`
-                                                    )">
-                                                <span class="nav-link-text">{{ nieto.titulo }}</span>
-                                            </a>
-                                    </li>
-                                </template>
-                            </ul>
-                        </li>
-                    </template>
-                </template> -->
-
                 <li class="nav-title">Sistema de Ventas</li>
-                <li id="acceso-menu-ventas" class="acceso-menu">
+                <li id="acceso-menu-almacen" class="acceso-menu">
                     <a
                         href="javascript:void(0)"
                         title="Almacén">
@@ -95,62 +38,144 @@
                         </span>
                     </a>
                     <ul>
-                        <li id="menu-item-0">
+                        <li id="menu-item-10">
                             <a
                                 href="javascript:void(0)"
                                 title="Gestión de categorías de productos"
                                 @click="
                                     seHizoClickEnOpcion(
-                                        'acceso-menu-ventas',
-                                        'menu-item-0',
+                                        'acceso-menu-almacen',
+                                        'menu-item-10',
                                         'categorias-admin'
                                     )
                                 ">
                                 <span class="nav-link-text">Categorías</span>
                             </a>
                         </li>
-                        <li id="menu-item-1">
+                        <li id="menu-item-11">
                             <a
                                 href="javascript:void(0)"
                                 title="Gestión de presentaciones"
                                 @click="
                                     seHizoClickEnOpcion(
-                                        'acceso-menu-ventas',
-                                        'menu-item-1',
+                                        'acceso-menu-almacen',
+                                        'menu-item-11',
                                         'presentaciones-admin'
                                     )
                                 ">
                                 <span class="nav-link-text">Presentaciones</span>
                             </a>
                         </li>
-                        <li id="menu-item-2">
+                        <li id="menu-item-12">
                             <a
                                 href="javascript:void(0)"
                                 title="Gestión de marcas"
                                 @click="
                                     seHizoClickEnOpcion(
-                                        'acceso-menu-ventas',
-                                        'menu-item-2',
+                                        'acceso-menu-almacen',
+                                        'menu-item-12',
                                         'marcas-admin'
                                     )
                                 ">
                                 <span class="nav-link-text">Marcas</span>
                             </a>
                         </li>
-                        <li id="menu-item-3">
+                        <li id="menu-item-13">
                             <a
                                 href="javascript:void(0)"
                                 title="Gestión productos"
                                 @click="
                                     seHizoClickEnOpcion(
-                                        'acceso-menu-ventas',
-                                        'menu-item-3',
+                                        'acceso-menu-almacen',
+                                        'menu-item-13',
                                         'productos-admin'
                                     )
                                 ">
                                 <span class="nav-link-text">Productos</span>
                             </a>
                         </li>
+                        <li id="menu-item-14">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión stock de productos"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-almacen',
+                                        'menu-item-14',
+                                        'productos-stock-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Stock Productos</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="acceso-menu-ventas" class="acceso-menu">
+                    <a
+                        href="javascript:void(0)"
+                        title="Almacén">
+                        <i class="fal fa-shopping-cart"></i>
+                        <span class="nav-link-text" data-i18n="nav.application_intel">
+                            Ventas
+                        </span>
+                    </a>
+                    <ul>
+                        <li id="menu-item-4">
+                            <a
+                                href="javascript:void(0)"
+                                title="Realizar ventas"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-4',
+                                        'ventas-editar'
+                                    )
+                                ">
+                                <span class="nav-link-text">Realizar Ventas</span>
+                            </a>
+                        </li>
+                        <!-- <li id="menu-item-5">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión de presentaciones"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-5',
+                                        'presentaciones-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Presentaciones</span>
+                            </a>
+                        </li>
+                        <li id="menu-item-6">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión de marcas"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-6',
+                                        'marcas-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Marcas</span>
+                            </a>
+                        </li>
+                        <li id="menu-item-7">
+                            <a
+                                href="javascript:void(0)"
+                                title="Gestión productos"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-7',
+                                        'productos-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Productos</span>
+                            </a>
+                        </li> -->
                     </ul>
                 </li>
             </ul>

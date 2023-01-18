@@ -68,189 +68,6 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
                                 <label
                                     class="form-label"
-                                    for="se_vende_como">Se vende como</label>
-                                <Select2
-                                    id="se_vende_como"
-                                    name="se_vende_como"
-                                    :class="{ 'input-validation-error-select2': v$.se_vende_como.$dirty && v$.se_vende_como.$invalid }"
-                                    :disabled="seGrabo"
-                                    v-model="v$.se_vende_como.$model"
-                                    :options="opcionesSeVendeComo"
-                                    :settings="{ multiple: false, placeholder: 'Seleccione', width: '100%', tags: false, dropdownParent:'#producto-editar-component-modal' }" />
-                                <small
-                                    class="invalid-feedback-select2"
-                                    v-if="v$.se_vende_como.$dirty && v$.se_vende_como.required.$invalid">
-                                    Se vende como, no tiene información.
-                                </small>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
-                                <div class="form-group">
-                                    <label
-                                        class="form-label"
-                                        for="precio_compra">Precio compra</label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            :class="{ 'is-invalid': v$.precio_compra.$dirty && v$.precio_compra.$invalid }"
-                                            id="precio_compra"
-                                            name="precio_compra"
-                                            autocomplete="off"
-                                            :disabled="seGrabo"
-                                            v-model.trim="v$.precio_compra.$model">
-                                        <small
-                                            class="invalid-feedback" v-if="v$.precio_compra.$dirty && v$.precio_compra.required.$invalid">
-                                            Precio compra, no tiene información.
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
-                                <div class="form-group">
-                                    <label
-                                        class="form-label"
-                                        for="porcentaje_ganancia">% Ganancia</label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <button
-                                                type="button"
-                                                class="btn btn-default btn-sm"
-                                                title="Menos"
-                                                @click="
-                                                    if (producto.porcentaje_ganancia > 0) {
-                                                        producto.porcentaje_ganancia = producto.porcentaje_ganancia - 1;
-                                                        producto.precio_venta = Number(producto.precio_compra) + Number((producto.precio_compra * ( producto.porcentaje_ganancia / 100 )).toFixed(2));
-                                                    }
-                                                ">
-                                                -
-                                            </button>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            :class="{ 'is-invalid': v$.porcentaje_ganancia.$dirty && v$.porcentaje_ganancia.$invalid }"
-                                            id="porcentaje_ganancia"
-                                            name="porcentaje_ganancia"
-                                            autocomplete="off"
-                                            :disabled="seGrabo"
-                                            :readonly="true"
-                                            v-model.trim="v$.porcentaje_ganancia.$model">
-                                        <div class="input-group-prepend">
-                                            <button
-                                                type="button"
-                                                class="btn btn-default btn-sm"
-                                                title="Más"
-                                                @click="
-                                                    if (producto.porcentaje_ganancia < 100) {
-                                                        producto.porcentaje_ganancia = producto.porcentaje_ganancia + 1;
-                                                        producto.precio_venta = Number(producto.precio_compra) + Number((producto.precio_compra * ( producto.porcentaje_ganancia / 100 )).toFixed(2));
-                                                    }
-                                                ">
-                                                +
-                                            </button>
-                                        </div>
-                                        <small
-                                            class="invalid-feedback" v-if="v$.porcentaje_ganancia.$dirty && v$.porcentaje_ganancia.required.$invalid">
-                                            % Ganancia, no tiene información.
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
-                                <div class="form-group">
-                                    <label
-                                        class="form-label"
-                                        for="precio_venta">Precio venta</label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            :class="{ 'is-invalid': v$.precio_venta.$dirty && v$.precio_venta.$invalid }"
-                                            id="precio_venta"
-                                            name="precio_venta"
-                                            autocomplete="off"
-                                            :disabled="seGrabo"
-                                            v-model.trim="v$.precio_venta.$model">
-                                        <small
-                                            class="invalid-feedback" v-if="v$.precio_venta.$dirty && v$.precio_venta.required.$invalid">
-                                            Precio venta, no tiene información.
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
-                                <div class="form-group">
-                                    <label
-                                        class="form-label"
-                                        for="precio_venta_por_mayor">Precio venta por mayor</label>
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            class="form-control form-control-sm"
-                                            :class="{ 'is-invalid': v$.precio_venta_por_mayor.$dirty && v$.precio_venta_por_mayor.$invalid }"
-                                            id="precio_venta_por_mayor"
-                                            name="precio_venta_por_mayor"
-                                            autocomplete="off"
-                                            :disabled="seGrabo"
-                                            v-model.trim="v$.precio_venta_por_mayor.$model">
-                                        <small
-                                            class="invalid-feedback" v-if="v$.precio_venta_por_mayor.$dirty && v$.precio_venta_por_mayor.required.$invalid">
-                                            Precio venta por mayor, no tiene información.
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
-                                <label
-                                    class="form-label"
-                                    for="stock">Stock</label>
-                                <input
-                                    type="text"
-                                    class="form-control form-control-sm"
-                                    :class="{ 'is-invalid': v$.stock.$dirty && v$.stock.$invalid }"
-                                    id="stock"
-                                    name="stock"
-                                    autocomplete="off"
-                                    :disabled="seGrabo || producto.id_producto > 0"
-                                    v-model.trim="v$.stock.$model">
-                                <small
-                                    class="invalid-feedback" v-if="v$.stock.$dirty && v$.stock.required.$invalid">
-                                    Stock, no tiene información.
-                                </small>
-                            </div>
-
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
-                                <label
-                                    class="form-label"
-                                    for="stock_minimo">Stock mínimo</label>
-                                <input
-                                    type="text"
-                                    class="form-control form-control-sm"
-                                    :class="{ 'is-invalid': v$.stock_minimo.$dirty && v$.stock_minimo.$invalid }"
-                                    id="stock_minimo"
-                                    name="stock_minimo"
-                                    autocomplete="off"
-                                    :disabled="seGrabo"
-                                    v-model.trim="v$.stock_minimo.$model">
-                                <small
-                                    class="invalid-feedback" v-if="v$.stock_minimo.$dirty && v$.stock_minimo.required.$invalid">
-                                    Stock mínimo, no tiene información.
-                                </small>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
-                                <label
-                                    class="form-label"
                                     for="id_categoria">Categoría</label>
                                 <Select2
                                     id="id_categoria"
@@ -266,7 +83,6 @@
                                     Categoría, no tiene información.
                                 </small>
                             </div>
-
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
                                 <label
                                     class="form-label"
@@ -285,6 +101,7 @@
                                     Marca, no tiene información.
                                 </small>
                             </div>
+
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
                                 <label
                                     class="form-label"
@@ -303,7 +120,7 @@
                                     Presentación, no tiene información.
                                 </small>
                             </div>
-
+                            
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
                                 <div class="custom-control custom-switch">
                                     <input
@@ -373,13 +190,6 @@ export default defineComponent({
             id_producto: 0,
             codigo_barras: '',
             nombre: '',
-            se_vende_como: '',
-            precio_compra: 0,
-            porcentaje_ganancia: 0,
-            precio_venta: 0,
-            precio_venta_por_mayor: 0,
-            stock: 0,
-            stock_minimo: 0,
             id_categoria: '',
             id_marca: '',
             id_presentacion: '',
@@ -389,13 +199,6 @@ export default defineComponent({
         const reglasProducto = {
             codigo_barras: { required, maxLength: maxLength(50) },
             nombre: { required, maxLength: maxLength(100) },
-            se_vende_como: { required, maxLength: maxLength(100) },
-            precio_compra: { required, },
-            porcentaje_ganancia: { required, },
-            precio_venta: { required, },
-            precio_venta_por_mayor: { required, },
-            stock: { required, },
-            stock_minimo: { required, },
             id_categoria: { required, },
             id_marca: { required, },
             id_presentacion: { required, },
@@ -405,11 +208,6 @@ export default defineComponent({
             reglasProducto,
             producto
         );
-
-        const opcionesSeVendeComo = ref<any>([
-            { id: 'unidad', text: 'UNIDAD' },
-            { id: 'paquete', text: 'PAQUETE' },
-        ]);
 
         const categorias = ref<any>([]);
         const marcas = ref<any>([]);
@@ -472,13 +270,6 @@ export default defineComponent({
             producto.value.id_producto = 0;
             producto.value.codigo_barras = '';
             producto.value.nombre = '';
-            producto.value.se_vende_como = '';
-            producto.value.precio_compra = 0;
-            producto.value.porcentaje_ganancia = 0;
-            producto.value.precio_venta = 0;
-            producto.value.precio_venta_por_mayor = 0;
-            producto.value.stock = 0;
-            producto.value.stock_minimo = 0;
             producto.value.id_categoria = '';
             producto.value.id_marca = '';
             producto.value.id_presentacion = '';
@@ -493,7 +284,6 @@ export default defineComponent({
         return {
             seGrabo,
             producto,
-            opcionesSeVendeComo,
             categorias,
             marcas,
             presentaciones,

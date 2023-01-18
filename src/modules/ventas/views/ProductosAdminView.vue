@@ -105,36 +105,6 @@
                                 border-cell
                                 alternating
                                 buttons-pagination>
-
-                                <template #item-se_vende_como="item">
-                                    {{ item.se_vende_como === 'unidad' ? 'UNIDAD' : 'PAQUETE' }}
-                                </template>
-                                <template #item-precio_compra="item">
-                                    <div class="text-right">
-                                        {{ numeral(item.precio_compra).format('0,0.00') }}
-                                    </div>
-                                </template>
-                                <template #item-precio_venta="item">
-                                    <div class="text-right">
-                                        {{ numeral(item.precio_venta).format('0,0.00') }}
-                                    </div>
-                                </template>
-                                <template #item-precio_venta_por_mayor="item">
-                                    <div class="text-right">
-                                        {{ numeral(item.precio_venta_por_mayor).format('0,0.00') }}
-                                    </div>
-                                </template>
-                                <template #item-stock="item">
-                                    <div class="text-right">
-                                        {{ numeral(item.stock).format('0,0') }}
-                                    </div>
-                                </template>
-                                <template #item-stock_minimo="item">
-                                    <div class="text-right">
-                                        {{ numeral(item.stock_minimo).format('0,0') }}
-                                    </div>
-                                </template>
-
                                 <template #item-estado="item">
                                     <div class="custom-control custom-checkbox ml-3">
                                         <input
@@ -208,12 +178,6 @@ export default {
         const headers = [
             { text: 'Código de barras', value: 'codigo_barras', sortable: true },
             { text: 'Nombre', value: 'nombre', sortable: true },
-            { text: 'Se vende como', value: 'se_vende_como', sortable: true },
-            { text: 'Precio compra', value: 'precio_compra', sortable: true },
-            { text: 'Precio venta', value: 'precio_venta', sortable: true },
-            { text: 'Precio venta por mayor', value: 'precio_venta_por_mayor', sortable: true },
-            { text: 'Stock', value: 'stock', sortable: true },
-            { text: 'Stock mínimo', value: 'stock_minimo', sortable: true },
             { text: 'Categoría', value: 'nombre_categoria', sortable: true },
             { text: 'Marca', value: 'nombre_marca', sortable: true },
             { text: 'Presentación', value: 'nombre_presentacion', sortable: true },

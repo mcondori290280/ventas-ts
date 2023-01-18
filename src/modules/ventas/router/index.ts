@@ -6,6 +6,8 @@ import CategoriasAdminView from '@/modules/ventas/views/CategoriasAdminView.vue'
 import PresentacionesAdminView from '@/modules/ventas/views/PresentacionesAdminView.vue';
 import MarcasAdminView from '@/modules/ventas/views/MarcasAdminView.vue';
 import ProductosAdminView from '@/modules/ventas/views/ProductosAdminView.vue';
+import ProductosStockAdminView from '@/modules/ventas/views/ProductosStockAdminView.vue';
+import VentasEditarView from '@/modules/ventas/views/VentasEditarView.vue';
 
 export default {
     name: 'ventas',
@@ -49,6 +51,27 @@ export default {
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Productos',
                 titleForm: 'Productos'
+            },
+        },
+        {
+            path: '/productos-stock-admin',
+            name: 'productos-stock-admin',
+            component: ProductosStockAdminView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Productos stock',
+                titleForm: 'Productos stock'
+            },
+        },
+
+        {
+            path: '/ventas-editar',
+            name: 'ventas-editar',
+            component: VentasEditarView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Ventas',
+                titleForm: 'Ventas'
             },
         },
     ],
