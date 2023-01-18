@@ -5,6 +5,7 @@ import SystemLayout from '@/modules/system/layouts/SystemLayout.vue';
 import CategoriasAdminView from '@/modules/ventas/views/CategoriasAdminView.vue';
 import PresentacionesAdminView from '@/modules/ventas/views/PresentacionesAdminView.vue';
 import MarcasAdminView from '@/modules/ventas/views/MarcasAdminView.vue';
+import ProductosAdminView from '@/modules/ventas/views/ProductosAdminView.vue';
 
 export default {
     name: 'ventas',
@@ -43,7 +44,7 @@ export default {
         {
             path: '/productos-admin',
             name: 'productos-admin',
-            component: CategoriasAdminView,
+            component: ProductosAdminView,
             beforeEnter: isAuthenticatedGuard,
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Productos',

@@ -14,7 +14,7 @@
                 <div class="panel">
                     <div class="panel-hdr mt-2">
                         <div class="float-left">
-                            <button type="button" class="btn btn-primary btn-sm mr-2" title="Nuevo" @click="nuevaPresentacion">
+                            <button type="button" class="btn btn-primary btn-sm mr-2" title="Nuevo" @click="nuevoProducto">
                                 <i class="fal fa-plus-square"></i>
                                 <span class="d-none d-sm-block float-right ml-1">Nuevo</span>
                             </button>
@@ -34,24 +34,24 @@
                             <div class="row mb-1">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label class="form-label" for="nombre">Presentación</label>
+                                        <label class="form-label" for="nombre">Producto</label>
                                         <div class="input-group">
                                             <input
                                                 type="text"
                                                 id="nombre"
                                                 name="nombre"
                                                 class="form-control form-control-sm"
-                                                placeholder="Nombre presentación"
+                                                placeholder="Nombre de producto"
                                                 autocomplete="off"
                                                 v-model.trim="fitroBusqueda.textoBuscar"
-                                                @keyup.enter="buscarPresentaciones"/>
+                                                @keyup.enter="buscarProductos"/>
                                             <div class="input-group-append">
                                                 <button
                                                     class="btn btn-primary btn-sm mb-2"
-                                                    id="btn-buscar-presentaciones"
-                                                    name="btn-buscar-presentaciones"
+                                                    id="btn-buscar-productos"
+                                                    name="btn-buscar-productos"
                                                     type="button"
-                                                    @click="buscarPresentaciones">
+                                                    @click="buscarProductos">
                                                     <i class="fal fa-search"></i>
                                                     Buscar
                                                 </button>
@@ -101,22 +101,51 @@
 
                             <EasyDataTable
                                 :headers="headers"
-                                :items="presentacionesFiltrados"
+                                :items="productosFiltrados"
                                 border-cell
                                 alternating
                                 buttons-pagination>
+
+                                <template #item-se_vende_como="item">
+                                    {{ item.se_vende_como === 'unidad' ? 'UNIDAD' : 'PAQUETE' }}
+                                </template>
+                                <template #item-precio_compra="item">
+                                    <div class="text-right">
+                                        {{ numeral(item.precio_compra).format('0,0.00') }}
+                                    </div>
+                                </template>
+                                <template #item-precio_venta="item">
+                                    <div class="text-right">
+                                        {{ numeral(item.precio_venta).format('0,0.00') }}
+                                    </div>
+                                </template>
+                                <template #item-precio_venta_por_mayor="item">
+                                    <div class="text-right">
+                                        {{ numeral(item.precio_venta_por_mayor).format('0,0.00') }}
+                                    </div>
+                                </template>
+                                <template #item-stock="item">
+                                    <div class="text-right">
+                                        {{ numeral(item.stock).format('0,0') }}
+                                    </div>
+                                </template>
+                                <template #item-stock_minimo="item">
+                                    <div class="text-right">
+                                        {{ numeral(item.stock_minimo).format('0,0') }}
+                                    </div>
+                                </template>
 
                                 <template #item-estado="item">
                                     <div class="custom-control custom-checkbox ml-3">
                                         <input
                                             type="checkbox"
                                             class="custom-control-input"
-                                            :id="'estado' + item.id_categoria"
-                                            :name="'estado' + item.id_categoria"
+                                            :id="'estado' + item.id_producto"
+                                            :name="'estado' + item.id_producto"
                                             :checked="item.estado">
                                         <label
                                             class="custom-control-label"
-                                            :for="'estado_' + item.id_categoria"></label>
+                                            :for="'estado_' + item.id_producto"></label>
                                     </div>
                                 </template>
 
@@ -125,8 +154,8 @@
                                         <button
                                             type="button"
                                             class="btn btn-primary btn-xs"
-                                            title="Editar presentación"
-                                            @click="editarPresentacion(item)">
+                                            title="Editar producto"
+                                            @click="editarProducto(item)">
                                             <i class="fal fa-edit"></i>
                                         </button>
                                     </div>
@@ -144,9 +173,9 @@
     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
     <!-- END Page Content -->
 
-    <presentacion-editar-component
-        ref="presentacionEditarComponentRef"
-        @cerrarEditarPresentacionComponent="cerrarEditarPresentacionComponentEmit" />
+    <producto-editar-component
+        ref="productoEditarComponentRef"
+        @cerrarEditarProductoComponent="cerrarEditarProductoComponentEmit" />
 
 </template>
 
@@ -155,70 +184,81 @@ import {
     onMounted,
     ref,
     defineAsyncComponent,
- } from 'vue'; 
+} from 'vue'; 
 
-import usePresentaciones from '@/modules/ventas/composables/usePresentaciones';
+import numeral from 'numeral';
+
+import useProductos from '@/modules/ventas/composables/useProductos';
 
 export default {
     components: {
-        PresentacionEditarComponent: defineAsyncComponent(
-            () => import('@/modules/ventas/components/PresentacionEditarComponent.vue')
+        ProductoEditarComponent: defineAsyncComponent(
+            () => import('@/modules/ventas/components/ProductoEditarComponent.vue')
         ),
     },
     setup() {
         const {
-            obtenerPresentaciones,
-        } = usePresentaciones();
+            obtenerProductos,
+        } = useProductos();
 
         const fitroBusqueda = ref<any>({
             textoBuscar: ''
         });
 
         const headers = [
+            { text: 'Código de barras', value: 'codigo_barras', sortable: true },
             { text: 'Nombre', value: 'nombre', sortable: true },
-            { text: 'Sigla', value: 'sigla', sortable: true },
+            { text: 'Se vende como', value: 'se_vende_como', sortable: true },
+            { text: 'Precio compra', value: 'precio_compra', sortable: true },
+            { text: 'Precio venta', value: 'precio_venta', sortable: true },
+            { text: 'Precio venta por mayor', value: 'precio_venta_por_mayor', sortable: true },
+            { text: 'Stock', value: 'stock', sortable: true },
+            { text: 'Stock mínimo', value: 'stock_minimo', sortable: true },
+            { text: 'Categoría', value: 'nombre_categoria', sortable: true },
+            { text: 'Marca', value: 'nombre_marca', sortable: true },
+            { text: 'Presentación', value: 'nombre_presentacion', sortable: true },
             { text: 'Estado', value: 'estado', sortable: true },
             { text: '', value: 'acciones', width: 15 },
         ];
 
-        let presentaciones: any = [];
-        const presentacionesFiltrados = ref<any[]>([]);
+        let productos: any = [];
+        const productosFiltrados = ref<any[]>([]);
 
         const textoFiltro = ref<string>('');
 
-        const presentacionEditarComponentRef = ref();
+        const productoEditarComponentRef = ref();
 
         onMounted(async() => {
-            await buscarPresentaciones();
+            await buscarProductos();
         });
 
-        const buscarPresentaciones = async () => {
-            const resp = await obtenerPresentaciones(fitroBusqueda.value.textoBuscar);
+        const buscarProductos = async () => {
+            const resp = await obtenerProductos(fitroBusqueda.value.textoBuscar);
             if (resp.ok) {
-                presentaciones = resp.data;
-                presentacionesFiltrados.value = JSON.parse(JSON.stringify(presentaciones));
+                productos = resp.data;
+                productosFiltrados.value = JSON.parse(JSON.stringify(productos));
             }
         }
 
-        const nuevaPresentacion = async () => {
-            presentacionEditarComponentRef.value.abrirComponent();
+        const nuevoProducto = async () => {
+            productoEditarComponentRef.value.abrirComponent();
         }
 
-        const editarPresentacion = async (presentacion: any) => {
-            presentacionEditarComponentRef.value.abrirComponent(JSON.parse(JSON.stringify(presentacion)));
+        const editarProducto = async (producto: any) => {
+            productoEditarComponentRef.value.abrirComponent(JSON.parse(JSON.stringify(producto)));
         }
 
         const filtrarInformacion = async () => {
-            presentacionesFiltrados.value = JSON.parse(JSON.stringify(
-                presentaciones.filter(
+            productosFiltrados.value = JSON.parse(JSON.stringify(
+                productos.filter(
                     (u: any) => u.nombre.toLowerCase().includes(textoFiltro.value.toLowerCase())
                 )
             ));
         }
 
-        const cerrarEditarPresentacionComponentEmit = async(seGrabo: boolean) => {
+        const cerrarEditarProductoComponentEmit = async(seGrabo: boolean) => {
             if (seGrabo) {
-                await buscarPresentaciones();
+                await buscarProductos();
             }
         }
 
@@ -226,15 +266,17 @@ export default {
             fitroBusqueda,
             headers,
             textoFiltro,
-            presentacionesFiltrados,
+            productosFiltrados,
 
-            buscarPresentaciones,
-            editarPresentacion,
+            buscarProductos,
+            editarProducto,
             filtrarInformacion,
-            nuevaPresentacion,
+            nuevoProducto,
 
-            presentacionEditarComponentRef,
-            cerrarEditarPresentacionComponentEmit,
+            numeral,
+
+            productoEditarComponentRef,
+            cerrarEditarProductoComponentEmit,
         };
     }
 }

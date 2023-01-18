@@ -21,7 +21,7 @@
                     @click="clickLogoMovil()" />
                 <span class="page-logo-text">
                     <img
-                        src="/assets/img/logo2020letras.png"
+                        src="/assets/img/logo-letras.png"
                         alt="SmartAdmin WebApp"
                         style="height:50px; margin-left:-10px"
                         @click="clickLogoMovil()" />

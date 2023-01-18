@@ -5,11 +5,11 @@ import utils from '@/utils/utils';
 
 import { useLoading } from 'vue-loading-overlay';
 
-const useMarcas = () => {
+const useProductos = () => {
     const store = useStore();
     const $loading = useLoading();
 
-    const obtenerMarcas = async(nombre: string) => {
+    const obtenerProductos = async(nombre: string) => {
         const respuesta = {
             ok: false,
             data: undefined,
@@ -18,7 +18,7 @@ const useMarcas = () => {
         const loader = $loading.show(utils.configuracionLoading);
         try {
             const { data } = await authApi.get(
-                `/marcas/obtener-marcas/${ nombre }`,
+                `/productos/obtener-productos/${ nombre }`,
                 {
                     headers: {
                         'Content-type' : 'application/json',
@@ -46,44 +46,7 @@ const useMarcas = () => {
         return respuesta;
     }
 
-    const obtenerMarcasHabilitadas = async() => {
-        const respuesta = {
-            ok: false,
-            data: undefined,
-        };
-
-        const loader = $loading.show(utils.configuracionLoading);
-        try {
-            const { data } = await authApi.get(
-                `/marcas/obtener-marcas-habilitadas`,
-                {
-                    headers: {
-                        'Content-type' : 'application/json',
-                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
-                    }
-                }
-            );
-            loader.hide();
-
-            if (data.ok) {
-                respuesta.ok = true;
-                respuesta.data = data.datos;
-            } else {
-                utils.mostrarMensaje({
-                    descripcion: data.mensaje.descripcion,
-                    tipoMensaje: data.mensaje.tipoMensaje
-                });
-            }
-        } catch( error ) {
-            loader.hide();
-
-            utils.mostrarMensajeErrorApi(error);
-        }
-
-        return respuesta;
-    }
-
-    const grabarMarca = async (marca: any) => {
+    const grabarProducto = async (producto: any) => {
         const respuesta = {
             ok: false,
             data: 0,
@@ -92,8 +55,8 @@ const useMarcas = () => {
         const loader = $loading.show(utils.configuracionLoading);
         try {
             const { data } = await authApi.post(
-                '/marcas/grabar-marca',
-                marca,
+                '/productos/grabar-producto',
+                producto,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + store.getters['auth/getToken']
@@ -119,10 +82,9 @@ const useMarcas = () => {
     }
     
     return {
-        obtenerMarcas,
-        obtenerMarcasHabilitadas,
-        grabarMarca,
+        obtenerProductos,
+        grabarProducto,
     }
 };
 
-export default useMarcas;
+export default useProductos;

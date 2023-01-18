@@ -17,13 +17,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
                                 <label
                                     class="form-label"
-                                    for="nombre">Nombre</label>
+                                    for="nombre-presentacion">Nombre</label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
                                     :class="{ 'is-invalid': v$.nombre.$dirty && v$.nombre.$invalid }"
-                                    id="nombre"
-                                    name="nombre"
+                                    id="nombre-presentacion"
+                                    name="nombre-presentacion"
                                     autocomplete="off"
                                     :disabled="seGrabo"
                                     v-model.trim="v$.nombre.$model"
@@ -143,6 +143,10 @@ export default defineComponent({
                 if (resp.ok) {
                     seGrabo.value = true;
                     presentacion.value.id_presentacion = resp.data;
+
+                    setTimeout(() => {
+                        cancelar();
+                    }, 1000);
                 }
             } else {
                 v$.value.$touch();

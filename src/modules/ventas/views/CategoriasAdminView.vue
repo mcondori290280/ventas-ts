@@ -204,7 +204,7 @@ export default {
         }
 
         const editarCategoria = async (categoria: any) => {
-            categoriaEditarComponentRef.value.abrirComponent(categoria);
+            categoriaEditarComponentRef.value.abrirComponent(JSON.parse(JSON.stringify(categoria)));
         }
 
         const filtrarInformacion = async () => {

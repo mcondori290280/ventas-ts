@@ -203,8 +203,8 @@ export default {
             marcaEditarComponentRef.value.abrirComponent();
         }
 
-        const editarMarca = async (categoria: any) => {
-            marcaEditarComponentRef.value.abrirComponent(categoria);
+        const editarMarca = async (marca: any) => {
+            marcaEditarComponentRef.value.abrirComponent(JSON.parse(JSON.stringify(marca)));
         }
 
         const filtrarInformacion = async () => {
