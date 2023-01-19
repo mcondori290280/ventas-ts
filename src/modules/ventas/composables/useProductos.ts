@@ -190,12 +190,50 @@ const useProductos = () => {
         return respuesta;
     }
 
+    const buscarProductosPorCodigoBarras = async(codigo_barras: string) => {
+        const respuesta = {
+            ok: false,
+            data: undefined,
+        };
+
+        const loader = $loading.show(utils.configuracionLoading);
+        try {
+            const { data } = await authApi.get(
+                `/productos/buscar-producto-por-codigo-barras/${ store.getters['auth/getIdSucursal'] }/${ codigo_barras }`,
+                {
+                    headers: {
+                        'Content-type' : 'application/json',
+                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
+                    }
+                }
+            );
+            loader.hide();
+
+            if (data.ok) {
+                respuesta.ok = true;
+                respuesta.data = data.datos;
+            } else {
+                utils.mostrarMensaje({
+                    descripcion: data.mensaje.descripcion,
+                    tipoMensaje: data.mensaje.tipoMensaje
+                });
+            }
+        } catch( error ) {
+            loader.hide();
+
+            utils.mostrarMensajeErrorApi(error);
+        }
+
+        return respuesta;
+    }
+
     return {
         obtenerProductos,
         obtenerProductosFiltro,
         grabarProducto,
         obtenerProductosStock,
         grabarProductoStock,
+        buscarProductosPorCodigoBarras,
     }
 };
 
