@@ -19,12 +19,9 @@
                                 <span class="d-none d-sm-block float-right ml-1">Nueva</span>
                             </button>
                         </div>
-                        <!-- <h2>
-                            Filtro de<span class="fw-300"><i>{{ $router.currentRoute.value.meta.titleForm }}</i></span>
-                        </h2> -->
                     </div>
                     <div class="panel-container">
-                        <div class="panel-content">
+                        <div class="panel-content mb-0 pb-0">
                             <div class="row mb-2">
                                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                                     <div class="form-group">
@@ -60,10 +57,37 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row" class="text-right pt-2">1</th>
-                                            <td class="pt-2">
-                                                {{  registroItemVenta.nombre_producto }}
+                                        <tr v-for="(ventaDetalleItem, i) in venta.ventas_detalle" :key="i">
+                                            <th scope="row" class="text-right" style="padding-top:12px;">{{ i + 1 }}</th>
+                                            <td style="padding-top:12px;">
+                                                {{  ventaDetalleItem.nombre_producto }}
+                                            </td>
+                                            <td class="text-right">
+                                                {{ ventaDetalleItem.cantidad }}
+                                            </td>
+                                            <td class="text-right">
+                                                {{ numeral(ventaDetalleItem.precio_unitario).format('0,0.00') }}.-
+                                            </td>
+                                            <td class="text-right">
+                                                {{ numeral(ventaDetalleItem.descuento).format('0,0.00') }}.-
+                                            </td>
+                                            <td class="text-right">
+                                                {{ numeral(ventaDetalleItem.importe).format('0,0.00') }}.-
+                                            </td>
+                                            <td class="text-centar">
+                                                <button type="button"
+                                                        class="btn btn-danger btn-xs"
+                                                        title="Eliminar"
+                                                        @click="eliminarDetalleFactura(i)">
+                                                    <i class="fal fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        <tr v-if="ventaDetalle.id_producto > 0" class="bg-warning-50">
+                                            <th scope="row" class="text-right" style="padding-top:12px;">-</th>
+                                            <td style="padding-top:12px;">
+                                                {{  ventaDetalle.nombre_producto }}
                                             </td>
                                             <td class="text-right">
                                                 <input
@@ -71,7 +95,12 @@
                                                     id="cantidad"
                                                     name="cantidad"
                                                     class="form-control form-control-sm text-right"
-                                                    v-model="registroItemVenta.cantidad"
+                                                    :class="{ 'is-invalid': vvd$.cantidad.$dirty && vvd$.cantidad.$invalid }"
+                                                    v-model="vvd$.cantidad.$model"
+                                                    @focus="$event.target.select()"
+                                                    @keyup="calcularImporte"
+                                                    @keypress="keyPressCantidad($event)"
+                                                    @keypress.enter="adicionarDetalleVenta"
                                                     ref="cantidadRef" />
                                             </td>
                                             <td class="text-right">
@@ -80,7 +109,11 @@
                                                     id="precio_unitario"
                                                     name="precio_unitario"
                                                     class="form-control form-control-sm text-right"
-                                                    v-model="registroItemVenta.precio_unitario" />
+                                                    :class="{ 'is-invalid': vvd$.precio_unitario.$dirty && vvd$.precio_unitario.$invalid }"
+                                                    v-model="vvd$.precio_unitario.$model"
+                                                    @keyup="calcularImporte"
+                                                    @keypress="keyPressPrecioUnitario($event)"
+                                                    @keypress.enter="adicionarDetalleVenta" />
                                             </td>
                                             <td class="text-right">
                                                 <input
@@ -88,10 +121,23 @@
                                                     id="descuento"
                                                     name="descuento"
                                                     class="form-control form-control-sm text-right"
-                                                    v-model="registroItemVenta.descuento" />
+                                                    :class="{ 'is-invalid': vvd$.descuento.$dirty && vvd$.descuento.$invalid }"
+                                                    v-model="vvd$.descuento.$model"
+                                                    @keyup="calcularImporte"
+                                                    @keypress.enter="adicionarDetalleVenta" />
                                             </td>
                                             <td class="text-right">
-                                                {{ registroItemVenta.importe }}
+                                                {{ numeral(ventaDetalle.importe).format('0,0.00') }}.-
+                                            </td>
+                                            <td class="text-centar">
+                                                &nbsp;
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row" colspan="5" class="text-right"><h5 class="font-weight-bold">TOTAL</h5></th>
+                                            <td class="text-right">
+                                                <h5 class="font-weight-bold">{{ numeral(venta.total).format('0,0.00') }}.-</h5>
                                             </td>
                                             <td class="text-centar">
                                                 
@@ -99,6 +145,16 @@
                                         </tr>
                                     </tbody>
                                 </table>
+
+                                <div class="text-right mb-3">
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm"
+                                        title="Cobrar venta" @click="cobrarVenta"
+                                        :disabled="venta.ventas_detalle.length === 0">
+                                        <span class="font-weight-bold">$</span> Cobrar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -113,8 +169,14 @@
     <!-- END Page Content -->
 </template>
 
-<script lang='ts'>import { onMounted, ref } from 'vue';
+<script lang='ts'>
+import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import useVuelidate from '@vuelidate/core';
+import { minValue, required } from '@vuelidate/validators';
+
+import numeral from 'numeral';
+
 import useProductos from '@/modules/ventas/composables/useProductos';
 import utils from '@/utils/utils';
 
@@ -127,10 +189,19 @@ export default {
         } = useProductos();
 
         const filtroProducto = ref<any>('');
-        const registroItemVenta = ref<any>({
-            id_venta_detalle: 0,
+        const venta = ref<any>({
             id_venta: 0,
             id_sucursal: store.getters['auth/getIdSucursal'],
+            id_cliente: 0,
+            fecha_venta: '',
+
+            total: 0,
+
+            ventas_detalle: []
+        });
+        const ventaDetalle = ref<any>({
+            id_venta_detalle: 0,
+            id_venta: 0,
             id_producto: 0,
             nombre_producto: '',
             cantidad: 0,
@@ -138,22 +209,27 @@ export default {
             descuento: 0,
             importe: 0
         });
+        const reglasVentaDetalle = computed(() => ({
+            cantidad: { required, minValue: minValue(0.01) },
+            precio_unitario: { required, minValue: minValue(0.01) },
+            descuento: { required, minValue: minValue(0.00) },
+        }));
+        const vvd$ = useVuelidate(reglasVentaDetalle, ventaDetalle);
 
         const filtroProductoRef = ref();
         const cantidadRef = ref();
 
-        
         onMounted(async() => {
             filtroProductoRef.value.focus();
         });
 
         const buscarProducto = async() => {
-            registroItemVenta.value.id_producto = 0;
-            registroItemVenta.value.nombre_producto = '';
-            registroItemVenta.value.cantidad = 0;
-            registroItemVenta.value.precio_unitario = 0;
-            registroItemVenta.value.descuento = 0;
-            registroItemVenta.value.importe = 0;
+            ventaDetalle.value.id_producto = 0;
+            ventaDetalle.value.nombre_producto = '';
+            ventaDetalle.value.cantidad = 0;
+            ventaDetalle.value.precio_unitario = 0;
+            ventaDetalle.value.descuento = 0;
+            ventaDetalle.value.importe = 0;
 
             if (filtroProducto.value.length > 0) {
                 const resp = await buscarProductosPorCodigoBarras(filtroProducto.value)
@@ -161,11 +237,21 @@ export default {
                     const productoEncontrado: any = resp.data;
 
                     if (productoEncontrado.length > 0) {
-                        registroItemVenta.value.id_producto = productoEncontrado[0].id_producto;
-                        registroItemVenta.value.nombre_producto = productoEncontrado[0].nombre;
-                        registroItemVenta.value.precio_unitario = productoEncontrado[0].precio_venta;
+                        // Verificamos si el producto ya está en el detalle.
+                        if (venta.value.ventas_detalle.filter((i: any) => i.id_producto == productoEncontrado[0].id_producto).length === 0) {
+                            ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
+                            ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
+                            ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
 
-                        cantidadRef.value.focus();
+                            setTimeout(() => {
+                                cantidadRef.value.focus();                            
+                            }, 0);
+                        } else {
+                            utils.mostrarMensaje({
+                                descripcion: 'El producto ya se encuentra en el detalle de la venta.',
+                                tipoMensaje: 'warning'
+                            });
+                        }
                     } else {
                         utils.mostrarMensaje({
                             descripcion: 'Producto no encontrado.',
@@ -178,16 +264,89 @@ export default {
             filtroProducto.value = '';
         }
 
+        const calcularImporte = () => {
+            ventaDetalle.value.importe = ((ventaDetalle.value.precio_unitario - ventaDetalle.value.descuento) * ventaDetalle.value.cantidad).toFixed(2);
+        }
+
+        const keyPressCantidad = ($event: any) => {
+            if ($event.key === '.') {
+                $event.preventDefault();
+            }
+        }
+
+        const keyPressPrecioUnitario = ($event: any) => {
+            if (ventaDetalle.value.precio_unitario.toString().split('.').length == 2) {
+                if (ventaDetalle.value.precio_unitario.toString().split('.')[1].length == 2) {
+                    $event.preventDefault();
+                }
+            }
+        }
+
+        const adicionarDetalleVenta = async () => {
+            if (!vvd$.value.$invalid) {
+                venta.value.ventas_detalle.push(JSON.parse(JSON.stringify(ventaDetalle.value)));
+                venta.value.total = venta.value.ventas_detalle.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
+
+                ventaDetalle.value.id_producto = 0;
+                ventaDetalle.value.nombre_producto = '';
+                ventaDetalle.value.cantidad = 0;
+                ventaDetalle.value.precio_unitario = 0;
+                ventaDetalle.value.descuento = 0;
+                ventaDetalle.value.importe = 0;
+
+                filtroProductoRef.value.focus();
+                vvd$.value.$reset();
+            } else {
+                vvd$.value.$touch();
+            }
+        }
+
+        const eliminarDetalleFactura = (index: number) => {
+            venta.value.ventas_detalle.splice(index, 1);
+
+            venta.value.total = venta.value.ventas_detalle.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
+        }
+
+        const cobrarVenta = () => {
+            console.log('Cobrar venta');
+        }
+
         const nuevaVenta = () => {
-            console.log(filtroProducto.value);
+            venta.value.id_venta = 0;
+            venta.value.id_sucursal = store.getters['auth/getIdSucursal'];
+            venta.value.id_cliente = 0;
+            venta.value.fecha_venta = '';
+            venta.value.total = 0;
+            venta.value.ventas_detalle = [];
+
+            ventaDetalle.value.id_venta_detalle = 0;
+            ventaDetalle.value.id_venta = 0;
+            ventaDetalle.value.id_producto = 0;
+            ventaDetalle.value.nombre_producto = '';
+            ventaDetalle.value.cantidad = 0;
+            ventaDetalle.value.precio_unitario = 0;
+            ventaDetalle.value.descuento = 0;
+            ventaDetalle.value.importe = 0;
+
+            filtroProductoRef.value.focus();
         }
 
         return {
             filtroProducto,
-            registroItemVenta,
+            ventaDetalle,
+            venta,
 
             buscarProducto,
             nuevaVenta,
+            calcularImporte,
+            keyPressCantidad,
+            keyPressPrecioUnitario,
+            adicionarDetalleVenta,
+            numeral,
+            cobrarVenta,
+            eliminarDetalleFactura,
+
+            vvd$,
 
             filtroProductoRef,
             cantidadRef,
