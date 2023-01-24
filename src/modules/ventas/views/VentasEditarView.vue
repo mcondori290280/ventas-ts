@@ -97,7 +97,7 @@
                                                     class="form-control form-control-sm text-right"
                                                     :class="{ 'is-invalid': vvd$.cantidad.$dirty && vvd$.cantidad.$invalid }"
                                                     v-model="vvd$.cantidad.$model"
-                                                    @focus="$event.target.select()"
+                                                    @focus="$event.target.select();"
                                                     @keyup="calcularImporte"
                                                     @keypress="keyPressCantidad($event)"
                                                     @keypress.enter="adicionarDetalleVenta"
@@ -167,10 +167,14 @@
     <!-- this overlay is activated only when mobile menu is triggered -->
     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
     <!-- END Page Content -->
+
+    <cobrar-venta-component
+        ref="cobrarVentaComponentRef"
+        @cerrarCobrarVentaComponent="cerrarCobrarVentaComponentEmit" />
 </template>
 
 <script lang='ts'>
-import { computed, onMounted, ref } from 'vue';
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import useVuelidate from '@vuelidate/core';
 import { minValue, required } from '@vuelidate/validators';
@@ -181,6 +185,11 @@ import useProductos from '@/modules/ventas/composables/useProductos';
 import utils from '@/utils/utils';
 
 export default {
+    components: {
+        CobrarVentaComponent: defineAsyncComponent(
+            () => import('@/modules/ventas/components/CobrarVentaComponent.vue')
+        ),
+    },
     setup() {
         const store = useStore();
 
@@ -219,6 +228,9 @@ export default {
         const filtroProductoRef = ref();
         const cantidadRef = ref();
 
+        // Varaibles del componente de cobro de la venta.
+        const cobrarVentaComponentRef = ref();
+
         onMounted(async() => {
             filtroProductoRef.value.focus();
         });
@@ -237,21 +249,13 @@ export default {
                     const productoEncontrado: any = resp.data;
 
                     if (productoEncontrado.length > 0) {
-                        // Verificamos si el producto ya está en el detalle.
-                        if (venta.value.ventas_detalle.filter((i: any) => i.id_producto == productoEncontrado[0].id_producto).length === 0) {
-                            ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
-                            ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
-                            ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
+                        ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
+                        ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
+                        ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
 
-                            setTimeout(() => {
-                                cantidadRef.value.focus();                            
-                            }, 0);
-                        } else {
-                            utils.mostrarMensaje({
-                                descripcion: 'El producto ya se encuentra en el detalle de la venta.',
-                                tipoMensaje: 'warning'
-                            });
-                        }
+                        setTimeout(() => {
+                            cantidadRef.value.focus();                            
+                        }, 0);
                     } else {
                         utils.mostrarMensaje({
                             descripcion: 'Producto no encontrado.',
@@ -308,7 +312,7 @@ export default {
         }
 
         const cobrarVenta = () => {
-            console.log('Cobrar venta');
+            cobrarVentaComponentRef.value.abrirComponent(venta.value.total)
         }
 
         const nuevaVenta = () => {
@@ -331,6 +335,11 @@ export default {
             filtroProductoRef.value.focus();
         }
 
+        // Todo obre el componente de cobro de la venta.
+        const cerrarCobrarVentaComponentEmit = (resultado: boolean) => {
+            console.log(resultado);
+        }
+
         return {
             filtroProducto,
             ventaDetalle,
@@ -350,6 +359,10 @@ export default {
 
             filtroProductoRef,
             cantidadRef,
+
+            // Componente.
+            cobrarVentaComponentRef,
+            cerrarCobrarVentaComponentEmit,
         };
     }
 }
