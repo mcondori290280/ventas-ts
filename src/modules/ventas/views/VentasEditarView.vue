@@ -57,7 +57,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(ventaDetalleItem, i) in venta.ventas_detalle" :key="i">
+                                        <tr v-for="(ventaDetalleItem, i) in ventasDetalle" :key="i">
                                             <th scope="row" class="text-right" style="padding-top:12px;">{{ i + 1 }}</th>
                                             <td style="padding-top:12px;">
                                                 {{  ventaDetalleItem.nombre_producto }}
@@ -137,7 +137,7 @@
                                         <tr>
                                             <th scope="row" colspan="5" class="text-right"><h5 class="font-weight-bold">TOTAL</h5></th>
                                             <td class="text-right">
-                                                <h5 class="font-weight-bold">{{ numeral(venta.total).format('0,0.00') }}.-</h5>
+                                                <h5 class="font-weight-bold">{{ numeral(total).format('0,0.00') }}.-</h5>
                                             </td>
                                             <td class="text-centar">
                                                 
@@ -151,8 +151,9 @@
                                         type="button"
                                         class="btn btn-warning btn-sm"
                                         title="Cobrar venta" @click="cobrarVenta"
-                                        :disabled="venta.ventas_detalle.length === 0">
-                                        <span class="font-weight-bold">$</span> Cobrar
+                                        :disabled="ventasDetalle.length === 0"
+                                        accesskey="c">
+                                        <span class="font-weight-bold">$</span> Cobrar [Atl + c]
                                     </button>
                                 </div>
                             </div>
@@ -175,7 +176,6 @@
 
 <script lang='ts'>
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
-import { useStore } from 'vuex';
 import useVuelidate from '@vuelidate/core';
 import { minValue, required } from '@vuelidate/validators';
 
@@ -191,29 +191,21 @@ export default {
         ),
     },
     setup() {
-        const store = useStore();
-
         const { 
             buscarProductosPorCodigoBarras
         } = useProductos();
 
         const filtroProducto = ref<any>('');
-        const venta = ref<any>({
-            id_venta: 0,
-            id_sucursal: store.getters['auth/getIdSucursal'],
-            id_cliente: 0,
-            fecha_venta: '',
 
-            total: 0,
+        const total = ref<number>(0);
 
-            ventas_detalle: []
-        });
+        const ventasDetalle = ref<any>([]);
         const ventaDetalle = ref<any>({
             id_venta_detalle: 0,
             id_venta: 0,
             id_producto: 0,
             nombre_producto: '',
-            cantidad: 0,
+            cantidad: 1,
             precio_unitario: 0,
             descuento: 0,
             importe: 0
@@ -238,7 +230,7 @@ export default {
         const buscarProducto = async() => {
             ventaDetalle.value.id_producto = 0;
             ventaDetalle.value.nombre_producto = '';
-            ventaDetalle.value.cantidad = 0;
+            ventaDetalle.value.cantidad = 1;
             ventaDetalle.value.precio_unitario = 0;
             ventaDetalle.value.descuento = 0;
             ventaDetalle.value.importe = 0;
@@ -288,12 +280,12 @@ export default {
 
         const adicionarDetalleVenta = async () => {
             if (!vvd$.value.$invalid) {
-                venta.value.ventas_detalle.push(JSON.parse(JSON.stringify(ventaDetalle.value)));
-                venta.value.total = venta.value.ventas_detalle.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
+                ventasDetalle.value.push(JSON.parse(JSON.stringify(ventaDetalle.value)));
+                total.value = ventasDetalle.value.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
 
                 ventaDetalle.value.id_producto = 0;
                 ventaDetalle.value.nombre_producto = '';
-                ventaDetalle.value.cantidad = 0;
+                ventaDetalle.value.cantidad = 1;
                 ventaDetalle.value.precio_unitario = 0;
                 ventaDetalle.value.descuento = 0;
                 ventaDetalle.value.importe = 0;
@@ -306,28 +298,24 @@ export default {
         }
 
         const eliminarDetalleFactura = (index: number) => {
-            venta.value.ventas_detalle.splice(index, 1);
+            ventasDetalle.value.splice(index, 1);
 
-            venta.value.total = venta.value.ventas_detalle.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
+            total.value = ventasDetalle.value.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
         }
 
         const cobrarVenta = () => {
-            cobrarVentaComponentRef.value.abrirComponent(venta.value.total)
+            cobrarVentaComponentRef.value.abrirComponent(ventasDetalle, total.value)
         }
 
         const nuevaVenta = () => {
-            venta.value.id_venta = 0;
-            venta.value.id_sucursal = store.getters['auth/getIdSucursal'];
-            venta.value.id_cliente = 0;
-            venta.value.fecha_venta = '';
-            venta.value.total = 0;
-            venta.value.ventas_detalle = [];
+            total.value = 0;
+            ventasDetalle.value = [];
 
             ventaDetalle.value.id_venta_detalle = 0;
             ventaDetalle.value.id_venta = 0;
             ventaDetalle.value.id_producto = 0;
             ventaDetalle.value.nombre_producto = '';
-            ventaDetalle.value.cantidad = 0;
+            ventaDetalle.value.cantidad = 1;
             ventaDetalle.value.precio_unitario = 0;
             ventaDetalle.value.descuento = 0;
             ventaDetalle.value.importe = 0;
@@ -337,13 +325,16 @@ export default {
 
         // Todo obre el componente de cobro de la venta.
         const cerrarCobrarVentaComponentEmit = (resultado: boolean) => {
-            console.log(resultado);
+            if (resultado) {
+                nuevaVenta();
+            }
         }
 
         return {
             filtroProducto,
+            ventasDetalle,
             ventaDetalle,
-            venta,
+            total,
 
             buscarProducto,
             nuevaVenta,

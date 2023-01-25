@@ -85,10 +85,11 @@
                                 :disabled="seGrabo"
                                 v-model.trim="v$.efectivo_recibido.$model"
                                 @keyup="calcularCambio"
-                                @keypress="keyPressEfectivoRecibido($event)">
+                                @keypress="keyPressEfectivoRecibido($event)"
+                                ref="efectivoRecibidoRef">
                             <small
                                 class="invalid-feedback" v-if="v$.efectivo_recibido.$dirty && v$.efectivo_recibido.required.$invalid">
-                                A pagar, no tiene información.
+                                Efectivo recibido, no tiene información.
                             </small>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
@@ -98,10 +99,19 @@
                             <input
                                 type="text"
                                 class="form-control form-control-sm text-right"
+                                :class="{ 'is-invalid': v$.cambio.$dirty && v$.cambio.$invalid }"
                                 id="cambio"
                                 name="cambio"
                                 :disabled="true"
-                                v-model.trim="venta.cambio">
+                                v-model.trim="v$.cambio.$model">
+                            <small
+                                class="invalid-feedback" v-if="v$.cambio.$dirty && v$.cambio.required.$invalid">
+                                Cambio, no tiene información.
+                            </small>
+                            <small
+                                class="invalid-feedback" v-if="v$.cambio.$dirty && v$.cambio.minValue.$invalid">
+                                Cambio, no debe ser negativo.
+                            </small>
                         </div>
                     </div>
 
@@ -111,11 +121,13 @@
                         type="button"
                         class="btn btn-primary btn-sm"
                         v-if="!seGrabo"
-                        @click="grabar">Grabar</button>
+                        @click="grabar"
+                        accesskey="g">Grabar [Atl + g]</button>
                     <button
                         type="button"
                         class="btn btn-danger btn-sm"
-                        @click="cancelar">{{ seGrabo ? 'Salir' : 'Cancelar'}}</button>
+                        @click="cancelar"
+                        accesskey="x">{{ seGrabo ? 'Salir' : 'Cancelar'}} [Atl + x]</button>
                 </div>
                 <pre>{{  venta  }}</pre>
             </div>
@@ -135,6 +147,8 @@ import { required, minValue } from '@vuelidate/validators';
 
 import useClientes from '../composables/useClientes';
 import useParametros from '../composables/useParametros';
+import useVentas from '../composables/useVentas';
+import utils from '@/utils/utils';
 
 declare let window: any;
 
@@ -144,6 +158,7 @@ export default defineComponent({
 
         const seGrabo = ref<boolean>(false);
         const idClienteRef = ref();
+        const efectivoRecibidoRef = ref();
 
         const TIPO_PAGO_EFECTIVO = '1';
 
@@ -154,6 +169,10 @@ export default defineComponent({
         const {
             obtenerTiposPago,
         } = useParametros();
+
+        const {
+            grabarVenta
+        } = useVentas();
 
         const venta = ref<any>({
             id_venta: 0,
@@ -166,12 +185,15 @@ export default defineComponent({
             cambio: 0,
             estado: true,
 
+            ventas_detalle: [],
+
             carnet_identidad: '',
             nombre_cliente: '',
         });
         const reglasVenta = {
             id_tipo_pago: { required, },
             efectivo_recibido: { required, minValue: minValue(0.01), },
+            cambio: { required, minValue: minValue(0.00), },
         };
         const v$ = useVuelidate(
             reglasVenta,
@@ -188,7 +210,8 @@ export default defineComponent({
             }
         });
 
-        const abrirComponent = async (aPagar: number) => {
+        const abrirComponent = async (ventasDetalle: any, aPagar: number) => {
+            venta.value.ventas_detalle = ventasDetalle;
             venta.value.a_pagar = aPagar;
             window.$('#cobrar-venta-component-modal').modal('show');
 
@@ -204,9 +227,16 @@ export default defineComponent({
                 if (resp.ok) {
                     const clientes: any = resp.data;
                     if (clientes.length > 0) {
-                        console.log(clientes);
                         venta.value.id_cliente = clientes[0].id_cliente;
                         venta.value.nombre_cliente = clientes[0].nombre;
+
+                        efectivoRecibidoRef.value.focus();
+                        efectivoRecibidoRef.value.select();
+                    } else {
+                        utils.mostrarMensaje({
+                            descripcion: '¡Ups!, no existe el cliente con el criterio de búsqueda.',
+                            tipoMensaje: 'warning'
+                        });
                     }
                 }
             }
@@ -226,16 +256,15 @@ export default defineComponent({
 
         const grabar = async () => {
             if (!v$.value.$invalid) {
-                console.log(v$.value.$invalid);
-                // const resp = await grabarProducto(producto.value);
-                // if (resp.ok) {
-                //     seGrabo.value = true;
-                //     producto.value.id_producto = resp.data;
+                const resp = await grabarVenta(venta.value);
+                if (resp.ok) {
+                    seGrabo.value = true;
+                    venta.value.id_venta = resp.data;
 
-                //     setTimeout(() => {
-                //         cancelar();
-                //     }, 1000);
-                // }
+                    setTimeout(() => {
+                        cancelar();
+                    }, 1000);
+                }
             } else {
                 v$.value.$touch();
             }
@@ -249,6 +278,23 @@ export default defineComponent({
             v$.value.$reset();
 
             seGrabo.value = false;
+
+            venta.value = {
+                id_venta: 0,
+                id_sucursal: store.getters['auth/getIdSucursal'],
+                id_cliente: 0,
+                fecha_venta: '',
+                id_tipo_pago: TIPO_PAGO_EFECTIVO,
+                a_pagar: 0,
+                efectivo_recibido: 0,
+                cambio: 0,
+                estado: true,
+
+                ventas_detalle: [],
+
+                carnet_identidad: '',
+                nombre_cliente: '',
+            };
         }
 
         return {
@@ -264,6 +310,7 @@ export default defineComponent({
             v$,
 
             idClienteRef,
+            efectivoRecibidoRef,
 
             cancelar,
             grabar,
