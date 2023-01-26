@@ -46,8 +46,7 @@ const useClientes = () => {
         return respuesta;
     }
 
-    /*
-    const grabarProducto = async (producto: any) => {
+    const grabarCliente = async (cliente: any) => {
         const respuesta = {
             ok: false,
             data: 0,
@@ -56,8 +55,8 @@ const useClientes = () => {
         const loader = $loading.show(utils.configuracionLoading);
         try {
             const { data } = await authApi.post(
-                '/productos/grabar-producto',
-                producto,
+                '/clientes/grabar-cliente',
+                cliente,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + store.getters['auth/getToken']
@@ -82,6 +81,7 @@ const useClientes = () => {
         return respuesta;
     }
 
+    /*
     const obtenerProductosStock = async(nombre: string) => {
         const respuesta = {
             ok: false,
@@ -231,6 +231,7 @@ const useClientes = () => {
 
     return {
         buscarClientePorCarnetIdentidad,
+        grabarCliente,
         /*
         obtenerProductosFiltro,
         grabarProducto,

@@ -215,7 +215,11 @@ export default {
         const filtrarInformacion = async () => {
             productosFiltrados.value = JSON.parse(JSON.stringify(
                 productos.filter(
-                    (u: any) => u.nombre.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                    (u: any) => u.codigo_barras.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.nombre.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.nombre_categoria.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.nombre_marca.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.nombre_presentacion.toLowerCase().includes(textoFiltro.value.toLowerCase())
                 )
             ));
         }

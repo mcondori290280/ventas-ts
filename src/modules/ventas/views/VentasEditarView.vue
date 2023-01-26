@@ -191,8 +191,11 @@ export default {
         ),
     },
     setup() {
+        const PRESENTACION_PAQUETE = 2;
+
         const { 
-            buscarProductosPorCodigoBarras
+            buscarProductosPorCodigoBarras,
+            buscarProductosPorIdProducto,
         } = useProductos();
 
         const filtroProducto = ref<any>('');
@@ -244,6 +247,20 @@ export default {
                         ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
                         ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
                         ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
+
+                        // Si el producto es por paquete.
+                        if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
+                            ventaDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
+
+                            const respProductoDetalle = await buscarProductosPorIdProducto(productoEncontrado[0].id_producto_detalle_paquete);
+                            if (respProductoDetalle.ok) {
+                                const productoDetalleEncintrado: any = respProductoDetalle.data;
+                                
+                                ventaDetalle.value.id_producto = productoDetalleEncintrado[0].id_producto;
+                                ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
+                                ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
+                            }
+                        }
 
                         setTimeout(() => {
                             cantidadRef.value.focus();                            

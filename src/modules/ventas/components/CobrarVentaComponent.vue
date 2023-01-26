@@ -129,10 +129,13 @@
                         @click="cancelar"
                         accesskey="x">{{ seGrabo ? 'Salir' : 'Cancelar'}} [Atl + x]</button>
                 </div>
-                <pre>{{  venta  }}</pre>
             </div>
         </div>
     </div>
+
+    <cliente-editar-component 
+        ref="clienteEditarComponentRef"
+        @cerrarClienteEditarComponent="cerrarClienteEditarComponentEmit" />
 </template>
 
 <script lang='ts'>
@@ -140,6 +143,7 @@ import {
     defineComponent,
     ref,
     onMounted,
+    defineAsyncComponent,
 } from 'vue';
 import { useStore } from 'vuex';
 import useVuelidate from '@vuelidate/core';
@@ -153,12 +157,20 @@ import utils from '@/utils/utils';
 declare let window: any;
 
 export default defineComponent({
+    components: {
+        ClienteEditarComponent: defineAsyncComponent(
+            () => import('@/modules/ventas/components/ClienteEditarComponent.vue')
+        ),
+    },
+    emits: ['cerrarCobrarVentaComponent'],
     setup(_, { emit }) {
         const store = useStore();
 
         const seGrabo = ref<boolean>(false);
         const idClienteRef = ref();
         const efectivoRecibidoRef = ref();
+
+        const clienteEditarComponentRef = ref();
 
         const TIPO_PAGO_EFECTIVO = '1';
 
@@ -237,6 +249,8 @@ export default defineComponent({
                             descripcion: '¡Ups!, no existe el cliente con el criterio de búsqueda.',
                             tipoMensaje: 'warning'
                         });
+
+                        clienteEditarComponentRef.value.abrirComponent(undefined, venta.value.carnet_identidad);
                     }
                 }
             }
@@ -256,14 +270,17 @@ export default defineComponent({
 
         const grabar = async () => {
             if (!v$.value.$invalid) {
-                const resp = await grabarVenta(venta.value);
-                if (resp.ok) {
-                    seGrabo.value = true;
-                    venta.value.id_venta = resp.data;
+                const respPregunta = await utils.mensajePregunta('¿Está seguro de grabar la venta?')
+                if (respPregunta) {
+                    const resp = await grabarVenta(venta.value);
+                    if (resp.ok) {
+                        seGrabo.value = true;
+                        venta.value.id_venta = resp.data;
 
-                    setTimeout(() => {
-                        cancelar();
-                    }, 1000);
+                        setTimeout(() => {
+                            cancelar();
+                        }, 1000);
+                    }
                 }
             } else {
                 v$.value.$touch();
@@ -297,6 +314,13 @@ export default defineComponent({
             };
         }
 
+        const cerrarClienteEditarComponentEmit = (resultado: boolean, carnetIdentidad: string) => {
+            if (resultado) {
+                venta.value.carnet_identidad = carnetIdentidad;
+                buscarCliente();
+            }
+        }
+
         return {
             buscarCliente,
             abrirComponent,
@@ -311,6 +335,9 @@ export default defineComponent({
 
             idClienteRef,
             efectivoRecibidoRef,
+
+            clienteEditarComponentRef,
+            cerrarClienteEditarComponentEmit,
 
             cancelar,
             grabar,
