@@ -24,6 +24,9 @@
                         <div class="panel-content mb-0 pb-0">
                             <div class="row mb-2">
                                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+                                    <label
+                                        class="form-label"
+                                        for="filtro_producto">Código de barras producto</label>
                                     <div class="form-group">
                                         <div class="input-group">
                                             <div class="input-group-prepend">
@@ -41,6 +44,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+                                    <label
+                                        class="form-label"
+                                        for="id_producto">Nombre producto</label>
+                                    <Select2
+                                        id="id_producto"
+                                        name="id_producto"
+                                        :options="productos"
+                                        :settings="{ multiple: false, placeholder: 'Seleccione', width: '100%', tags: false }" />
+                                </div> -->
                             </div>
 
                             <div class="table-responsive">
@@ -196,6 +209,7 @@ export default {
         const { 
             buscarProductosPorCodigoBarras,
             buscarProductosPorIdProducto,
+            obtenerProductosParaLaVentaCompra,
         } = useProductos();
 
         const filtroProducto = ref<any>('');
@@ -207,6 +221,7 @@ export default {
             id_venta_detalle: 0,
             id_venta: 0,
             id_producto: 0,
+            id_producto_stock: 0,
             nombre_producto: '',
             cantidad: 1,
             precio_unitario: 0,
@@ -223,15 +238,23 @@ export default {
         const filtroProductoRef = ref();
         const cantidadRef = ref();
 
+        const productos = ref<any>([]);
+
         // Varaibles del componente de cobro de la venta.
         const cobrarVentaComponentRef = ref();
 
         onMounted(async() => {
             filtroProductoRef.value.focus();
+
+            const resp = await obtenerProductosParaLaVentaCompra();
+            if (resp.ok) {
+                productos.value = resp.data;
+            }
         });
 
         const buscarProducto = async() => {
             ventaDetalle.value.id_producto = 0;
+            ventaDetalle.value.id_producto_stock = 0;
             ventaDetalle.value.nombre_producto = '';
             ventaDetalle.value.cantidad = 1;
             ventaDetalle.value.precio_unitario = 0;
@@ -245,6 +268,7 @@ export default {
 
                     if (productoEncontrado.length > 0) {
                         ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
+                        ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
                         ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
                         ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
 
@@ -257,10 +281,13 @@ export default {
                                 const productoDetalleEncintrado: any = respProductoDetalle.data;
                                 
                                 ventaDetalle.value.id_producto = productoDetalleEncintrado[0].id_producto;
+                                ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
                                 ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
                                 ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
                             }
                         }
+
+                        calcularImporte();
 
                         setTimeout(() => {
                             cantidadRef.value.focus();                            
@@ -301,6 +328,7 @@ export default {
                 total.value = ventasDetalle.value.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
 
                 ventaDetalle.value.id_producto = 0;
+                ventaDetalle.value.id_producto_stock = 0;
                 ventaDetalle.value.nombre_producto = '';
                 ventaDetalle.value.cantidad = 1;
                 ventaDetalle.value.precio_unitario = 0;
@@ -331,6 +359,7 @@ export default {
             ventaDetalle.value.id_venta_detalle = 0;
             ventaDetalle.value.id_venta = 0;
             ventaDetalle.value.id_producto = 0;
+            ventaDetalle.value.id_producto_stock = 0;
             ventaDetalle.value.nombre_producto = '';
             ventaDetalle.value.cantidad = 1;
             ventaDetalle.value.precio_unitario = 0;
@@ -352,6 +381,7 @@ export default {
             ventasDetalle,
             ventaDetalle,
             total,
+            productos,
 
             buscarProducto,
             nuevaVenta,

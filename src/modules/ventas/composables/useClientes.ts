@@ -9,6 +9,43 @@ const useClientes = () => {
     const store = useStore();
     const $loading = useLoading();
 
+    const obtenerClientes = async(nombre: string) => {
+        const respuesta = {
+            ok: false,
+            data: undefined,
+        };
+
+        const loader = $loading.show(utils.configuracionLoading);
+        try {
+            const { data } = await authApi.get(
+                `/clientes/obtener-clientes/${ nombre }`,
+                {
+                    headers: {
+                        'Content-type' : 'application/json',
+                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
+                    }
+                }
+            );
+            loader.hide();
+
+            if (data.ok) {
+                respuesta.ok = true;
+                respuesta.data = data.datos;
+            } else {
+                utils.mostrarMensaje({
+                    descripcion: data.mensaje.descripcion,
+                    tipoMensaje: data.mensaje.tipoMensaje
+                });
+            }
+        } catch( error ) {
+            loader.hide();
+
+            utils.mostrarMensajeErrorApi(error);
+        }
+
+        return respuesta;
+    }
+
     const buscarClientePorCarnetIdentidad = async(ci: string) => {
         const respuesta = {
             ok: false,
@@ -230,15 +267,9 @@ const useClientes = () => {
     */
 
     return {
+        obtenerClientes,
         buscarClientePorCarnetIdentidad,
         grabarCliente,
-        /*
-        obtenerProductosFiltro,
-        grabarProducto,
-        obtenerProductosStock,
-        grabarProductoStock,
-        buscarProductosPorCodigoBarras,
-        */
     }
 };
 

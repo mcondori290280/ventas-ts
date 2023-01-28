@@ -113,69 +113,121 @@
                 <li id="acceso-menu-ventas" class="acceso-menu">
                     <a
                         href="javascript:void(0)"
-                        title="Almacén">
+                        title="Ventas">
                         <i class="fal fa-shopping-cart"></i>
                         <span class="nav-link-text" data-i18n="nav.application_intel">
                             Ventas
                         </span>
                     </a>
                     <ul>
-                        <li id="menu-item-4">
+                        <li id="menu-item-21">
+                            <a
+                                href="javascript:void(0)"
+                                title="Clientes"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-ventas',
+                                        'menu-item-21',
+                                        'clientes-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Clientes</span>
+                            </a>
+                        </li>
+                        <li id="menu-item-22">
                             <a
                                 href="javascript:void(0)"
                                 title="Realizar ventas"
                                 @click="
                                     seHizoClickEnOpcion(
                                         'acceso-menu-ventas',
-                                        'menu-item-4',
+                                        'menu-item-22',
                                         'ventas-editar'
                                     )
                                 ">
                                 <span class="nav-link-text">Realizar Ventas</span>
                             </a>
                         </li>
-                        <!-- <li id="menu-item-5">
+                        <li id="menu-item-23">
                             <a
                                 href="javascript:void(0)"
-                                title="Gestión de presentaciones"
+                                title="Consultar ventas"
                                 @click="
                                     seHizoClickEnOpcion(
                                         'acceso-menu-ventas',
-                                        'menu-item-5',
-                                        'presentaciones-admin'
+                                        'menu-item-23',
+                                        'ventas-admin'
                                     )
                                 ">
-                                <span class="nav-link-text">Presentaciones</span>
+                                <span class="nav-link-text">Consultar Ventas</span>
                             </a>
                         </li>
-                        <li id="menu-item-6">
+                    </ul>
+                </li>
+                <li id="acceso-menu-inventario" class="acceso-menu">
+                    <a
+                        href="javascript:void(0)"
+                        title="Inventario">
+                        <i class="fal fa-th-large"></i>
+                        <span class="nav-link-text" data-i18n="nav.application_intel">
+                            Inventario
+                        </span>
+                    </a>
+                    <ul>
+                        <li id="menu-item-31">
                             <a
                                 href="javascript:void(0)"
-                                title="Gestión de marcas"
+                                title="Kadex"
                                 @click="
                                     seHizoClickEnOpcion(
-                                        'acceso-menu-ventas',
-                                        'menu-item-6',
-                                        'marcas-admin'
+                                        'acceso-menu-inventario',
+                                        'menu-item-31',
+                                        'kardex-admin'
                                     )
                                 ">
-                                <span class="nav-link-text">Marcas</span>
+                                <span class="nav-link-text">Kardex</span>
                             </a>
                         </li>
-                        <li id="menu-item-7">
+                    </ul>
+                </li>
+                <li id="acceso-menu-compras" class="acceso-menu">
+                    <a
+                        href="javascript:void(0)"
+                        title="Compras">
+                        <i class="fal fa-truck"></i>
+                        <span class="nav-link-text" data-i18n="nav.application_intel">
+                            Compras
+                        </span>
+                    </a>
+                    <ul>
+                        <li id="menu-item-41">
                             <a
                                 href="javascript:void(0)"
-                                title="Gestión productos"
+                                title="Proveedores"
                                 @click="
                                     seHizoClickEnOpcion(
-                                        'acceso-menu-ventas',
-                                        'menu-item-7',
-                                        'productos-admin'
+                                        'acceso-menu-compras',
+                                        'menu-item-41',
+                                        'proveedores-admin'
                                     )
                                 ">
-                                <span class="nav-link-text">Productos</span>
+                                <span class="nav-link-text">Proveedores</span>
                             </a>
-                        </li> -->
+                        </li>
+                        <li id="menu-item-42">
+                            <a
+                                href="javascript:void(0)"
+                                title="Realizar Compra"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-compras',
+                                        'menu-item-42',
+                                        'compra-editar'
+                                    )
+                                ">
+                                <span class="nav-link-text">Realizar Compra</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

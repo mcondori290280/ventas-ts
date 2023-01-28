@@ -13,6 +13,8 @@ import Select2 from 'vue3-select2-component';
 
 import PrimeVue from 'primevue/config';
 import Tree from 'primevue/tree';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
@@ -26,6 +28,8 @@ createApp(App)
     .component('EasyDataTable', Vue3EasyDataTable)
     .component('Select2', Select2)
     .component('Tree', Tree)
+    .component('DataTable', DataTable)
+    .component('Column', Column)
     // Componentes locales.
     .mount('#app');
 

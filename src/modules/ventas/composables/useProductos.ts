@@ -264,6 +264,43 @@ const useProductos = () => {
         return respuesta;
     }
 
+    const obtenerProductosParaLaVentaCompra = async() => {
+        const respuesta = {
+            ok: false,
+            data: undefined,
+        };
+
+        const loader = $loading.show(utils.configuracionLoading);
+        try {
+            const { data } = await authApi.get(
+                `/productos/obtener-productos-para-la-venta-compra/${ store.getters['auth/getIdSucursal'] }`,
+                {
+                    headers: {
+                        'Content-type' : 'application/json',
+                        'Authorization': 'Bearer ' + store.getters['auth/getToken'],
+                    }
+                }
+            );
+            loader.hide();
+
+            if (data.ok) {
+                respuesta.ok = true;
+                respuesta.data = data.datos;
+            } else {
+                utils.mostrarMensaje({
+                    descripcion: data.mensaje.descripcion,
+                    tipoMensaje: data.mensaje.tipoMensaje
+                });
+            }
+        } catch( error ) {
+            loader.hide();
+
+            utils.mostrarMensajeErrorApi(error);
+        }
+
+        return respuesta;
+    }
+
     return {
         obtenerProductos,
         obtenerProductosFiltro,
@@ -272,6 +309,7 @@ const useProductos = () => {
         grabarProductoStock,
         buscarProductosPorCodigoBarras,
         buscarProductosPorIdProducto,
+        obtenerProductosParaLaVentaCompra,
     }
 };
 

@@ -8,6 +8,11 @@ import MarcasAdminView from '@/modules/ventas/views/MarcasAdminView.vue';
 import ProductosAdminView from '@/modules/ventas/views/ProductosAdminView.vue';
 import ProductosStockAdminView from '@/modules/ventas/views/ProductosStockAdminView.vue';
 import VentasEditarView from '@/modules/ventas/views/VentasEditarView.vue';
+import VentasAdminView from '@/modules/ventas/views/VentasAdminView.vue';
+import ClientesAdminView from '@/modules/ventas/views/ClientesAdminView.vue';
+import KardexAdminView from '@/modules/ventas/views/KardexAdminView.vue';
+import ProveedoresAdminView from '@/modules/ventas/views/ProveedoresAdminView.vue';
+import CompraEditarView from '@/modules/ventas/views/CompraEditarView.vue';
 
 export default {
     name: 'ventas',
@@ -65,14 +70,67 @@ export default {
         },
 
         {
+            path: '/clientes-admin',
+            name: 'clientes-admin',
+            component: ClientesAdminView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Clientes',
+                titleForm: 'Clientes'
+            },
+        },
+        {
             path: '/ventas-editar',
             name: 'ventas-editar',
             component: VentasEditarView,
             beforeEnter: isAuthenticatedGuard,
             meta: {
-                title: appConfig.TITULO_SISTEMA + ' - Ventas',
+                title: appConfig.TITULO_SISTEMA + ' - Realizar ventas',
+                titleForm: 'Realizar venta'
+            },
+        },
+        {
+            path: '/ventas-admin',
+            name: 'ventas-admin',
+            component: VentasAdminView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Consultar ventas',
                 titleForm: 'Ventas'
             },
         },
+
+        {
+            path: '/kardex-admin',
+            name: 'kardex-admin',
+            component: KardexAdminView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Kardex de productos',
+                titleForm: 'Kardex de productos'
+            },
+        },
+
+        {
+            path: '/proveedores-admin',
+            name: 'proveedores-admin',
+            component: ProveedoresAdminView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Proveedores',
+                titleForm: 'Proveedores'
+            },
+        },
+        {
+            path: '/compra-editar',
+            name: 'compra-editar',
+            component: CompraEditarView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Realizar compra',
+                titleForm: 'Realizar compra'
+            },
+        },
+
     ],
 };

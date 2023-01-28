@@ -30,7 +30,7 @@
                                             id="carnet_identidad_modal"
                                             name="carnet_identidad_modal"
                                             autocomplete="off"
-                                            :disabled="seGrabo"
+                                            :disabled="seGrabo || cliente.nombre === 'NO ESPECIFICA'"
                                             v-model.trim="v$.carnet_identidad.$model"
                                             ref="carnetIdentidadModalRef">
                                         <small
@@ -54,7 +54,7 @@
                                     id="nombre-producto"
                                     name="nombre-producto"
                                     autocomplete="off"
-                                    :disabled="seGrabo"
+                                    :disabled="seGrabo || cliente.nombre === 'NO ESPECIFICA'"
                                     v-model.trim="v$.nombre.$model">
                                 <small
                                     class="invalid-feedback" v-if="v$.nombre.$dirty && v$.nombre.required.$invalid">
@@ -76,7 +76,7 @@
                                     id="celular"
                                     name="celular"
                                     autocomplete="off"
-                                    :disabled="seGrabo"
+                                    :disabled="seGrabo || cliente.nombre === 'NO ESPECIFICA'"
                                     v-model.trim="v$.celular.$model">
                                 <small
                                     class="invalid-feedback-select2"
@@ -99,7 +99,7 @@
                                     id="correo_electronico"
                                     name="correo_electronico"
                                     autocomplete="off"
-                                    :disabled="seGrabo"
+                                    :disabled="seGrabo || cliente.nombre === 'NO ESPECIFICA'"
                                     v-model.trim="v$.correo_electronico.$model">
                                 <small class="invalid-feedback"
                                     v-if="v$.correo_electronico.$dirty && v$.correo_electronico.maxLength.$invalid">
@@ -117,7 +117,7 @@
                                     id="direccion"
                                     name="direccion"
                                     autocomplete="off"
-                                    :disabled="seGrabo"
+                                    :disabled="seGrabo || cliente.nombre === 'NO ESPECIFICA'"
                                     v-model.trim="v$.direccion.$model" />
                                 <small class="invalid-feedback"
                                     v-if="v$.direccion.$dirty && v$.direccion.maxLength.$invalid">
