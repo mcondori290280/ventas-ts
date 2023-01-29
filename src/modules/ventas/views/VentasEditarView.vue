@@ -26,7 +26,7 @@
                                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                                     <label
                                         class="form-label"
-                                        for="filtro_producto">Código de barras producto</label>
+                                        for="filtro_codigo_barras">Código de barras producto</label>
                                     <div class="form-group">
                                         <div class="input-group">
                                             <div class="input-group-prepend">
@@ -34,26 +34,29 @@
                                             </div>
                                             <input
                                                 type="text"
-                                                id="filtro_producto"
-                                                name="filtro_producto"
+                                                id="filtro_codigo_barras"
+                                                name="filtro_codigo_barras"
                                                 class="form-control form-control-sm flex"
                                                 placeholder="Buscar producto"
-                                                v-model.trim="filtroProducto"
+                                                v-model.trim="filtroCodigoBarras"
                                                 @keypress.enter="buscarProducto"
                                                 ref="filtroProductoRef" />
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+                                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                                     <label
                                         class="form-label"
-                                        for="id_producto">Nombre producto</label>
+                                        for="filtro_nombre_producto">Nombre producto</label>
                                     <Select2
-                                        id="id_producto"
-                                        name="id_producto"
+                                        id="filtro_nombre_producto"
+                                        name="filtro_nombre_producto"
                                         :options="productos"
-                                        :settings="{ multiple: false, placeholder: 'Seleccione', width: '100%', tags: false }" />
-                                </div> -->
+                                        aria-placeholder="Seleccione"
+                                        v-model="filtroNombreProducto"
+                                        :settings="{ multiple: false, placeholder: 'Seleccione', width: '100%', tags: false }"
+                                        @select="asignarProductoSeleccionado" />
+                                </div>
                             </div>
 
                             <div class="table-responsive">
@@ -212,7 +215,8 @@ export default {
             obtenerProductosParaLaVentaCompra,
         } = useProductos();
 
-        const filtroProducto = ref<any>('');
+        const filtroCodigoBarras = ref<any>('');
+        const filtroNombreProducto = ref<any>('');
 
         const total = ref<number>(0);
 
@@ -261,8 +265,8 @@ export default {
             ventaDetalle.value.descuento = 0;
             ventaDetalle.value.importe = 0;
 
-            if (filtroProducto.value.length > 0) {
-                const resp = await buscarProductosPorCodigoBarras(filtroProducto.value)
+            if (filtroCodigoBarras.value.length > 0) {
+                const resp = await buscarProductosPorCodigoBarras(filtroCodigoBarras.value)
                 if (resp.ok && resp.data) {
                     const productoEncontrado: any = resp.data;
 
@@ -290,7 +294,7 @@ export default {
                         calcularImporte();
 
                         setTimeout(() => {
-                            cantidadRef.value.focus();                            
+                            cantidadRef.value.focus();
                         }, 0);
                     } else {
                         utils.mostrarMensaje({
@@ -301,7 +305,51 @@ export default {
                 }
             }
 
-            filtroProducto.value = '';
+            setTimeout(() => {
+                filtroCodigoBarras.value = '';
+                filtroNombreProducto.value = '';
+            }, 0);
+        }
+
+        const asignarProductoSeleccionado = async() => {
+            ventaDetalle.value.id_producto = 0;
+            ventaDetalle.value.id_producto_stock = 0;
+            ventaDetalle.value.nombre_producto = '';
+            ventaDetalle.value.cantidad = 1;
+            ventaDetalle.value.precio_unitario = 0;
+            ventaDetalle.value.descuento = 0;
+            ventaDetalle.value.importe = 0;
+
+            const productoEncontrado = productos.value.filter((p: any) => p.id_producto == filtroNombreProducto.value);
+
+            ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
+            ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
+            ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
+            ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
+
+            // Si el producto es por paquete.
+            if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
+                ventaDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
+
+                const respProductoDetalle = await buscarProductosPorIdProducto(productoEncontrado[0].id_producto_detalle_paquete);
+                if (respProductoDetalle.ok) {
+                    const productoDetalleEncintrado: any = respProductoDetalle.data;
+                    
+                    ventaDetalle.value.id_producto = productoDetalleEncintrado[0].id_producto;
+                    ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
+                    ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
+                    ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
+                }
+            }
+
+            calcularImporte();
+
+            setTimeout(() => {
+                cantidadRef.value.focus();
+
+                filtroCodigoBarras.value = '';
+                filtroNombreProducto.value = '';
+            }, 0);
         }
 
         const calcularImporte = () => {
@@ -377,13 +425,15 @@ export default {
         }
 
         return {
-            filtroProducto,
+            filtroCodigoBarras,
+            filtroNombreProducto,
             ventasDetalle,
             ventaDetalle,
             total,
             productos,
 
             buscarProducto,
+            asignarProductoSeleccionado,
             nuevaVenta,
             calcularImporte,
             keyPressCantidad,
