@@ -44,46 +44,8 @@ const useCompras = () => {
         return respuesta;
     }
 
-    // const obtenerVentasPorFecha = async(fechaVenta: string) => {
-    //     const respuesta = {
-    //         ok: false,
-    //         data: undefined,
-    //     };
-
-    //     const loader = $loading.show(utils.configuracionLoading);
-    //     try {
-    //         const { data } = await authApi.get(
-    //             `/ventas/obtener-ventas-por-fecha/${ store.getters['auth/getIdSucursal'] }/${ fechaVenta }`,
-    //             {
-    //                 headers: {
-    //                     'Content-type' : 'application/json',
-    //                     'Authorization': 'Bearer ' + store.getters['auth/getToken'],
-    //                 }
-    //             }
-    //         );
-    //         loader.hide();
-
-    //         if (data.ok) {
-    //             respuesta.ok = true;
-    //             respuesta.data = data.datos;
-    //         } else {
-    //             utils.mostrarMensaje({
-    //                 descripcion: data.mensaje.descripcion,
-    //                 tipoMensaje: data.mensaje.tipoMensaje
-    //             });
-    //         }
-    //     } catch( error ) {
-    //         loader.hide();
-
-    //         utils.mostrarMensajeErrorApi(error);
-    //     }
-
-    //     return respuesta;
-    // }
-
     return {
         grabarCompra,
-        // obtenerVentasPorFecha,
     }
 };
 
