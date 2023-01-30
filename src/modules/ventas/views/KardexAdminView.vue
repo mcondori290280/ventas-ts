@@ -95,10 +95,15 @@
     <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div>
     <!-- END Page Content -->
 
+    <kardex-editar-entrada-salida-component
+        ref="kardexEditarEntradaSalidaComponentRef"
+        @cerrarKardexEditarEntradaSalidaComponent="cerrarKardexEditarEntradaSalidaComponentEmit" />
+
 </template>
 
 <script lang='ts'>
 import {
+  defineAsyncComponent,
     onMounted,
     ref,
  } from 'vue'; 
@@ -108,6 +113,11 @@ import useInventarios from '../composables/useInventarios';
 import numeral from 'numeral';
 
 export default {
+    components: {
+        KardexEditarEntradaSalidaComponent: defineAsyncComponent(
+            () => import('@/modules/ventas/components/KardexEditarEntradaSalidaComponent.vue')
+        ),
+    },
     setup() {
         const {
             obtenerKardexProductos,
@@ -128,6 +138,8 @@ export default {
 
         const textoFiltro = ref<string>('');
 
+        const kardexEditarEntradaSalidaComponentRef = ref();
+
         onMounted(async() => {
             await buscarKardex();
         });
@@ -141,11 +153,11 @@ export default {
         }
 
         const nuevaEntrada = async () => {
-            console.log('nuevaEntrada');
+            kardexEditarEntradaSalidaComponentRef.value.abrirComponent('entrada');
         }
 
         const nuevaSalida = async () => {
-            console.log('nuevaSalida');
+            kardexEditarEntradaSalidaComponentRef.value.abrirComponent('salida');
         }
 
         const filtrarInformacion = async () => {
@@ -157,6 +169,10 @@ export default {
             ));
         }
 
+        const cerrarKardexEditarEntradaSalidaComponentEmit = async(seGrabo: boolean) => {
+            console.log(seGrabo);
+        }
+
         return {
             headers,
             textoFiltro,
@@ -166,8 +182,12 @@ export default {
             filtrarInformacion,
             nuevaEntrada,
             nuevaSalida,
+
             numeral,
-        };
+
+            kardexEditarEntradaSalidaComponentRef,
+            cerrarKardexEditarEntradaSalidaComponentEmit,
+};
     }
 }
 </script>

@@ -5,11 +5,11 @@ import utils from '@/utils/utils';
 
 import { useLoading } from 'vue-loading-overlay';
 
-const useCompras = () => {
+const useKardex = () => {
     const store = useStore();
     const $loading = useLoading();
 
-    const grabarCompra = async (venta: any) => {
+    const grabarKardexEntradaSalida = async (kardex: any) => {
         const respuesta = {
             ok: false,
             data: 0,
@@ -18,8 +18,8 @@ const useCompras = () => {
         const loader = $loading.show(utils.configuracionLoading);
         try {
             const { data } = await authApi.post(
-                '/compras/grabar-compra',
-                venta,
+                '/kardex/grabar-kardex-entrada-salida',
+                kardex,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + store.getters['auth/getToken']
@@ -45,8 +45,8 @@ const useCompras = () => {
     }
 
     return {
-        grabarCompra,
+        grabarKardexEntradaSalida,
     }
 };
 
-export default useCompras;
+export default useKardex;

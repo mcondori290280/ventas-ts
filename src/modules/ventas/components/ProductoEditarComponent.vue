@@ -193,7 +193,7 @@ export default defineComponent({
             id_categoria: '',
             id_marca: '',
             id_presentacion: '',
-            imagen: 'IMAGEN',
+            imagen: '',
             estado: true,
         });
         const reglasProducto = {
@@ -202,7 +202,7 @@ export default defineComponent({
             id_categoria: { required, },
             id_marca: { required, },
             id_presentacion: { required, },
-            imagen: { required, },
+            // imagen: { required, },
         };
         const v$ = useVuelidate(
             reglasProducto,
@@ -273,7 +273,7 @@ export default defineComponent({
             producto.value.id_categoria = '';
             producto.value.id_marca = '';
             producto.value.id_presentacion = '';
-            producto.value.imagen = 'IMAGEN';
+            producto.value.imagen = '';
             producto.value.estado =  true;
 
             v$.value.$reset();

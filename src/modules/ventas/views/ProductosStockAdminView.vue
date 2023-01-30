@@ -264,6 +264,10 @@ export default {
             productosFiltrados.value = JSON.parse(JSON.stringify(
                 productos.filter(
                     (u: any) => u.nombre.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.codigo_barras.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.nombre_categoria.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.nombre_marca.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                        || u.nombre_presentacion.toLowerCase().includes(textoFiltro.value.toLowerCase())
                 )
             ));
         }
