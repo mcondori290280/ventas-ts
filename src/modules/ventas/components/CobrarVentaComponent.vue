@@ -56,6 +56,24 @@
                                 Tipo pago, no tiene información.
                             </small>
                         </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                            <label
+                                class="form-label"
+                                for="fecha_venta">Fecha venta</label>
+                            <input
+                                type="date"
+                                class="form-control form-control-sm"
+                                :class="{ 'input-validation-error-select2': v$.fecha_venta.$dirty && v$.fecha_venta.$invalid }"
+                                id="fecha_venta"
+                                name="fecha_venta"
+                                :readonly="editarFechaVenta"
+                                v-model="v$.fecha_venta.$model">
+                            <small
+                                class="invalid-feedback-select2"
+                                v-if="v$.fecha_venta.$dirty && v$.fecha_venta.required.$invalid">
+                                Fecha venta, no tiene información.
+                            </small>
+                        </div>
                     </div>
 
                     <div class="form-row mt-3">
@@ -153,6 +171,7 @@ import useClientes from '../composables/useClientes';
 import useParametros from '../composables/useParametros';
 import useVentas from '../composables/useVentas';
 import utils from '@/utils/utils';
+import appConfig from '@/app.config';
 
 declare let window: any;
 
@@ -174,6 +193,10 @@ export default defineComponent({
 
         const TIPO_PAGO_EFECTIVO = '1';
 
+        const hoy = new Date();
+
+        const editarFechaVenta = ref<boolean>(!appConfig.FECHA_VENTA_EDITABLE);
+
         const {
             buscarClientePorCarnetIdentidad,
         } = useClientes();
@@ -190,7 +213,9 @@ export default defineComponent({
             id_venta: 0,
             id_sucursal: store.getters['auth/getIdSucursal'],
             id_cliente: 0,
-            fecha_venta: '',
+            fecha_venta:  hoy.getFullYear().toString()
+                + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
+                + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString()),
             id_tipo_pago: TIPO_PAGO_EFECTIVO,
             a_pagar: 0,
             efectivo_recibido: 0,
@@ -204,6 +229,7 @@ export default defineComponent({
         });
         const reglasVenta = {
             id_tipo_pago: { required, },
+            fecha_venta: { required, },
             efectivo_recibido: { required, minValue: minValue(0.01), },
             cambio: { required, minValue: minValue(0.00), },
         };
@@ -300,7 +326,9 @@ export default defineComponent({
                 id_venta: 0,
                 id_sucursal: store.getters['auth/getIdSucursal'],
                 id_cliente: 0,
-                fecha_venta: '',
+                fecha_venta:  hoy.getFullYear().toString()
+                    + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
+                    + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString()),
                 id_tipo_pago: TIPO_PAGO_EFECTIVO,
                 a_pagar: 0,
                 efectivo_recibido: 0,
@@ -330,6 +358,7 @@ export default defineComponent({
             seGrabo,
             venta,
             tiposPago,
+            editarFechaVenta,
 
             v$,
 

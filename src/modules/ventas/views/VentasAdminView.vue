@@ -69,6 +69,7 @@
                     <div class="panel-hdr mt-2">
                         <h2>
                             Listado de<span class="fw-300"><i>{{ $router.currentRoute.value.meta.titleForm }}</i></span>
+                            <span class="ml-3 text-danger font-weight-bold font-italic" style="font-size:18px;">{{ `Total general: Bs. ${ numeral(totalVentas).format('0,0.00') }.-` }}</span>
                         </h2>
                         <div class="panel-toolbar">
                             <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10"
@@ -125,18 +126,6 @@
                                     </div>
                                 </template>
 
-                                <!-- <template #item-acciones="item">
-                                    <div class="input-group-append">
-                                        <button
-                                            type="button"
-                                            class="btn btn-primary btn-xs"
-                                            title="Ver detalle venta"
-                                            @click="verDetalleVenta(item)">
-                                            <i class="fal fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </template> -->
-
                                 <template #expand="item">
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-sm mt-2 mb-2">
@@ -188,90 +177,78 @@
 
 </template>
 
-<script lang='ts'>
-import {
-    onMounted,
-    ref,
- } from 'vue'; 
+<script lang='ts' setup>
+import { onMounted, ref, } from 'vue'; 
 import { useRouter } from 'vue-router';
+import numeral from 'numeral';
 
 import useVentas from '../composables/useVentas';
 
-import numeral from 'numeral';
+const router = useRouter();
+const {
+    obtenerVentasPorFecha,
+} = useVentas();
 
-export default {
-    setup() {
-        const router = useRouter();
-        const {
-            obtenerVentasPorFecha,
-        } = useVentas();
+const totalVentas = ref<any>(0);
 
-        const hoy = new Date();
-        const fitroBusqueda = ref<any>({
-            textoBuscar: hoy.getFullYear().toString()
-                + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
-                + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString())
-        });
+const hoy = new Date();
+const fitroBusqueda = ref<any>({
+    textoBuscar: hoy.getFullYear().toString()
+        + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
+        + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString())
+});
 
-        const headers = [
-            { text: 'Sucursal', value: 'nombre_sucursal', sortable: true },
-            { text: 'Cliente', value: 'nombre_cliente', sortable: true },
-            { text: 'Fecha', value: 'fecha_venta', sortable: true },
-            { text: 'Tipo Pago', value: 'nombre_tipo_pago', sortable: true },
-            { text: 'Total', value: 'a_pagar', sortable: true },
-            { text: 'Estado', value: 'estado', sortable: true },
-            // { text: '', value: 'acciones', width: 15 },
-        ];
+const headers = [
+    { text: 'Sucursal', value: 'nombre_sucursal', sortable: true },
+    { text: 'Cliente', value: 'nombre_cliente', sortable: true },
+    { text: 'Fecha', value: 'fecha_venta', sortable: true },
+    { text: 'Tipo Pago', value: 'nombre_tipo_pago', sortable: true },
+    { text: 'Total', value: 'a_pagar', sortable: true },
+    { text: 'Estado', value: 'estado', sortable: true },
+];
 
-        let ventas: any = [];
-        const ventasFiltrados = ref<any[]>([]);
+let ventas: any = [];
+const ventasFiltrados = ref<any[]>([]);
 
-        const textoFiltro = ref<string>('');
+const textoFiltro = ref<string>('');
 
-        onMounted(async() => {
-            await buscarVentas();
-        });
+onMounted(async() => {
+    await buscarVentas();
+});
 
-        const buscarVentas = async () => {
-            const resp = await obtenerVentasPorFecha(fitroBusqueda.value.textoBuscar);
-            if (resp.ok) {
-                ventas = resp.data;
-                ventasFiltrados.value = JSON.parse(JSON.stringify(ventas));
-            }
-        }
+const buscarVentas = async () => {
+    textoFiltro.value = '';
+    const resp = await obtenerVentasPorFecha(fitroBusqueda.value.textoBuscar);
+    if (resp.ok) {
+        ventas = resp.data;
+        ventasFiltrados.value = JSON.parse(JSON.stringify(ventas));
 
-        const nuevaVenta = async () => {
-            router.push({ name: 'ventas-editar' });
-        }
-
-        // const verDetalleVenta = async (venta: any) => {
-        //     console.log(venta);
-        // }
-
-        const filtrarInformacion = async () => {
-            ventasFiltrados.value = JSON.parse(JSON.stringify(
-                ventas.filter(
-                    (u: any) => u.carnet_identidad.toLowerCase().includes(textoFiltro.value.toLowerCase())
-                        || u.nombre.toLowerCase().includes(textoFiltro.value.toLowerCase())
-                        || u.celular.toLowerCase().includes(textoFiltro.value.toLowerCase())
-                        || u.correo_electronico.toLowerCase().includes(textoFiltro.value.toLowerCase())
-                        || u.direccion.toLowerCase().includes(textoFiltro.value.toLowerCase())
-                )
-            ));
-        }
-
-        return {
-            fitroBusqueda,
-            headers,
-            textoFiltro,
-            ventasFiltrados,
-
-            buscarVentas,
-            // verDetalleVenta,
-            filtrarInformacion,
-            nuevaVenta,
-            numeral,
-        };
+        calcularTotalVentas();
     }
+}
+
+const calcularTotalVentas = async() => {
+    totalVentas.value = 0;
+    ventasFiltrados.value.forEach((venta: any) => {
+        totalVentas.value += Number(venta.a_pagar);
+    });
+}
+
+const nuevaVenta = async () => {
+    router.push({ name: 'ventas-editar' });
+}
+
+const filtrarInformacion = async () => {
+    ventasFiltrados.value = JSON.parse(JSON.stringify(
+        ventas.filter(
+            (u: any) => u.nombre_sucursal.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                || u.nombre_cliente.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                || u.fecha_venta.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                || u.nombre_tipo_pago.toLowerCase().includes(textoFiltro.value.toLowerCase())
+                || u.a_pagar.toLowerCase().includes(textoFiltro.value.toLowerCase())
+        )
+    ));
+
+    calcularTotalVentas();
 }
 </script>
