@@ -6,5 +6,7 @@ export default {
     API_REST: 'http://localhost:3001/api',
 
     KEY_RECAPTCHA: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+
+    FECHA_VENTA_EDITABLE: false
 };
 
