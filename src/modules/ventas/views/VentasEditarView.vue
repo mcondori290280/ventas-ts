@@ -230,7 +230,8 @@ export default {
             cantidad: 1,
             precio_unitario: 0,
             descuento: 0,
-            importe: 0
+            importe: 0,
+            precio_compra: 0
         });
         const reglasVentaDetalle = computed(() => ({
             cantidad: { required, minValue: minValue(0.01) },
@@ -264,6 +265,7 @@ export default {
             ventaDetalle.value.precio_unitario = 0;
             ventaDetalle.value.descuento = 0;
             ventaDetalle.value.importe = 0;
+            ventaDetalle.value.precio_compra = 0;
 
             if (filtroCodigoBarras.value.length > 0) {
                 const resp = await buscarProductosPorCodigoBarras(filtroCodigoBarras.value)
@@ -275,6 +277,7 @@ export default {
                         ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
                         ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
                         ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
+                        ventaDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
 
                         // Si el producto es por paquete.
                         if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
@@ -288,6 +291,7 @@ export default {
                                 ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
                                 ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
                                 ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
+                                ventaDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
                             }
                         }
 
@@ -319,6 +323,7 @@ export default {
             ventaDetalle.value.precio_unitario = 0;
             ventaDetalle.value.descuento = 0;
             ventaDetalle.value.importe = 0;
+            ventaDetalle.value.precio_compra = 0;
 
             const productoEncontrado = productos.value.filter((p: any) => p.id_producto == filtroNombreProducto.value);
 
@@ -326,6 +331,7 @@ export default {
             ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
             ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
             ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
+            ventaDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
 
             // Si el producto es por paquete.
             if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
@@ -339,6 +345,7 @@ export default {
                     ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
                     ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
                     ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
+                    ventaDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
                 }
             }
 
@@ -382,6 +389,7 @@ export default {
                 ventaDetalle.value.precio_unitario = 0;
                 ventaDetalle.value.descuento = 0;
                 ventaDetalle.value.importe = 0;
+                ventaDetalle.value.precio_compra = 0;
 
                 filtroProductoRef.value.focus();
                 vvd$.value.$reset();
@@ -413,6 +421,7 @@ export default {
             ventaDetalle.value.precio_unitario = 0;
             ventaDetalle.value.descuento = 0;
             ventaDetalle.value.importe = 0;
+            ventaDetalle.value.precio_compra = 0;
 
             filtroProductoRef.value.focus();
         }
