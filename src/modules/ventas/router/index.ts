@@ -13,6 +13,7 @@ import ClientesAdminView from '@/modules/ventas/views/ClientesAdminView.vue';
 import KardexAdminView from '@/modules/ventas/views/KardexAdminView.vue';
 import ProveedoresAdminView from '@/modules/ventas/views/ProveedoresAdminView.vue';
 import CompraEditarView from '@/modules/ventas/views/CompraEditarView.vue';
+import ComprasAdminView from '@/modules/ventas/views/ComprasAdminView.vue';
 
 export default {
     name: 'ventas',
@@ -131,6 +132,15 @@ export default {
                 titleForm: 'Realizar compra'
             },
         },
-
+        {
+            path: '/compras-admin',
+            name: 'compras-admin',
+            component: ComprasAdminView,
+            beforeEnter: isAuthenticatedGuard,
+            meta: {
+                title: appConfig.TITULO_SISTEMA + ' - Consultar compras',
+                titleForm: 'Compras'
+            },
+        },
     ],
 };

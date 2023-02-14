@@ -228,6 +228,20 @@
                                 <span class="nav-link-text">Realizar Compra</span>
                             </a>
                         </li>
+                        <li id="menu-item-43">
+                            <a
+                                href="javascript:void(0)"
+                                title="Consultar compras"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-compras',
+                                        'menu-item-43',
+                                        'compras-admin'
+                                    )
+                                ">
+                                <span class="nav-link-text">Consultar Compras</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
