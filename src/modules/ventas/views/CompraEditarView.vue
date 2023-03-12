@@ -480,6 +480,7 @@ export default {
 
         const adicionarDetalleVenta = async () => {
             if (!vcd$.value.$invalid) {
+                calcularImporte();
                 compra.value.comprasDetalle.push(JSON.parse(JSON.stringify(compraDetalle.value)));
                 compra.value.total = compra.value.comprasDetalle.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
 

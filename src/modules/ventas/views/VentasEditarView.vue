@@ -379,6 +379,7 @@ export default {
 
         const adicionarDetalleVenta = async () => {
             if (!vvd$.value.$invalid) {
+                calcularImporte();
                 ventasDetalle.value.push(JSON.parse(JSON.stringify(ventaDetalle.value)));
                 total.value = ventasDetalle.value.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
 
