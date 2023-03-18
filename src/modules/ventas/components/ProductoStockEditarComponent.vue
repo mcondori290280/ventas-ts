@@ -426,12 +426,13 @@ export default defineComponent({
                 productosDetallePaquete.value = JSON.parse(JSON.stringify(productos.value.filter((p: any) => p.id_presentacion == 1)));
 
                 if (esNuevoRegistro.value) {
-                    for (let i = 0; i < productosIds.length; i++) {
-                        productos.value.splice(
-                            productos.value.findIndex((p: any) => p.id_producto == productosIds[i]),
-                            1
-                        );
-                    }
+                    productos.value = productos.value.filter((p: any) => !productosIds.includes(p.id_producto));
+                    // for (let i = 0; i < productosIds.length; i++) {
+                    //     productos.value.splice(
+                    //         productos.value.findIndex((p: any) => p.id_producto == productosIds[i]),
+                    //         1
+                    //     );
+                    // }
                 }
 
                 if (productoStockPar) {
