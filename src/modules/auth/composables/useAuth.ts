@@ -90,7 +90,6 @@ const useAuth = () => {
             localStorage.setItem('ad7a024142e0256d760f0deee43e7699', hash);
 
             if (currentHash !== hash) {
-                console.log('Recarga...');
                 location.reload();
             }
         } catch (error) {
