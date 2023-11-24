@@ -59,7 +59,6 @@ const useAuth = () => {
                     "Secreto"
                 ).toString(CryptoJS.enc.Utf8)
             );
-            console.log(usuario);
             store.commit('auth/loginUser', { usuario, access_token });
         } else {
             store.commit('auth/logout');
