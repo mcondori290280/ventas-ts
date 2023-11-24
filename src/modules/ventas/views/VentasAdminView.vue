@@ -32,7 +32,7 @@
                     <div class="panel-container">
                         <div class="panel-content">
                             <div class="row mb-1">
-                                <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="col-xl-3 col-lg-5 col-md-4 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label class="form-label" for="fecha_venta">Fecha</label>
                                         <div class="input-group">
