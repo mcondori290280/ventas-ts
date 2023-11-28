@@ -16,6 +16,7 @@
     "numeral": "^2.0.6",
     "primeicons": "^6.0.1",
     "primevue": "^3.41.1",
+    "select2": "^4.1.0-rc.0",
     "sweetalert2": "^11.10.1",
     "vue": "^3.3.8",
     "vue-class-component": "^8.0.0-0",

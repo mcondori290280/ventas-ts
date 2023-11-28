@@ -198,7 +198,7 @@ export default defineComponent({
         const editarFechaVenta = ref<boolean>(!appConfig.FECHA_VENTA_EDITABLE);
 
         const {
-            buscarClientePorCarnetIdentidad,
+            obtenerClientes,
         } = useClientes();
 
         const {
@@ -240,13 +240,25 @@ export default defineComponent({
         );
 
         const tiposPago = ref<any>([]);
+        let clientes: any[] = [];
 
         onMounted(async() => {
             const resp = await obtenerTiposPago();
-            if (resp.ok) {
-                tiposPago.value = resp.data;
+            if (!resp.ok) {
+                return;
             }
+            tiposPago.value = resp.data;
+
+            await obtenerClientesBackend();
         });
+
+        async function obtenerClientesBackend() {
+            const resp = await obtenerClientes('');
+            if (!resp.ok) {
+                return;
+            }
+            clientes = resp.data ?? [];
+        }
 
         const abrirComponent = async (ventasDetalle: any, aPagar: number) => {
             venta.value.ventas_detalle = ventasDetalle;
@@ -261,23 +273,20 @@ export default defineComponent({
         const buscarCliente = async() => {
             venta.value.nombre_cliente = '';
             if (venta.value.carnet_identidad.length > 0) {
-                const resp = await buscarClientePorCarnetIdentidad(venta.value.carnet_identidad);
-                if (resp.ok) {
-                    const clientes: any = resp.data;
-                    if (clientes.length > 0) {
-                        venta.value.id_cliente = clientes[0].id_cliente;
-                        venta.value.nombre_cliente = clientes[0].nombre;
+                const cliente = clientes.filter((c: any) => c.carnet_identidad === venta.value.carnet_identidad)[0] ?? undefined;
+                if (cliente) {
+                    venta.value.id_cliente = cliente.id_cliente;
+                    venta.value.nombre_cliente = cliente.nombre;
 
-                        efectivoRecibidoRef.value.focus();
-                        efectivoRecibidoRef.value.select();
-                    } else {
-                        utils.mostrarMensaje({
-                            descripcion: '¡Ups!, no existe el cliente con el criterio de búsqueda.',
-                            tipoMensaje: 'warning'
-                        });
+                    efectivoRecibidoRef.value.focus();
+                    efectivoRecibidoRef.value.select();
+                } else {
+                    utils.mostrarMensaje({
+                        descripcion: '¡Ups!, no existe el cliente con el criterio de búsqueda.',
+                        tipoMensaje: 'warning'
+                    });
 
-                        clienteEditarComponentRef.value.abrirComponent(undefined, venta.value.carnet_identidad);
-                    }
+                    clienteEditarComponentRef.value.abrirComponent(undefined, venta.value.carnet_identidad);
                 }
             }
         }
@@ -342,7 +351,9 @@ export default defineComponent({
             };
         }
 
-        const cerrarClienteEditarComponentEmit = (resultado: boolean, carnetIdentidad: string) => {
+        const cerrarClienteEditarComponentEmit = async (resultado: boolean, carnetIdentidad: string) => {
+            await obtenerClientesBackend();
+
             if (resultado) {
                 venta.value.carnet_identidad = carnetIdentidad;
                 buscarCliente();
