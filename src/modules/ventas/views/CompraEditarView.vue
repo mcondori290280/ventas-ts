@@ -137,9 +137,11 @@
                                         </tr>
 
                                         <tr>
-                                            <th scope="row" colspan="4" class="text-right"><h5 class="font-weight-bold">TOTAL</h5></th>
+                                            <th scope="row" colspan="4" class="text-right">
+                                                <h1 class="font-weight-bold">TOTAL</h1>
+                                            </th>
                                             <td class="text-right">
-                                                <h5 class="font-weight-bold">{{ numeral(compra.total).format('0,0.00') }}.-</h5>
+                                                <h1 class="font-weight-bold">{{ numeral(compra.total).format('0,0.00') }}.-</h1>
                                             </td>
                                             <td class="text-centar">
                                                 
