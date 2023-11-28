@@ -113,7 +113,6 @@
                                                     class="form-control form-control-sm text-right"
                                                     :class="{ 'is-invalid': vvd$.cantidad.$dirty && vvd$.cantidad.$invalid }"
                                                     v-model="vvd$.cantidad.$model"
-                                                    @focus="$event.target.select();"
                                                     @keyup="calcularImporte"
                                                     @keypress="keyPressCantidad($event)"
                                                     @keypress.enter="adicionarDetalleVenta"
@@ -352,7 +351,7 @@ export default {
             calcularImporte();
 
             setTimeout(() => {
-                cantidadRef.value.focus();
+                cantidadRef.value.select();
 
                 filtroCodigoBarras.value = '';
                 filtroNombreProducto.value = '';
