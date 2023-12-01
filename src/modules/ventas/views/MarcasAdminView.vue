@@ -32,7 +32,7 @@
                     <div class="panel-container">
                         <div class="panel-content">
                             <div class="row mb-1">
-                                <div class="col-md-4">
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label class="form-label" for="nombre">Marca</label>
                                         <div class="input-group">

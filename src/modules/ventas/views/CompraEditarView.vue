@@ -23,7 +23,7 @@
                     <div class="panel-container">
                         <div class="panel-content mb-0 pb-0">
                             <div class="row mb-2">
-                                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <label
                                         class="form-label"
                                         for="filtro_codigo_barras">Código de barras producto</label>
@@ -45,7 +45,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <label
                                         class="form-label"
                                         for="filtro_nombre_producto">Nombre producto</label>
@@ -111,7 +111,6 @@
                                                     class="form-control form-control-sm text-right"
                                                     :class="{ 'is-invalid': vcd$.cantidad.$dirty && vcd$.cantidad.$invalid }"
                                                     v-model="vcd$.cantidad.$model"
-                                                    @focus="$event.target.select();"
                                                     @keyup="calcularImporte"
                                                     @keypress="keyPressCantidad($event)"
                                                     @keypress.enter="adicionarDetalleVenta"
@@ -138,9 +137,11 @@
                                         </tr>
 
                                         <tr>
-                                            <th scope="row" colspan="4" class="text-right"><h5 class="font-weight-bold">TOTAL</h5></th>
+                                            <th scope="row" colspan="4" class="text-right">
+                                                <h1 class="font-weight-bold">TOTAL</h1>
+                                            </th>
                                             <td class="text-right">
-                                                <h5 class="font-weight-bold">{{ numeral(compra.total).format('0,0.00') }}.-</h5>
+                                                <h1 class="font-weight-bold">{{ numeral(compra.total).format('0,0.00') }}.-</h1>
                                             </td>
                                             <td class="text-centar">
                                                 
@@ -453,7 +454,7 @@ export default {
             calcularImporte();
 
             setTimeout(() => {
-                cantidadRef.value.focus();
+                cantidadRef.value.select();
 
                 filtroCodigoBarras.value = '';
                 filtroNombreProducto.value = '';

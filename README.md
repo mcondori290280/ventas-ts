@@ -1,14 +1,12 @@
 ### Config Producción
 ```
 export default {
-    TITULO_SISTEMA: 'CSBP',
-
-    // Apis
-    API_FACTURACION: 'https://api.csbp.com.bo/api/',
-    API_SEGURIDAD: 'https://innovoservicios.csbp.com.bo/Seguridad/2.0.0/api/',
-
-    KEY_RECAPTCHA: '6Lerw3UUAAAAAEkfwN4jS6a7CdfCbPAIHh5pFD1F',
-    IMPRIMIR_FACTURA_MODAL: true,
+    TITULO_SISTEMA: 'Ventas',
+    NOMBRE_EMPRESA: 'MarketBo',
+    SITIO_WEB_EMPRESA: 'https://marketbo.net',
+    API_REST: 'http://144.217.4.63:3000/api',
+    KEY_RECAPTCHA: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+    FECHA_VENTA_EDITABLE: false
 };
 ```
 # ventas-ts

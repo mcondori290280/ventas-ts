@@ -170,7 +170,7 @@ export default {
         }
 
         const cerrarKardexEditarEntradaSalidaComponentEmit = async(seGrabo: boolean) => {
-            console.log(seGrabo);
+            return seGrabo;
         }
 
         return {
