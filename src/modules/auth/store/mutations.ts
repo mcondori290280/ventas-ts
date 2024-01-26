@@ -45,7 +45,7 @@ export const logout = (state: any) => {
     sessionStorage.removeItem('menu-item');
 };
 
-export const setSucursal = (state: any, sucursal: any) => {
+export const setSucursal = async (state: any, sucursal: any) => {
     const token = localStorage.getItem('_token');
     if (token) {
         let user: any = token.split('|')[1];
@@ -72,12 +72,6 @@ export const setSucursal = (state: any, sucursal: any) => {
     }
 };
 
-
-
-
-
-
-
 export const setAccess = (state: any, access: any) => {
     const token = localStorage.getItem('_token');
     if (token) {
@@ -102,6 +96,14 @@ export const setAccess = (state: any, access: any) => {
         state.user = user;
     }
 };
+
+
+
+
+
+
+
+
 
 export const setTokenUser = (state: any, { access_token }: any) => {
 
