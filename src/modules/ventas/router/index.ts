@@ -1,4 +1,7 @@
-import { isAuthenticatedGuard } from '@/modules/auth/router/authGuard';
+import {
+    isAuthenticatedGuard,
+    isWithAccessGuard
+} from '@/modules/auth/router/authGuard';
 import appConfig from '@/app.config';
 
 import SystemLayout from '@/modules/system/layouts/SystemLayout.vue';
@@ -23,7 +26,7 @@ export default {
             path: '/categorias-admin',
             name: 'categorias-admin',
             component: CategoriasAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Categorías',
                 titleForm: 'Categorías'
@@ -33,7 +36,7 @@ export default {
             path: '/presentaciones-admin',
             name: 'presentaciones-admin',
             component: PresentacionesAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Presentaciones',
                 titleForm: 'Presentaciones'
@@ -43,7 +46,7 @@ export default {
             path: '/marcas-admin',
             name: 'marcas-admin',
             component: MarcasAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Marcas',
                 titleForm: 'Marcas'
@@ -53,7 +56,7 @@ export default {
             path: '/productos-admin',
             name: 'productos-admin',
             component: ProductosAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Productos',
                 titleForm: 'Productos'
@@ -63,7 +66,7 @@ export default {
             path: '/productos-stock-admin',
             name: 'productos-stock-admin',
             component: ProductosStockAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Productos stock',
                 titleForm: 'Productos stock'
@@ -74,7 +77,7 @@ export default {
             path: '/clientes-admin',
             name: 'clientes-admin',
             component: ClientesAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Clientes',
                 titleForm: 'Clientes'
@@ -84,7 +87,7 @@ export default {
             path: '/ventas-editar',
             name: 'ventas-editar',
             component: VentasEditarView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Realizar ventas',
                 titleForm: 'Realizar venta'
@@ -94,7 +97,7 @@ export default {
             path: '/ventas-admin',
             name: 'ventas-admin',
             component: VentasAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Consultar ventas',
                 titleForm: 'Ventas'
@@ -105,7 +108,7 @@ export default {
             path: '/kardex-admin',
             name: 'kardex-admin',
             component: KardexAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Kardex de productos',
                 titleForm: 'Kardex de productos'
@@ -116,7 +119,7 @@ export default {
             path: '/proveedores-admin',
             name: 'proveedores-admin',
             component: ProveedoresAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Proveedores',
                 titleForm: 'Proveedores'
@@ -126,7 +129,7 @@ export default {
             path: '/compra-editar',
             name: 'compra-editar',
             component: CompraEditarView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Realizar compra',
                 titleForm: 'Realizar compra'
@@ -136,7 +139,7 @@ export default {
             path: '/compras-admin',
             name: 'compras-admin',
             component: ComprasAdminView,
-            beforeEnter: isAuthenticatedGuard,
+            beforeEnter: [isAuthenticatedGuard, isWithAccessGuard],
             meta: {
                 title: appConfig.TITULO_SISTEMA + ' - Consultar compras',
                 titleForm: 'Compras'
