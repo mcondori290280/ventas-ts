@@ -277,7 +277,7 @@ const useAuth = () => {
         getTokenUser,
         reestablecerContrasena,
         verificaEnlace,
-        accesos: computed(() => store.getters['auth/getAccesosModulo']),
+        accesos: store.getters['auth/getAccesos'],
         email: computed(() => store.getters['auth/getEmail']),
         fullNameUser: computed(() => store.getters['auth/getFullNameUser']),
         unicaSucursal: computed(() => store.getters['auth/getUnicaSucursal']),
