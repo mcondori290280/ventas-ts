@@ -1,32 +1,32 @@
 export default [
     {
         nombre: 'SISTEMA DE VENTAS',
-        descripcion: 'Modulo de Gestion de Ventas',
+        descripcion: 'Módulo de Gestión de Ventas',
         es_agrupador: true,
         url: '',
         access: [
             {
                 nombre: 'Ventas',
-                descripcion: 'Gestion de Ventas',
+                descripcion: 'Gestión de Ventas',
                 es_agrupador: true,
                 url: '',
-                access: [
+                accesos: [
                     {
                         nombre: 'Realizar Ventas',
-                        descripcion: 'Gestion de Ventas',
+                        descripcion: 'Realizar Ventas',
                         es_agrupador: false,
                         url: 'ventas-editar',
                         accesos: []
                     },
                     {
                         nombre: 'Consultar Ventas',
-                        descripcion: 'Gestion de Ventas',
+                        descripcion: 'Gestión de Ventas',
                         es_agrupador: false,
                         url: 'ventas-admin',
                         accesos: []
                     }
                 ]
             },
-        ]
+      ]
     }
 ];

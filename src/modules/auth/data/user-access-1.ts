@@ -1,47 +1,47 @@
 export default [
     {
         nombre: 'SISTEMA DE VENTAS',
-        descripcion: 'Modulo de Gestion de Ventas',
+        descripcion: 'Módulo de Gestión de Ventas',
         es_agrupador: true,
         url: '',
         accesos: [
             {
-                nombre: 'Almacen',
-                descripcion: 'Gestion de Almacen',
+                nombre: 'Almacén',
+                descripcion: 'Gestión de Almacén',
                 es_agrupador: true,
                 url: '',
                 accesos: [
                     {
-                        nombre: 'Categorias',
-                        descripcion: 'Gestion de Categorias de Productos',
+                        nombre: 'Categorías',
+                        descripcion: 'Gestión de Categoría de Productos',
                         es_agrupador: false,
                         url: 'categorias-admin',
                         accesos: []
                     },
                     {
                         nombre: 'Presentaciones',
-                        descripcion: 'Gestion de Presentaciones de Productos',
+                        descripcion: 'Gestión de Presentación de Productos',
                         es_agrupador: false,
                         url: 'presentaciones-admin',
                         accesos: []
                     },
                     {
                         nombre: 'Marcas',
-                        descripcion: 'Gestion de Marcas de Productos',
+                        descripcion: 'Gestión de Marca de Productos',
                         es_agrupador: false,
                         url: 'marcas-admin',
                         accesos: []
                     },
                     {
                         nombre: 'Productos',
-                        descripcion: 'Gestion de Productos',
+                        descripcion: 'Gestión de Productos',
                         es_agrupador: false,
                         url: 'productos-admin',
                         accesos: []
                     },
                     {
                         nombre: 'Stock de Productos',
-                        descripcion: 'Gestion de Stock de Productos',
+                        descripcion: 'Gestión de Stock de Productos',
                         es_agrupador: false,
                         url: 'productos-stock-admin',
                         accesos: []
@@ -50,27 +50,27 @@ export default [
             },
             {
                 nombre: 'Ventas',
-                descripcion: 'Gestion de Ventas',
+                descripcion: 'Gestión de Ventas',
                 es_agrupador: true,
                 url: '',
                 accesos: [
                     {
                         nombre: 'Clientes',
-                        descripcion: 'Gestion de Clientes',
+                        descripcion: 'Gestión de Clientes',
                         es_agrupador: false,
                         url: 'clientes-admin',
                         accesos: []
                     },
                     {
                         nombre: 'Realizar Ventas',
-                        descripcion: 'Gestion de Ventas',
+                        descripcion: 'Realizar Ventas',
                         es_agrupador: false,
                         url: 'ventas-editar',
                         accesos: []
                     },
                     {
                         nombre: 'Consultar Ventas',
-                        descripcion: 'Gestion de Ventas',
+                        descripcion: 'Gestión de Ventas',
                         es_agrupador: false,
                         url: 'ventas-admin',
                         accesos: []
@@ -79,7 +79,7 @@ export default [
             },
             {
                 nombre: 'Inventario',
-                descripcion: 'Gestion de Inventario',
+                descripcion: 'Gestión de Inventario',
                 es_agrupador: true,
                 url: '',
                 accesos: [
@@ -94,13 +94,13 @@ export default [
             },
             {
                 nombre: 'Compras',
-                descripcion: 'Gestion de Compras',
+                descripcion: 'Gestión de Compras',
                 es_agrupador: true,
                 url: '',
                 accesos: [
                     {
                         nombre: 'Proveedores',
-                        descripcion: 'Gestion de Proveedores',
+                        descripcion: 'Gestión de Proveedores',
                         es_agrupador: false,
                         url: 'proveedores-admin',
                         accesos: []
@@ -114,7 +114,7 @@ export default [
                     },
                     {
                         nombre: 'Consultar Compras',
-                        descripcion: 'Gestion de Compras',
+                        descripcion: 'Gestión de Compras',
                         es_agrupador: false,
                         url: 'compras-admin',
                         accesos: []

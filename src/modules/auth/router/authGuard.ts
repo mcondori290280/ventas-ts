@@ -1,4 +1,5 @@
-import store from "@/store";
+import store from '@/store';
+import utils from '@/utils/utils';
 
 const isAuthenticatedGuard = async(to: any, _: any, next: any) => {
     document.title = to.meta.title;
@@ -18,23 +19,28 @@ const isNotAuthenticatedGuard = async(to: any, _: any, next: any) => {
 const isWithAccessGuard = async (to: any, _: any, next: any) => {
     document.title = to.meta.title;
 
-    if (buscarAccesos(store.getters['auth/getAccesos'], to)) {
+    const acceso = { tieneAcceso: false };
+    buscarAccesos(store.getters['auth/getAccesos'], to, acceso)
+    if (acceso.tieneAcceso) {
         next();
     } else { 
         next({ name: 'system' });
+        utils.mostrarMensaje({
+            descripcion: 'No tiene acceso a esta opción del sistema.',
+            tipoMensaje: 'error'
+        });
     }
 
 }
 
-const buscarAccesos = (accesos: any[], to: any): boolean => {
+const buscarAccesos = (accesos: any[], to: any, acceso: any) => {
     for (let i = 0; i < accesos.length; i++) {
         if (accesos[i].url === to.name) {
-            return true;
-        } else {
-            return buscarAccesos(accesos[i].accesos, to)
+            acceso.tieneAcceso = true;
+            break;
         }
+        buscarAccesos(accesos[i].accesos, to, acceso);
     }
-    return false;
 }
 
 export {
