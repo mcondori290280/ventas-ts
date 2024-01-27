@@ -4,18 +4,21 @@ export default [
         descripcion: 'Módulo de Gestión de Ventas',
         es_agrupador: true,
         url: '',
-        access: [
+        icon: '',
+        accesos: [
             {
                 nombre: 'Ventas',
                 descripcion: 'Gestión de Ventas',
                 es_agrupador: true,
                 url: '',
+                icon: 'fal fa-shopping-cart',
                 accesos: [
                     {
                         nombre: 'Realizar Ventas',
                         descripcion: 'Realizar Ventas',
                         es_agrupador: false,
                         url: 'ventas-editar',
+                        icon: '',
                         accesos: []
                     },
                     {
@@ -23,10 +26,11 @@ export default [
                         descripcion: 'Gestión de Ventas',
                         es_agrupador: false,
                         url: 'ventas-admin',
+                        icon: '',
                         accesos: []
                     }
                 ]
             },
-      ]
+        ]
     }
 ];
