@@ -136,6 +136,44 @@ const useAuth = () => {
         }
     }
 
+    const cambiarContrasenia = async(changePasswordForm: any) => {
+        let resultado = false;
+
+        const loader = $loading.show(utils.configuracionLoading);
+        try {
+            const { data } = await authApi.put(
+                '/usuarios/CambiarContrasena', {
+                    contrasenaActual: changePasswordForm.contraseniaActual,
+                    contrasenaNueva: changePasswordForm.nuevaContrasenia,
+                    contrasenaRepite: changePasswordForm.confirmarContrasenia,
+                    idUsuario: store.getters['auth/getIdUsuario'],
+                }, {
+                    headers: {
+                        'Authorization': 'Bearer ' + store.getters['auth/getToken']
+                    }
+                }
+            );
+
+            if (data.ok) {
+                utils.mostrarMensaje({
+                    descripcion: 'La contraseña fue modificada correctamente. Por favor vuelva a iniciar sesión.',
+                    tipoMensaje: 'success',
+                });
+                resultado = true;
+            } else {
+                utils.mostrarMensaje({
+                    descripcion: data.mensaje.descripcion,
+                    tipoMensaje: data.mensaje.tipoMensaje
+                });
+            }
+        } catch( error ) {
+            utils.mostrarMensajeErrorApi(error);
+        }
+        loader.hide();
+
+        return resultado;
+    }
+
 
 
 
@@ -148,44 +186,6 @@ const useAuth = () => {
         const ok = await store.dispatch('auth/getTokenUser', user);
         loader.hide();
         return ok;
-    }
-
-    const cambiarContrasenia = async(changePasswordForm: any) => {
-        let resultado = false;
-
-        const loader = $loading.show(utils.configuracionLoading);
-        try {
-            const respuesta = await authApi.put(
-                'CambiarContrasena', {
-                    contrasenaActual: changePasswordForm.contraseniaActual,
-                    contrasenaNueva: changePasswordForm.nuevaContrasenia,
-                    contrasenaRepite: changePasswordForm.confirmarContrasenia,
-                    idUsuario: store.getters['auth/getIdUsuario'],
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer ' + store.getters['auth/getToken']
-                    }
-                }
-            );
-
-             if (respuesta.data.Mensaje.TipoMensaje === 'Success') {
-                 utils.mostrarMensaje({
-                     Descripcion: 'La contraseña fue modificada correctamente. Por favor vuelva a iniciar sesión.',
-                     TipoMensaje: 'success',
-                 });
-                 resultado = true;
-             } else {
-                 utils.mostrarMensaje({
-                     Descripcion: respuesta.data.Mensaje.Descripcion,
-                     TipoMensaje: 'warning',
-                 });
-            }
-        } catch( error ) {
-            utils.mostrarMensajeErrorApi(error);
-        }
-        loader.hide();
-
-        return resultado;
     }
 
     const verificaEnlace = async (enlace: string) => {
@@ -269,11 +269,12 @@ const useAuth = () => {
         obtenerAccesos,
         obtenerSucursales,
         solicitaReestablecerContrasenia,
-
-
-
-
         cambiarContrasenia,
+
+
+
+
+
         getTokenUser,
         reestablecerContrasena,
         verificaEnlace,
