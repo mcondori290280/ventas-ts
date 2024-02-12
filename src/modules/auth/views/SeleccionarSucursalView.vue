@@ -78,7 +78,10 @@ export default {
         const router = useRouter();
         const store = useStore();
 
-        const { obtenerSucursales } = useAuth();
+        const {
+            obtenerSucursales,
+            obtenerAccesos
+        } = useAuth();
 
         const sucursales = ref<any>([]);
         const payload = ref({
@@ -110,6 +113,9 @@ export default {
                 } else if (store.getters['auth/getIdSucursal'] !== 0) {
                     payload.value.id_sucursal = store.getters['auth/getIdSucursal'];
                 }
+
+                const access = await obtenerAccesos(store.getters['auth/getIdUsuario']);
+                store.commit('auth/setAccess', access);
             } else {
                 payload.value.id_sucursal = id_sucursal;
                 payload.value.sucursal = sucursales.value.filter((sucursal: any) => sucursal.id_sucursal == payload.value.id_sucursal)[0].ciudad
@@ -118,6 +124,9 @@ export default {
                 payload.value.unica_sucursal = sucursales.value.length === 1;
 
                 store.commit('auth/setSucursal', payload.value);
+
+                const access = await obtenerAccesos(store.getters['auth/getIdUsuario']);
+                store.commit('auth/setAccess', access);
 
                 router.push({ name: 'inicio' });
             }

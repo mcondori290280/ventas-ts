@@ -26,7 +26,37 @@
         </div>
         <!-- BEGIN PRIMARY NAVIGATION -->
         <nav id="js-primary-nav" class="primary-nav" role="navigation">
-            <ul id="js-nav-menu" class="nav-menu">
+            <ul id="js-nav-menu" class="nav-menu" v-for="acceso_0 in accesos" :key="acceso_0.nombre">
+                <li class="nav-title" :title="acceso_0.descripcion">{{ acceso_0.nombre }}</li>
+                <li :id="'acceso-menu-' + acceso_1.id" class="acceso-menu" v-for="acceso_1 in acceso_0.accesos" :key="acceso_1.id">
+                    <a
+                        href="javascript:void(0)"
+                        :title="acceso_1.descripcion">
+                        <i :class="acceso_1.icon"></i>
+                        <span class="nav-link-text" data-i18n="nav.application_intel">
+                            {{ acceso_1.nombre }}
+                        </span>
+                    </a>
+                    <ul>
+                        <li :id="'menu-item-' + acceso_2.id" v-for="acceso_2 in acceso_1.accesos" :key="acceso_2.id">
+                            <a
+                                href="javascript:void(0)"
+                                :title="acceso_2.descripcion"
+                                @click="
+                                    seHizoClickEnOpcion(
+                                        'acceso-menu-' + acceso_1.id,
+                                        'menu-item-' + acceso_2.id,
+                                        acceso_2.url
+                                    )
+                                ">
+                                <span class="nav-link-text">{{ acceso_2.nombre }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- <ul id="js-nav-menu" class="nav-menu">
                 <li class="nav-title">Sistema de Ventas</li>
                 <li id="acceso-menu-almacen" class="acceso-menu">
                     <a
@@ -244,7 +274,7 @@
                         </li>
                     </ul>
                 </li>
-            </ul>
+            </ul> -->
             <div class="filter-message js-filter-message bg-success-600"></div>
         </nav>
         <!-- END PRIMARY NAVIGATION -->

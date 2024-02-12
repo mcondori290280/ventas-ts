@@ -73,7 +73,7 @@
                                 Concepto, no tiene información.
                             </small>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
+                        <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
                             <div class="form-group">
                                 <label
                                     class="form-label"
@@ -92,9 +92,9 @@
                                     Código de barras, no tiene información.
                                 </small>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-2">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt-3">
                             <label
                                 class="form-label"
                                 for="movimiento">Cantidad movimiento</label>
@@ -118,7 +118,7 @@
                     </div>
 
                 </div>
-                <div class="modal-footer pt-0">
+                <div class="modal-footer">
                     <button
                         type="button"
                         class="btn btn-primary btn-sm"
@@ -161,7 +161,7 @@ export default defineComponent({
             grabarKardexEntradaSalida
         } = useKardex();
 
-        const hoy = new Date();
+        // const hoy = new Date();
         const tipoMovimiento = ref<string>('');
 
         const kardex = ref<any>({
@@ -170,16 +170,17 @@ export default defineComponent({
             id_producto_stock: 0,
             id_sucursal: store.getters['auth/getIdSucursal'],
             inventario_inicial: 0,
-            fecha: hoy.getFullYear().toString()
-                + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
-                + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString()),
+            // fecha: hoy.getFullYear().toString()
+            //     + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
+            //     + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString()),
+            fecha: '',
             concepto: '',
             movimiento: 0,
             estado: true,
         });
         const reglasKardex = {
             id_producto: { required },
-            fecha: { required },
+            // fecha: { required },
             concepto: { required },
             movimiento: { required, minValue: minValue(1) },
 
@@ -247,9 +248,10 @@ export default defineComponent({
                 id_producto_stock: 0,
                 id_sucursal: store.getters['auth/getIdSucursal'],
                 inventario_inicial: 0,
-                fecha: hoy.getFullYear().toString()
-                    + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
-                    + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString()),
+                // fecha: hoy.getFullYear().toString()
+                //     + '-' + ((hoy.getMonth() + 1) < 10 ? '0' + (hoy.getMonth() + 1).toString() : (hoy.getMonth() + 1).toString())
+                //     + '-' + (hoy.getDate() < 10 ? '0' + hoy.getDate().toString() : hoy.getDate().toString()),
+                fecha: '',
                 concepto: '',
                 movimiento: 0,
                 estado: true,

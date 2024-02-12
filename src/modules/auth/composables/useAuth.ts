@@ -9,6 +9,9 @@ import { useLoading } from 'vue-loading-overlay';
 
 import CryptoJS from 'crypto-js';
 
+import userAccess1 from '../data/user-access-1';
+import userAccess2 from '../data/user-access-2';
+
 const useAuth = () => {
     const store = useStore();
     const $loading = useLoading();
@@ -123,6 +126,15 @@ const useAuth = () => {
         return ok;
     }
 
+    const obtenerAccesos = async(idUsuario: number) => {
+        if (idUsuario == 1) {
+            return userAccess1;
+        } else if (idUsuario == 2) {
+            return userAccess2;
+        } else {
+            return [];
+        }
+    }
 
 
 
@@ -136,10 +148,6 @@ const useAuth = () => {
         const ok = await store.dispatch('auth/getTokenUser', user);
         loader.hide();
         return ok;
-    }
-
-    const obtenerAccesos = async() => {
-        await store.dispatch('auth/obtenerAccesos');
     }
 
     const cambiarContrasenia = async(changePasswordForm: any) => {
@@ -252,25 +260,24 @@ const useAuth = () => {
         loader.hide();
         return ok;
     }
-    
+
     return {
-        loginUser,
-        obtenerSucursales,
         checkAuthStatus,
         checkVersion,
+        loginUser,
         logout,
+        obtenerAccesos,
+        obtenerSucursales,
         solicitaReestablecerContrasenia,
-
 
 
 
 
         cambiarContrasenia,
         getTokenUser,
-        obtenerAccesos,
-        verificaEnlace,
         reestablecerContrasena,
-        accesos: computed(() => store.getters['auth/getAccesosModulo']),
+        verificaEnlace,
+        accesos: store.getters['auth/getAccesos'],
         email: computed(() => store.getters['auth/getEmail']),
         fullNameUser: computed(() => store.getters['auth/getFullNameUser']),
         unicaSucursal: computed(() => store.getters['auth/getUnicaSucursal']),

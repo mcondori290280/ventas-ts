@@ -1,4 +1,5 @@
-import store from "@/store";
+import store from '@/store';
+import utils from '@/utils/utils';
 
 const isAuthenticatedGuard = async(to: any, _: any, next: any) => {
     document.title = to.meta.title;
@@ -17,35 +18,29 @@ const isNotAuthenticatedGuard = async(to: any, _: any, next: any) => {
 
 const isWithAccessGuard = async (to: any, _: any, next: any) => {
     document.title = to.meta.title;
-    const accesos = store.getters['auth/getAccesosModulo'];
-    let tieneAcceso = false;
-    accesos.forEach((primerNivel: any) => {
-        if (!tieneAcceso)
-            tieneAcceso = (primerNivel.EsFormulario && primerNivel.url == to.path) ? true : false;
-        if (primerNivel.Children.length > 0 && !tieneAcceso) {
-            primerNivel.Children.forEach((segundoNivel: any) => {
-                if (!tieneAcceso)
-                    tieneAcceso = (segundoNivel.EsFormulario && segundoNivel.url == to.path) ? true : false;
-                if (segundoNivel.Children.length > 0 && !tieneAcceso) { 
-                    segundoNivel.Children.forEach((tercerNivel: any) => {
-                        if(!tieneAcceso)
-                            tieneAcceso = (tercerNivel.EsFormulario && tercerNivel.url == to.path) ? true : false;
-                        if (tercerNivel.Children.length > 0 && !tieneAcceso) { 
-                            tercerNivel.Children.forEach((cuartoNivel: any) => {
-                                tieneAcceso = (cuartoNivel.EsFormulario && cuartoNivel.url == to.path) ? true : false;
-                            });
-                        }
-                    });
-                }
-            });
-         }
-    });
-    if (tieneAcceso) {
+
+    const acceso = { tieneAcceso: false };
+    buscarAccesos(store.getters['auth/getAccesos'], to, acceso)
+    if (acceso.tieneAcceso) {
         next();
     } else { 
         next({ name: 'system' });
+        utils.mostrarMensaje({
+            descripcion: 'No tiene acceso a esta opción del sistema.',
+            tipoMensaje: 'error'
+        });
     }
 
+}
+
+const buscarAccesos = (accesos: any[], to: any, acceso: any) => {
+    for (let i = 0; i < accesos.length; i++) {
+        if (accesos[i].url === to.name) {
+            acceso.tieneAcceso = true;
+            break;
+        }
+        buscarAccesos(accesos[i].accesos, to, acceso);
+    }
 }
 
 export {
