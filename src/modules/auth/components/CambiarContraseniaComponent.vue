@@ -28,8 +28,7 @@
                                     autocomplete="off"
                                     :class="{ 'is-invalid': v$.contraseniaActual.$dirty && v$.contraseniaActual.$invalid }"
                                     v-model.trim="v$.contraseniaActual.$model"
-                                    ref="contraseniaActual"
-                                    v-on:keyup.enter="$refs.nuevaContrasenia.focus();">
+                                    ref="contraseniaActual">
                             <small class="invalid-feedback"
                                     v-if="v$.contraseniaActual.$dirty && v$.contraseniaActual.required.$invalid">
                                 Contraseña actual, no tiene información.
@@ -45,8 +44,7 @@
                                     autocomplete="off"
                                     :class="{ 'is-invalid': v$.nuevaContrasenia.$dirty && v$.nuevaContrasenia.$invalid }"
                                     v-model.trim="v$.nuevaContrasenia.$model"
-                                    ref="nuevaContrasenia"
-                                    v-on:keyup.enter="$refs.confirmarContrasenia.focus();">
+                                    ref="nuevaContrasenia">
                             <small class="invalid-feedback"
                                     v-if="v$.nuevaContrasenia.$dirty && v$.nuevaContrasenia.required.$invalid">
                                 Nueva contraseña, no tiene información.
@@ -80,8 +78,7 @@
                                     autocomplete="off"
                                     :class="{ 'is-invalid': v$.confirmarContrasenia.$dirty && v$.confirmarContrasenia.$invalid }"
                                     v-model.trim="v$.confirmarContrasenia.$model"
-                                    ref="confirmarContrasenia"
-                                    v-on:keyup.enter="$refs.btnAceptar.focus();">
+                                    ref="confirmarContrasenia">
                             <small class="invalid-feedback"
                                     v-if="v$.confirmarContrasenia.$dirty && v$.confirmarContrasenia.required.$invalid">
                                 Confirmar contraseña, no tiene información.
@@ -184,8 +181,8 @@ export default {
                 v$.value.$touch();
 
                 utils.mostrarMensaje({
-                    Descripcion: 'Existe información incorrecta. Por favor revise.',
-                    DescripcionTipoMensaje: 'error',
+                    descripcion: 'Existe información incorrecta. Por favor revise.',
+                    tipoMensaje: 'error',
                 });
             }
         }
