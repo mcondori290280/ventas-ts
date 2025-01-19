@@ -71,7 +71,7 @@
                                             <!-- <th scope="col" class="text-center" style="width:150px;">Descuento</th> -->
                                             <th scope="col" class="text-center" style="width:150px;">Importe</th>
                                             <th scope="col" class="text-center" style="width:5px;">|</th>
-                                            <th scope="col" class="text-center" style="width:110px;">Anterior P/Venta</th>
+                                            <th scope="col" class="text-center" style="width:110px;">Actual P/Venta</th>
                                             <th scope="col" class="text-center" style="width:110px;">Nuevo P/Venta</th>
                                             <th scope="col" class="text-center" style="width:30px;"></th>
                                         </tr>
@@ -93,7 +93,7 @@
                                             </td>
                                             <td class="text-center">&nbsp;</td>
                                             <td class="text-right">
-                                                {{ numeral(compraDetalleItem.anterior_precio_venta).format('0,0.00') }}.-
+                                                {{ numeral(compraDetalleItem.actual_precio_venta).format('0,0.00') }}.-
                                             </td>
                                             <td class="text-right">
                                                 {{ numeral(compraDetalleItem.nuevo_precio_venta).format('0,0.00') }}.-
@@ -143,7 +143,7 @@
                                             </td>
                                             <td>&nbsp;</td>
                                             <td class="text-right">
-                                                {{ numeral(compraDetalle.anterior_precio_venta).format('0,0.00') }}.-
+                                                {{ numeral(compraDetalle.actual_precio_venta).format('0,0.00') }}.-
                                             </td>
                                             <td class="text-right">
                                                 <input
@@ -359,7 +359,7 @@ export default {
             cantidad: 1,
             precio_compra: 0,
             importe: 0,
-            anterior_precio_venta: 0,
+            actual_precio_venta: 0,
             nuevo_precio_venta: 0,
         });
         const reglasCompraDetalle = computed(() => ({
@@ -405,7 +405,7 @@ export default {
             compraDetalle.value.cantidad = 1;
             compraDetalle.value.precio_compra = 0;
             compraDetalle.value.importe = 0;
-            compraDetalle.value.anterior_precio_venta = 0;
+            compraDetalle.value.actual_precio_venta = 0;
             compraDetalle.value.nuevo_precio_venta = 0;
 
             if (filtroCodigoBarras.value.length > 0) {
@@ -418,7 +418,7 @@ export default {
                         compraDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
                         compraDetalle.value.nombre_producto = productoEncontrado[0].nombre;
                         compraDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
-                        compraDetalle.value.anterior_precio_venta = productoEncontrado[0].precio_venta;
+                        compraDetalle.value.actual_precio_venta = productoEncontrado[0].precio_venta;
                         compraDetalle.value.nuevo_precio_venta = productoEncontrado[0].precio_venta;
                         // Si el producto es por paquete.
                         if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
@@ -432,7 +432,7 @@ export default {
                                 compraDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
                                 compraDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
                                 compraDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
-                                compraDetalle.value.anterior_precio_venta = productoDetalleEncintrado[0].precio_venta;
+                                compraDetalle.value.actual_precio_venta = productoDetalleEncintrado[0].precio_venta;
                                 compraDetalle.value.nuevo_precio_venta = productoDetalleEncintrado[0].precio_venta;
                             }
                         }
@@ -464,7 +464,7 @@ export default {
             compraDetalle.value.cantidad = 1;
             compraDetalle.value.precio_compra = 0;
             compraDetalle.value.importe = 0;
-            compraDetalle.value.anterior_precio_venta = 0;
+            compraDetalle.value.actual_precio_venta = 0;
             compraDetalle.value.nuevo_precio_venta = 0;
 
             const productoEncontrado = productos.value.filter((p: any) => p.id_producto == filtroNombreProducto.value);
@@ -473,7 +473,7 @@ export default {
             compraDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
             compraDetalle.value.nombre_producto = productoEncontrado[0].nombre;
             compraDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
-            compraDetalle.value.anterior_precio_venta = productoEncontrado[0].precio_venta;
+            compraDetalle.value.actual_precio_venta = productoEncontrado[0].precio_venta;
             compraDetalle.value.nuevo_precio_venta = productoEncontrado[0].precio_venta;
             // Si el producto es por paquete.
             if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
@@ -487,7 +487,7 @@ export default {
                     compraDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
                     compraDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
                     compraDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
-                    compraDetalle.value.anterior_precio_venta = productoDetalleEncintrado[0].precio_venta;
+                    compraDetalle.value.actual_precio_venta = productoDetalleEncintrado[0].precio_venta;
                     compraDetalle.value.nuevo_precio_venta = productoDetalleEncintrado[0].precio_venta;
                 }
             }
@@ -533,7 +533,7 @@ export default {
                 compraDetalle.value.cantidad = 1;
                 compraDetalle.value.precio_compra = 0;
                 compraDetalle.value.importe = 0;
-                compraDetalle.value.anterior_precio_venta = 0;
+                compraDetalle.value.actual_precio_venta = 0;
                 compraDetalle.value.nuevo_precio_venta = 0;
 
                 filtroProductoRef.value.focus();
@@ -571,7 +571,7 @@ export default {
             compraDetalle.value.cantidad = 1;
             compraDetalle.value.precio_compra = 0;
             compraDetalle.value.importe = 0;
-            compraDetalle.value.anterior_precio_venta = 0;
+            compraDetalle.value.actual_precio_venta = 0;
             compraDetalle.value.nuevo_precio_venta = 0;
 
             filtroProductoRef.value.focus();
@@ -584,7 +584,22 @@ export default {
 
         const grabarCompraFunction = async() => {
             if (!v$.value.$invalid) {
-                const respPregunta = await utils.mensajePregunta('¿Está seguro de grabar la compra?')
+
+                // Validamos que el precio de venta nuevo, no sea menor al anterior.
+                let mensaje = '';
+                let respPregunta = true;
+                for (let i = 0; i < compra.value.comprasDetalle.length; i++) {
+                    if (Number(compra.value.comprasDetalle[i].nuevo_precio_venta) < Number(compra.value.comprasDetalle[i].actual_precio_venta)) {
+                        mensaje += `El nuevo precio de venta del producto ${ compra.value.comprasDetalle[i].nombre_producto }, es menor al precio actual.<br>`;
+                    }
+                }
+                if (mensaje.length > 0) {
+                    mensaje += `<br>¿Está seguro de grabar la compra?`;
+                    respPregunta = await utils.mensajePregunta(mensaje);
+                } else {
+                    respPregunta = await utils.mensajePregunta('¿Está seguro de grabar la compra?');
+                }
+
                 if (respPregunta) {
                     const resp = await grabarCompra(compra.value);
                     if (resp.ok) {
