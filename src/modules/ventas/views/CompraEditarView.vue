@@ -70,6 +70,9 @@
                                             <th scope="col" class="text-center" style="width:150px;">P/Unitario</th>
                                             <!-- <th scope="col" class="text-center" style="width:150px;">Descuento</th> -->
                                             <th scope="col" class="text-center" style="width:150px;">Importe</th>
+                                            <th scope="col" class="text-center" style="width:5px;">|</th>
+                                            <th scope="col" class="text-center" style="width:110px;">Anterior P/Venta</th>
+                                            <th scope="col" class="text-center" style="width:110px;">Nuevo P/Venta</th>
                                             <th scope="col" class="text-center" style="width:30px;"></th>
                                         </tr>
                                     </thead>
@@ -88,7 +91,14 @@
                                             <td class="text-right">
                                                 {{ numeral(compraDetalleItem.importe).format('0,0.00') }}.-
                                             </td>
-                                            <td class="text-centar">
+                                            <td class="text-center">&nbsp;</td>
+                                            <td class="text-right">
+                                                {{ numeral(compraDetalleItem.anterior_precio_venta).format('0,0.00') }}.-
+                                            </td>
+                                            <td class="text-right">
+                                                {{ numeral(compraDetalleItem.nuevo_precio_venta).format('0,0.00') }}.-
+                                            </td>
+                                            <td class="text-center">
                                                 <button type="button"
                                                         class="btn btn-danger btn-xs"
                                                         title="Eliminar"
@@ -131,6 +141,22 @@
                                             <td class="text-right">
                                                 {{ numeral(compraDetalle.importe).format('0,0.00') }}.-
                                             </td>
+                                            <td>&nbsp;</td>
+                                            <td class="text-right">
+                                                {{ numeral(compraDetalle.anterior_precio_venta).format('0,0.00') }}.-
+                                            </td>
+                                            <td class="text-right">
+                                                <input
+                                                    type="text"
+                                                    id="nuevo_precio_venta"
+                                                    name="nuevo_precio_venta"
+                                                    class="form-control form-control-sm text-right"
+                                                    :class="{ 'is-invalid': vcd$.nuevo_precio_venta.$dirty && vcd$.nuevo_precio_venta.$invalid }"
+                                                    v-model="vcd$.nuevo_precio_venta.$model"
+                                                    @keyup="calcularImporte"
+                                                    @keypress.enter="adicionarDetalleVenta"
+                                                />
+                                            </td>
                                             <td class="text-centar">
                                                 &nbsp;
                                             </td>
@@ -143,8 +169,8 @@
                                             <td class="text-right">
                                                 <h1 class="font-weight-bold">{{ numeral(compra.total).format('0,0.00') }}.-</h1>
                                             </td>
-                                            <td class="text-centar">
-                                                
+                                            <td colspan="3" class="text-centar">
+                                                &nbsp;
                                             </td>
                                         </tr>
                                     </tbody>
@@ -332,11 +358,14 @@ export default {
             nombre_producto: '',
             cantidad: 1,
             precio_compra: 0,
-            importe: 0
+            importe: 0,
+            anterior_precio_venta: 0,
+            nuevo_precio_venta: 0,
         });
         const reglasCompraDetalle = computed(() => ({
             cantidad: { required, minValue: minValue(0.01) },
             precio_compra: { required, minValue: minValue(0.01) },
+            nuevo_precio_venta: { required, minValue: minValue(0.01) },
         }));
         const vcd$ = useVuelidate(reglasCompraDetalle, compraDetalle);
 
@@ -376,6 +405,8 @@ export default {
             compraDetalle.value.cantidad = 1;
             compraDetalle.value.precio_compra = 0;
             compraDetalle.value.importe = 0;
+            compraDetalle.value.anterior_precio_venta = 0;
+            compraDetalle.value.nuevo_precio_venta = 0;
 
             if (filtroCodigoBarras.value.length > 0) {
                 const resp = await buscarProductosPorCodigoBarras(filtroCodigoBarras.value)
@@ -387,6 +418,8 @@ export default {
                         compraDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
                         compraDetalle.value.nombre_producto = productoEncontrado[0].nombre;
                         compraDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
+                        compraDetalle.value.anterior_precio_venta = productoEncontrado[0].precio_venta;
+                        compraDetalle.value.nuevo_precio_venta = productoEncontrado[0].precio_venta;
                         // Si el producto es por paquete.
                         if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
                             compraDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
@@ -399,6 +432,8 @@ export default {
                                 compraDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
                                 compraDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
                                 compraDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
+                                compraDetalle.value.anterior_precio_venta = productoDetalleEncintrado[0].precio_venta;
+                                compraDetalle.value.nuevo_precio_venta = productoDetalleEncintrado[0].precio_venta;
                             }
                         }
 
@@ -429,6 +464,8 @@ export default {
             compraDetalle.value.cantidad = 1;
             compraDetalle.value.precio_compra = 0;
             compraDetalle.value.importe = 0;
+            compraDetalle.value.anterior_precio_venta = 0;
+            compraDetalle.value.nuevo_precio_venta = 0;
 
             const productoEncontrado = productos.value.filter((p: any) => p.id_producto == filtroNombreProducto.value);
 
@@ -436,6 +473,8 @@ export default {
             compraDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
             compraDetalle.value.nombre_producto = productoEncontrado[0].nombre;
             compraDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
+            compraDetalle.value.anterior_precio_venta = productoEncontrado[0].precio_venta;
+            compraDetalle.value.nuevo_precio_venta = productoEncontrado[0].precio_venta;
             // Si el producto es por paquete.
             if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
                 compraDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
@@ -448,6 +487,8 @@ export default {
                     compraDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
                     compraDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
                     compraDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
+                    compraDetalle.value.anterior_precio_venta = productoDetalleEncintrado[0].precio_venta;
+                    compraDetalle.value.nuevo_precio_venta = productoDetalleEncintrado[0].precio_venta;
                 }
             }
 
@@ -482,6 +523,7 @@ export default {
         const adicionarDetalleVenta = async () => {
             if (!vcd$.value.$invalid) {
                 calcularImporte();
+
                 compra.value.comprasDetalle.push(JSON.parse(JSON.stringify(compraDetalle.value)));
                 compra.value.total = compra.value.comprasDetalle.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
 
@@ -491,6 +533,8 @@ export default {
                 compraDetalle.value.cantidad = 1;
                 compraDetalle.value.precio_compra = 0;
                 compraDetalle.value.importe = 0;
+                compraDetalle.value.anterior_precio_venta = 0;
+                compraDetalle.value.nuevo_precio_venta = 0;
 
                 filtroProductoRef.value.focus();
                 vcd$.value.$reset();
@@ -527,6 +571,8 @@ export default {
             compraDetalle.value.cantidad = 1;
             compraDetalle.value.precio_compra = 0;
             compraDetalle.value.importe = 0;
+            compraDetalle.value.anterior_precio_venta = 0;
+            compraDetalle.value.nuevo_precio_venta = 0;
 
             filtroProductoRef.value.focus();
 
