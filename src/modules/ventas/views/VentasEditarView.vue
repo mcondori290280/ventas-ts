@@ -72,10 +72,10 @@
                                 </h6>
                             </div>
 
-                            <div class="table-responsive" style="max-height: calc(100vh - 400px); overflow-y: auto;">
+                            <div class="table-responsive" style="max-height: calc(100vh - 430px); overflow-y: auto;">
                                 <table class="table table-bordered table-sm" style="box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-radius: 4px;">
                                         <thead>
-                                        <tr>
+                                        <tr style="position: sticky; top: 0; background: white; z-index: 2;">
                                             <th scope="col" class="text-center" style="width:50px;">#</th>
                                             <th scope="col" class="text-center">Producto</th>
                                             <th scope="col" class="text-center" style="width:150px;">Cantidad</th>
@@ -113,7 +113,7 @@
                                             </td>
                                         </tr>
 
-                                        <tr v-if="ventaDetalle.id_producto > 0" style="background: #f8f9fa; border-left: 3px solid #adb5bd;">
+                                        <tr v-if="ventaDetalle.id_producto > 0" style="position: sticky; bottom: 0; background: #f8f9fa; z-index: 1; border-left: 3px solid #adb5bd;">
                                             <th scope="row" class="text-right" style="padding-top:12px;">-</th>
                                             <td style="padding-top:12px;">
                                                 {{  ventaDetalle.nombre_producto }}
@@ -161,14 +161,7 @@
                                                 &nbsp;
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div style="position: sticky; bottom: 0; background: white; z-index: 10; border-top: 2px solid #dee2e6;">
-                                <table class="table table-bordered table-sm mb-0">
-                                    <tbody>
-                                        <tr>
+                                        <tr style="position: sticky; bottom: 0; background: white; z-index: 1;">
                                             <th scope="row" colspan="5" class="text-right py-2">
                                                 <h1 class="font-weight-bold mb-0">TOTAL</h1>
                                             </th>
@@ -179,6 +172,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <div style="position: sticky; bottom: 0; background: white; z-index: 10; border-top: 2px solid #dee2e6;">
                                 <div class="text-right p-2" style="background: inherit;">
                                     <button
                                         type="button"
