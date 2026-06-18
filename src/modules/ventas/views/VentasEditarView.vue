@@ -28,20 +28,24 @@
                                         class="form-label"
                                         for="filtro_codigo_barras">Código de barras producto</label>
                                     <div class="form-group">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fal fa-barcode"></i></span>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i v-if="!loadingBusqueda" class="fal fa-barcode"></i>
+                                                        <i v-else class="fal fa-spinner fa-pulse"></i>
+                                                    </span>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    id="filtro_codigo_barras"
+                                                    name="filtro_codigo_barras"
+                                                    class="form-control form-control-sm flex"
+                                                    placeholder="Buscar producto"
+                                                    v-model.trim="filtroCodigoBarras"
+                                                    @keypress.enter="buscarProducto"
+                                                    :disabled="loadingBusqueda"
+                                                    ref="filtroProductoRef" />
                                             </div>
-                                            <input
-                                                type="text"
-                                                id="filtro_codigo_barras"
-                                                name="filtro_codigo_barras"
-                                                class="form-control form-control-sm flex"
-                                                placeholder="Buscar producto"
-                                                v-model.trim="filtroCodigoBarras"
-                                                @keypress.enter="buscarProducto"
-                                                ref="filtroProductoRef" />
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
@@ -59,7 +63,7 @@
                                 </div>
                             </div>
 
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="max-height: calc(100vh - 400px); overflow-y: auto;">
                                 <table class="table table-bordered table-sm">
                                     <thead>
                                         <tr>
@@ -148,22 +152,25 @@
                                                 &nbsp;
                                             </td>
                                         </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
+                            <div style="position: sticky; bottom: 0; background: white; z-index: 10; border-top: 2px solid #dee2e6;">
+                                <table class="table table-bordered table-sm mb-0">
+                                    <tbody>
                                         <tr>
-                                            <th scope="row" colspan="5" class="text-right">
-                                                <h1 class="font-weight-bold">TOTAL</h1>
+                                            <th scope="row" colspan="5" class="text-right py-2">
+                                                <h1 class="font-weight-bold mb-0">TOTAL</h1>
                                             </th>
-                                            <td class="text-right">
-                                                <h1 class="font-weight-bold">{{ numeral(total).format('0,0.00') }}.-</h1>
+                                            <td class="text-right py-2">
+                                                <h1 class="font-weight-bold mb-0">{{ numeral(total).format('0,0.00') }}.-</h1>
                                             </td>
-                                            <td class="text-centar">
-                                                
-                                            </td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
-
-                                <div class="text-right mb-3">
+                                <div class="text-right p-2" style="background: inherit;">
                                     <button
                                         type="button"
                                         class="btn btn-warning btn-sm"
@@ -241,10 +248,27 @@ export default {
         }));
         const vvd$ = useVuelidate(reglasVentaDetalle, ventaDetalle);
 
+        const resetVentaDetalle = () => {
+            ventaDetalle.value = {
+                id_venta_detalle: 0,
+                id_venta: 0,
+                id_producto: 0,
+                id_producto_stock: 0,
+                nombre_producto: '',
+                cantidad: 1,
+                precio_unitario: 0,
+                descuento: 0,
+                importe: 0,
+                precio_compra: 0,
+            };
+        };
+
         const filtroProductoRef = ref();
         const cantidadRef = ref();
 
         const productos = ref<any>([]);
+
+        const loadingBusqueda = ref(false);
 
         // Varaibles del componente de cobro de la venta.
         const cobrarVentaComponentRef = ref();
@@ -252,61 +276,64 @@ export default {
         onMounted(async() => {
             filtroProductoRef.value.focus();
 
-            const resp = await obtenerProductosParaLaVentaCompra();
-            if (resp.ok) {
-                productos.value = resp.data;
+            loadingBusqueda.value = true;
+            try {
+                const resp = await obtenerProductosParaLaVentaCompra();
+                if (resp.ok) {
+                    productos.value = resp.data;
+                }
+            } finally {
+                loadingBusqueda.value = false;
             }
         });
 
         const buscarProducto = async() => {
-            ventaDetalle.value.id_producto = 0;
-            ventaDetalle.value.id_producto_stock = 0;
-            ventaDetalle.value.nombre_producto = '';
-            ventaDetalle.value.cantidad = 1;
-            ventaDetalle.value.precio_unitario = 0;
-            ventaDetalle.value.descuento = 0;
-            ventaDetalle.value.importe = 0;
-            ventaDetalle.value.precio_compra = 0;
+            resetVentaDetalle();
 
             if (filtroCodigoBarras.value.length > 0) {
-                const resp = await buscarProductosPorCodigoBarras(filtroCodigoBarras.value)
-                if (resp.ok && resp.data) {
-                    const productoEncontrado: any = resp.data;
+                loadingBusqueda.value = true;
+                try {
+                    const resp = await buscarProductosPorCodigoBarras(filtroCodigoBarras.value)
+                    if (resp.ok && resp.data) {
+                        const productoEncontrado: any = resp.data;
 
-                    if (productoEncontrado.length > 0) {
-                        ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
-                        ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
-                        ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
-                        ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
-                        ventaDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
+                        if (productoEncontrado.length > 0) {
+                            ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
+                            ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
+                            ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
+                            ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
+                            ventaDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
 
-                        // Si el producto es por paquete.
-                        if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
-                            ventaDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
+                            // Si el producto es por paquete.
+                            if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
+                                ventaDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
 
-                            const respProductoDetalle = await buscarProductosPorIdProducto(productoEncontrado[0].id_producto_detalle_paquete);
-                            if (respProductoDetalle.ok) {
-                                const productoDetalleEncintrado: any = respProductoDetalle.data;
-                                
-                                ventaDetalle.value.id_producto = productoDetalleEncintrado[0].id_producto;
-                                ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
-                                ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
-                                ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
-                                ventaDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
+                                const respProductoDetalle = await buscarProductosPorIdProducto(productoEncontrado[0].id_producto_detalle_paquete);
+                                if (respProductoDetalle.ok) {
+                                    const productoDetalleEncintrado: any = respProductoDetalle.data;
+                                    
+                                    ventaDetalle.value.id_producto = productoDetalleEncintrado[0].id_producto;
+                                    ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
+                                    ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
+                                    ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
+                                    ventaDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
+                                }
                             }
+
+                            calcularImporte();
+
+                            setTimeout(() => {
+                                cantidadRef.value.focus();
+                            }, 0);
+                        } else {
+                            utils.mostrarMensaje({
+                                descripcion: 'Producto no encontrado.',
+                                tipoMensaje: 'warning'
+                            })
                         }
-
-                        calcularImporte();
-
-                        setTimeout(() => {
-                            cantidadRef.value.focus();
-                        }, 0);
-                    } else {
-                        utils.mostrarMensaje({
-                            descripcion: 'Producto no encontrado.',
-                            tipoMensaje: 'warning'
-                        })
                     }
+                } finally {
+                    loadingBusqueda.value = false;
                 }
             }
 
@@ -317,40 +344,38 @@ export default {
         }
 
         const asignarProductoSeleccionado = async() => {
-            ventaDetalle.value.id_producto = 0;
-            ventaDetalle.value.id_producto_stock = 0;
-            ventaDetalle.value.nombre_producto = '';
-            ventaDetalle.value.cantidad = 1;
-            ventaDetalle.value.precio_unitario = 0;
-            ventaDetalle.value.descuento = 0;
-            ventaDetalle.value.importe = 0;
-            ventaDetalle.value.precio_compra = 0;
+            resetVentaDetalle();
 
-            const productoEncontrado = productos.value.filter((p: any) => p.id_producto == filtroNombreProducto.value);
+            loadingBusqueda.value = true;
+            try {
+                const productoEncontrado = productos.value.filter((p: any) => p.id_producto == filtroNombreProducto.value);
 
-            ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
-            ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
-            ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
-            ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
-            ventaDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
+                ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
+                ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
+                ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
+                ventaDetalle.value.precio_unitario = productoEncontrado[0].precio_venta;
+                ventaDetalle.value.precio_compra = productoEncontrado[0].precio_compra;
 
-            // Si el producto es por paquete.
-            if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
-                ventaDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
+                // Si el producto es por paquete.
+                if (productoEncontrado[0].id_presentacion == PRESENTACION_PAQUETE) {
+                    ventaDetalle.value.cantidad = productoEncontrado[0].cantidad_paquete;
 
-                const respProductoDetalle = await buscarProductosPorIdProducto(productoEncontrado[0].id_producto_detalle_paquete);
-                if (respProductoDetalle.ok) {
-                    const productoDetalleEncintrado: any = respProductoDetalle.data;
-                    
-                    ventaDetalle.value.id_producto = productoDetalleEncintrado[0].id_producto;
-                    ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
-                    ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
-                    ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
-                    ventaDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
+                    const respProductoDetalle = await buscarProductosPorIdProducto(productoEncontrado[0].id_producto_detalle_paquete);
+                    if (respProductoDetalle.ok) {
+                        const productoDetalleEncintrado: any = respProductoDetalle.data;
+                        
+                        ventaDetalle.value.id_producto = productoDetalleEncintrado[0].id_producto;
+                        ventaDetalle.value.id_producto_stock = productoDetalleEncintrado[0].id_producto_stock;
+                        ventaDetalle.value.nombre_producto = productoDetalleEncintrado[0].nombre;
+                        ventaDetalle.value.precio_unitario = productoDetalleEncintrado[0].precio_venta;
+                        ventaDetalle.value.precio_compra = productoDetalleEncintrado[0].precio_compra;
+                    }
                 }
-            }
 
-            calcularImporte();
+                calcularImporte();
+            } finally {
+                loadingBusqueda.value = false;
+            }
 
             setTimeout(() => {
                 cantidadRef.value.select();
@@ -384,14 +409,7 @@ export default {
                 ventasDetalle.value.push(JSON.parse(JSON.stringify(ventaDetalle.value)));
                 total.value = ventasDetalle.value.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
 
-                ventaDetalle.value.id_producto = 0;
-                ventaDetalle.value.id_producto_stock = 0;
-                ventaDetalle.value.nombre_producto = '';
-                ventaDetalle.value.cantidad = 1;
-                ventaDetalle.value.precio_unitario = 0;
-                ventaDetalle.value.descuento = 0;
-                ventaDetalle.value.importe = 0;
-                ventaDetalle.value.precio_compra = 0;
+                resetVentaDetalle();
 
                 filtroProductoRef.value.focus();
                 vvd$.value.$reset();
@@ -414,16 +432,7 @@ export default {
             total.value = 0;
             ventasDetalle.value = [];
 
-            ventaDetalle.value.id_venta_detalle = 0;
-            ventaDetalle.value.id_venta = 0;
-            ventaDetalle.value.id_producto = 0;
-            ventaDetalle.value.id_producto_stock = 0;
-            ventaDetalle.value.nombre_producto = '';
-            ventaDetalle.value.cantidad = 1;
-            ventaDetalle.value.precio_unitario = 0;
-            ventaDetalle.value.descuento = 0;
-            ventaDetalle.value.importe = 0;
-            ventaDetalle.value.precio_compra = 0;
+            resetVentaDetalle();
 
             filtroProductoRef.value.focus();
         }
@@ -458,6 +467,7 @@ export default {
 
             filtroProductoRef,
             cantidadRef,
+            loadingBusqueda,
 
             // Componente.
             cobrarVentaComponentRef,
