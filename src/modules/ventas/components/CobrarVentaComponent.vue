@@ -70,18 +70,23 @@
                                 <i class="fa fa-credit-card mr-1"></i> Pago
                             </h6>
                             <div class="form-row">
-                                <div class="col-6">
-                                    <label class="form-label small" for="id_tipo_pago">Tipo de pago</label>
-                                    <Select2
-                                        id="id_tipo_pago"
-                                        name="id_tipo_pago"
-                                        :class="{ 'input-validation-error-select2': v$.id_tipo_pago.$dirty && v$.id_tipo_pago.$invalid }"
-                                        :disabled="seGrabo"
-                                        v-model="v$.id_tipo_pago.$model"
-                                        :options="tiposPago"
-                                        :settings="{ multiple: false, placeholder: 'Seleccione', width: '100%', tags: false, dropdownParent: '#cobrar-venta-component-modal' }" />
+                                <div class="col-12">
+                                    <label class="form-label small">Tipo de pago</label>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button
+                                            v-for="tipo in tiposPago"
+                                            :key="tipo.id"
+                                            type="button"
+                                            class="btn btn-payment-method d-flex flex-column align-items-center justify-content-center mr-2 mb-2"
+                                            :class="{ 'payment-active': String(venta.id_tipo_pago) === String(tipo.id) }"
+                                            :disabled="seGrabo"
+                                            @click="seleccionarTipoPago(tipo.id)">
+                                            <i :class="getIconoPago(tipo.text)" class="fa fa-fw fa-2x mb-1"></i>
+                                            <span class="small font-weight-bold">{{ tipo.text }}</span>
+                                        </button>
+                                    </div>
                                     <small
-                                        class="invalid-feedback-select2"
+                                        class="invalid-feedback-select2 d-block"
                                         v-if="v$.id_tipo_pago.$dirty && v$.id_tipo_pago.required.$invalid">
                                         Seleccione un tipo de pago.
                                     </small>
@@ -299,6 +304,7 @@ export default defineComponent({
             window.$('#cobrar-venta-component-modal').modal('show');
 
             setTimeout(() => {
+                v$.value.id_tipo_pago.$model = venta.value.id_tipo_pago;
                 idClienteRef.value?.focus();
             }, 500);
         }
@@ -398,6 +404,24 @@ export default defineComponent({
             };
         }
 
+        const seleccionarTipoPago = (id: string) => {
+            venta.value.id_tipo_pago = id;
+            v$.value.id_tipo_pago.$model = id;
+        }
+
+        const getIconoPago = (text: string): string => {
+            const lower = (text ?? '').toLowerCase();
+            if (lower.includes('billetera') && lower.includes('movil')) return 'fa-mobile-alt';
+            if (lower.includes('tarjeta') || lower.includes('credito') || lower.includes('debito')) return 'fa-credit-card';
+            if (lower.includes('efectivo')) return 'fa-money-bill-alt';
+            if (lower.includes('transferencia')) return 'fa-university';
+            if (lower.includes('cheque')) return 'fa-check';
+            if (lower.includes('qr') || lower.includes('pago')) return 'fa-qrcode';
+            if (lower.includes('app') || lower.includes('movil') || lower.includes('celular') || lower.includes('wallet')) return 'fa-mobile-alt';
+            if (lower.includes('billetera') || lower.includes('digital')) return 'fa-wallet';
+            return 'fa-ellipsis-h';
+        }
+
         const cerrarClienteEditarComponentEmit = async (resultado: boolean, carnetIdentidad: string) => {
             await obtenerClientesBackend();
             if (resultado) {
@@ -426,6 +450,8 @@ export default defineComponent({
             efectivoRecibidoRef,
             clienteEditarComponentRef,
             cerrarClienteEditarComponentEmit,
+            seleccionarTipoPago,
+            getIconoPago,
             cancelar,
             grabar,
         };
@@ -479,6 +505,33 @@ export default defineComponent({
 
 .gap-1 {
     gap: 0.25rem;
+}
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.btn-payment-method {
+    min-width: 110px;
+    min-height: 80px;
+    padding: 10px 16px;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    background: #fff;
+    color: #495057;
+    transition: all 0.15s ease;
+}
+.btn-payment-method:hover:not(:disabled) {
+    border-color: #adb5bd;
+    background: #f8f9fa;
+}
+.btn-payment-method.payment-active {
+    border-color: #007bff;
+    background: #e8f4ff;
+    color: #0056b3;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+}
+.btn-payment-method:disabled {
+    opacity: 0.5;
 }
 
 .modal-content.shadow {
