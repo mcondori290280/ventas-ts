@@ -72,7 +72,7 @@
                                 </h6>
                             </div>
 
-                            <div class="table-responsive" style="max-height: calc(100vh - 430px); overflow-y: auto;">
+                            <div ref="tableResponsiveRef" class="table-responsive" style="max-height: calc(100vh - 430px); overflow-y: auto;">
                                 <table class="table table-bordered table-sm" style="box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-radius: 4px;">
                                         <thead>
                                         <tr style="position: sticky; top: 0; background: white; z-index: 2;">
@@ -204,7 +204,7 @@
 </template>
 
 <script lang='ts'>
-import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
+import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { minValue, required } from '@vuelidate/validators';
 
@@ -274,6 +274,7 @@ export default {
         const productos = ref<any>([]);
 
         const loadingBusqueda = ref(false);
+        const tableResponsiveRef = ref();
 
         // Varaibles del componente de cobro de la venta.
         const cobrarVentaComponentRef = ref();
@@ -326,6 +327,11 @@ export default {
                             }
 
                             calcularImporte();
+
+                            await nextTick();
+                            if (tableResponsiveRef.value) {
+                                tableResponsiveRef.value.scrollTop = tableResponsiveRef.value.scrollHeight;
+                            }
 
                             setTimeout(() => {
                                 cantidadRef.value.focus();
@@ -380,6 +386,11 @@ export default {
                 }
 
                 calcularImporte();
+
+                await nextTick();
+                if (tableResponsiveRef.value) {
+                    tableResponsiveRef.value.scrollTop = tableResponsiveRef.value.scrollHeight;
+                }
             } finally {
                 loadingBusqueda.value = false;
             }
@@ -417,6 +428,11 @@ export default {
                 total.value = ventasDetalle.value.reduce((sumaParcial: number, i: any) => sumaParcial + Number(i.importe), 0);
 
                 resetVentaDetalle();
+
+                await nextTick();
+                if (tableResponsiveRef.value) {
+                    tableResponsiveRef.value.scrollTop = tableResponsiveRef.value.scrollHeight;
+                }
 
                 filtroProductoRef.value.focus();
                 vvd$.value.$reset();
@@ -475,6 +491,7 @@ export default {
             filtroProductoRef,
             cantidadRef,
             loadingBusqueda,
+            tableResponsiveRef,
 
             // Componente.
             cobrarVentaComponentRef,
