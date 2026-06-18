@@ -63,9 +63,18 @@
                                 </div>
                             </div>
 
+                            <hr class="my-3">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="font-weight-bold text-muted mb-0">
+                                    <i class="fal fa-box mr-1"></i> Productos
+                                    <span class="badge badge-primary ml-1">{{ ventasDetalle.length }}</span>
+                                </h6>
+                            </div>
+
                             <div class="table-responsive" style="max-height: calc(100vh - 400px); overflow-y: auto;">
-                                <table class="table table-bordered table-sm">
-                                    <thead>
+                                <table class="table table-bordered table-sm" style="box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-radius: 4px;">
+                                        <thead>
                                         <tr>
                                             <th scope="col" class="text-center" style="width:50px;">#</th>
                                             <th scope="col" class="text-center">Producto</th>
@@ -104,7 +113,7 @@
                                             </td>
                                         </tr>
 
-                                        <tr v-if="ventaDetalle.id_producto > 0" class="bg-warning-50">
+                                        <tr v-if="ventaDetalle.id_producto > 0" style="background: #f8f9fa; border-left: 3px solid #adb5bd;">
                                             <th scope="row" class="text-right" style="padding-top:12px;">-</th>
                                             <td style="padding-top:12px;">
                                                 {{  ventaDetalle.nombre_producto }}
@@ -350,6 +359,8 @@ export default {
             try {
                 const productoEncontrado = productos.value.filter((p: any) => p.id_producto == filtroNombreProducto.value);
 
+                if (productoEncontrado.length === 0) return;
+
                 ventaDetalle.value.id_producto = productoEncontrado[0].id_producto;
                 ventaDetalle.value.id_producto_stock = productoEncontrado[0].id_producto_stock;
                 ventaDetalle.value.nombre_producto = productoEncontrado[0].nombre;
@@ -386,7 +397,7 @@ export default {
         }
 
         const calcularImporte = () => {
-            ventaDetalle.value.importe = ((ventaDetalle.value.precio_unitario - ventaDetalle.value.descuento) * ventaDetalle.value.cantidad).toFixed(2);
+            ventaDetalle.value.importe = Math.round(((ventaDetalle.value.precio_unitario - ventaDetalle.value.descuento) * ventaDetalle.value.cantidad) * 100) / 100;
         }
 
         const keyPressCantidad = ($event: any) => {
