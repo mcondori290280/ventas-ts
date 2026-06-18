@@ -200,7 +200,6 @@ import {
     ref,
     computed,
     onMounted,
-    onBeforeUnmount,
     defineAsyncComponent,
 } from 'vue';
 import { useStore } from 'vuex';
@@ -286,25 +285,7 @@ export default defineComponent({
             if (!resp.ok) return;
             tiposPago.value = resp.data;
             await obtenerClientesBackend();
-
-            const modal = document.getElementById('cobrar-venta-component-modal');
-            if (modal) {
-                modal.addEventListener('shown.bs.modal', onModalShown);
-            }
         });
-
-        onBeforeUnmount(() => {
-            const modal = document.getElementById('cobrar-venta-component-modal');
-            if (modal) {
-                modal.removeEventListener('shown.bs.modal', onModalShown);
-            }
-        });
-
-        function onModalShown() {
-            setTimeout(() => {
-                idClienteRef.value?.focus();
-            }, 100);
-        }
 
         async function obtenerClientesBackend() {
             const resp = await obtenerClientes('');
@@ -316,6 +297,10 @@ export default defineComponent({
             venta.value.ventas_detalle = ventasDetalle;
             venta.value.a_pagar = aPagar;
             window.$('#cobrar-venta-component-modal').modal('show');
+
+            setTimeout(() => {
+                idClienteRef.value?.focus();
+            }, 500);
         }
 
         const buscarCliente = async () => {
