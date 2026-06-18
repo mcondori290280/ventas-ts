@@ -87,7 +87,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="(ventaDetalleItem, i) in ventasDetalle" :key="i">
-                                            <th scope="row" class="text-right" style="padding-top:12px;">{{ i + 1 }}</th>
+                                            <th scope="row" class="text-right" style="padding-top:12px;">{{ Number(i) + 1 }}</th>
                                             <td style="padding-top:12px;">
                                                 {{  ventaDetalleItem.nombre_producto }}
                                             </td>
@@ -107,7 +107,7 @@
                                                 <button type="button"
                                                         class="btn btn-danger btn-xs"
                                                         title="Eliminar"
-                                                        @click="eliminarDetalleFactura(i)">
+                                                        @click="eliminarDetalleFactura(Number(i))">
                                                     <i class="fal fa-trash-alt"></i>
                                                 </button>
                                             </td>
