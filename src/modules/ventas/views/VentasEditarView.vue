@@ -72,7 +72,7 @@
                                 </h6>
                             </div>
 
-                            <div ref="tableResponsiveRef" class="table-responsive" style="max-height: calc(100vh - 430px); overflow-y: auto;">
+                            <div ref="tableResponsiveRef" class="table-responsive" style="max-height: calc(100vh - 470px); overflow-y: auto;">
                                 <table class="table table-bordered table-sm" style="box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-radius: 4px;">
                                         <thead>
                                         <tr style="position: sticky; top: 0; background: white; z-index: 2;">
@@ -161,7 +161,14 @@
                                                 &nbsp;
                                             </td>
                                         </tr>
-                                        <tr style="position: sticky; bottom: 0; background: white; z-index: 1;">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div style="position: sticky; bottom: 0; background: white; z-index: 10; border-top: 2px solid #dee2e6;">
+                                <table class="table table-bordered table-sm mb-0">
+                                    <tbody>
+                                        <tr>
                                             <th scope="row" colspan="5" class="text-right py-2">
                                                 <h1 class="font-weight-bold mb-0">TOTAL</h1>
                                             </th>
@@ -172,9 +179,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-
-                            <div style="position: sticky; bottom: 0; background: white; z-index: 10; border-top: 2px solid #dee2e6;">
                                 <div class="text-right p-2" style="background: inherit;">
                                     <button
                                         type="button"
